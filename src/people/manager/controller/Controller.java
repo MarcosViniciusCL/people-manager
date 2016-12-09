@@ -5,6 +5,7 @@
  */
 package people.manager.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
@@ -16,11 +17,16 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import people.manager.model.Produto;
 import people.manager.model.Usuario;
 import people.manager.persistencia.ArquivoDAO;
+import people.manager.persistencia.ArquivoZIP;
 import people.manager.persistencia.ProdutoDAO;
 import people.manager.persistencia.Update;
+import people.manager.view.Main;
+import people.manager.view.TelaInicial;
+import people.manager.view.TelaTrocaPropriaSenha;
 
 /**
  *
@@ -148,30 +154,85 @@ public class Controller {
                 if (s.equals("categ")) {
                     ArrayList<Produto> a = ProdutoDAO.listarTodos();
                     for (Produto p : a) { //Verificando quais categorias devem ser adicionadas
-                        if (!categorias.contains(p.getCategoria()))
+                        if (!categorias.contains(p.getCategoria())) {
                             categorias.add(p.getCategoria());
+                        }
                     }
                     ArquivoDAO.remover("categ");
-                    for (String str : categorias){
-                        ArquivoDAO.escritor("categ", str.toUpperCase()+";");
+                    for (String str : categorias) {
+                        ArquivoDAO.escritor("categ", str.toUpperCase() + ";");
                     }
 
                 }
-                
+
                 if (s.equals("log")) {
                     System.out.println("Copiando backup");
                 }
-                if(!s.equals("categ"))
+                if (!s.equals("categ")) {
                     ArquivoDAO.escritor(s, "****************************** ARQUIVO RECUPERADO ****************************");
+                }
             }
         } catch (IOException ex) {
             Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
         }
         Controller.arquivosErro.clear();
     }
-    
-    public static boolean verificarAtualizacao(){
+
+    public static boolean verificarAtualizacao() {
         return Update.verificarAtualização();
     }
-    
+
+    public static boolean baixarAtualixacao(){
+        return Update.baixarAtualizacao();
+    }
+    public static boolean instalarAtualizacao() {
+        try {
+            ArquivoZIP.unzip(new File("PeopleManager.zip"), new File("PeopleManagerAt"));
+            File jarOriginal = new File("PeopleManager.jar");
+            jarOriginal.delete();
+            ArquivoDAO.copiar("PeopleManagerAt/PeopleManager.jar", "PeopleManager.jar");
+            return true;
+        } catch (IOException ex) {
+            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+
+    /**
+     * Reinicia a aplicação de acordo ao tempo especificado.
+     *
+     * @param seg - Tempo em segundos para a aplicação reiniciar;
+     * @param log - Ação que causou o reiniciamento da aplicação;
+     */
+    public static void reiniciar(int seg, String log) {
+        new Thread() {
+            @Override
+            public void run() {
+                JOptionPane.showMessageDialog(null, "A aplicação será reiniciada em " + seg + " segundos.");
+            }
+        }.start();
+        new Thread() {
+            @Override
+            public void run() {
+                Controller.aguardar(seg);
+                TelaInicial ti = Main.getTI();
+                Controller.novoLog(log);
+                ti.logout();
+            }
+        }.start();
+    }
+
+    /**
+     * Faz o programa esperar por um tempo especificado.
+     * @param seg 
+     */
+    public static void aguardar(int seg) {
+        int tempo = Integer.parseInt(seg + "000");
+        try {
+            Thread.sleep(tempo);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(TelaTrocaPropriaSenha.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
 }

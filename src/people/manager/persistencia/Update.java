@@ -20,48 +20,50 @@ import java.util.logging.Logger;
  * @author cassio
  */
 public class Update {
-    
-    private static void download(String endereco, String arquivo) {
+
+    private static boolean download(String endereco, String arquivo) {
         int c;
         try {
             //cria URL
-            URL url1 = new URL(endereco);
+            URL url = new URL(endereco);
             //abre uma conexao na url criada àcima
-            URLConnection con = url1.openConnection();
-            //tenta conectar.
-            con.connect();
-            try ( //arquivo de saida
-                    FileOutputStream fileOut = new FileOutputStream(arquivo)) {
-                do {
-                    //le o byte
-                    c = con.getInputStream().read();
-                    //escreve o byte no arquivo saida
-                    fileOut.write(c);
-                } while (c != -1);
+            InputStream is = url.openStream();
+            try (FileOutputStream fileOut = new FileOutputStream(arquivo)) {
+                int umByte;
+                while ((umByte = is.read()) != -1) {
+                    fileOut.write(umByte);
+                }
             }
 
             System.out.println("Arquivo baixado com sucesso");
 
         } catch (IOException e) {
-            System.out.println("erro");
+            return false;
         }
+        return true;
     }
 
     public static boolean verificarAtualização() {
-        download("https://http://185.28.21.156/public_html/peoplemanager/dist/info.properties", "./properties/Dinfo.properties");
-        try {
-            Properties propAtual = GerenciaProperties.getProp("info.properties");
-            Properties propDown = GerenciaProperties.getProp("Dinfo.properties");
-            if(Double.parseDouble(propDown.getProperty("versao")) > Double.parseDouble(propAtual.getProperty("versao")))
-                return true;
-        } catch (IOException ex) {
-            Logger.getLogger(Update.class.getName()).log(Level.SEVERE, null, ex);
+        if (download("http://peoplemanager.esy.es/peoplemanager/dist/info.properties", "./properties/Dinfo.properties")) {
+            try {
+                Properties propAtual = GerenciaProperties.getProp("info.properties");
+                Properties propDown = GerenciaProperties.getProp("Dinfo.properties");
+                if (Double.parseDouble(propDown.getProperty("versao")) > Double.parseDouble(propAtual.getProperty("versao"))) {
+                    return true;
+                }
+            } catch (IOException ex) {
+                Logger.getLogger(Update.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
-        return false;    
+        return false;
     }
-    
-    private static String gerarNome(String nomeArquivo){
+
+    private static String gerarNome(String nomeArquivo) {
         String[] s = nomeArquivo.split("/");
-        return s[s.length-1];
+        return s[s.length - 1];
+    }
+
+    public static boolean baixarAtualizacao() {
+        return download("http://peoplemanager.esy.es/peoplemanager/dist/PeopleManager.zip", "PeopleManager.zip");
     }
 }

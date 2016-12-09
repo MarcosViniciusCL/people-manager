@@ -29,16 +29,18 @@ public class ControllerProduto {
         ProdutoDAO.remover(id);
     }    
  
-    public static Produto editarProduto(int id, String nome, String codigoBarra, Double valorVenda, Double valorCompra) throws ParseException, ClienteNaoEncontradoException{
+    public static Produto editarProduto(int id, String nome, String codigoBarra, String categoria , Double valorVenda, Double valorCompra, Integer quantidade) throws ClienteNaoEncontradoException{
         Produto produto = ProdutoDAO.buscaID(id);
         if(produto == null)
             throw new ClienteNaoEncontradoException();
         produto.setNome(nome);
         produto.setCodigoBarra(codigoBarra);
+        produto.setQuantidade(quantidade);
+        produto.setCategoria(categoria);
         produto.setValorVenda(valorVenda);
         produto.setValorCompra(valorCompra);
         ProdutoDAO.edita(produto);
-        return produto;       
+        return produto;
     }
     
 

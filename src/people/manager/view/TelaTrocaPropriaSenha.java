@@ -142,7 +142,7 @@ public class TelaTrocaPropriaSenha extends javax.swing.JFrame {
             } else {
                 ControllerUsuario.editarUsuario(user.getUser(), new String(jPasswordFieldSenhaNova.getPassword()), user.getLevel());
                 JOptionPane.showMessageDialog(null, "Senha alterada.");
-                cronometro(60);
+                Controller.reiniciar(60, "trocou a senha. Aplicação reiniciou automaticamente");
                 dispose();
             }
         } else {
@@ -151,32 +151,6 @@ public class TelaTrocaPropriaSenha extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jButton2ActionPerformed
 
-    private void cronometro(int seg) {
-        new Thread() {
-            @Override
-            public void run() {
-               JOptionPane.showMessageDialog(null, "A aplicação será reiniciada em " + seg + " segundos.");
-            }
-        }.start();
-        i = seg;
-        new Thread() {
-            @Override
-            public void run() {
-                while (i > 0) {
-                    try {
-                        Thread.sleep(1000);
-                        System.out.println(i);
-                    } catch (InterruptedException ex) {
-                        Logger.getLogger(TelaTrocaPropriaSenha.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                    i--;
-                }
-                TelaInicial ti = Main.getTI();
-                Controller.novoLog("trocou a senha. Aplicação reiniciou automaticamente");
-                ti.logout();
-            }
-        }.start();
-    }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;

@@ -9,8 +9,10 @@ import people.manager.exception.ArquivoModificadoException;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -106,11 +108,30 @@ public class ArquivoDAO {
         }
         return false;
     }
-    
-    public static void remover(String path){
+
+    public static void remover(String path) {
         File arquivo = new File(path);
         if (arquivo.exists()) {
             arquivo.delete();
+        }
+    }
+
+    public static void copiar(String origem, String destino) {
+        try {
+            File origemV = new File(origem);
+            FileInputStream fis = new FileInputStream(origemV);
+            File destinoV = new File(destino);
+            FileOutputStream fos = new FileOutputStream(destinoV);
+
+            int count;
+            byte[] bytes = new byte[1024];
+
+            while ((count = fis.read(bytes)) >= 0) {
+                fos.write(bytes, 0, count);
+            }
+
+        } catch (IOException ex) {
+
         }
     }
 }

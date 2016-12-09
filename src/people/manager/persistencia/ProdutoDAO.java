@@ -30,10 +30,11 @@ public class ProdutoDAO {
         
         try {
             stmt = con.createStatement();
-            String sql = "INSERT INTO PRODUTOS(ID, NOME, CODIGOBARRA, VALOR, VALORCOMPRA, QUANTIDADE, CATEGORIA) VALUES("
+            String sql = "INSERT INTO PRODUTOS(ID, NOME, CODIGOBARRA, CATEGORIA, VALOR, VALORCOMPRA, QUANTIDADE, CATEGORIA) VALUES("
                     + ""+p.getId()+","
                     + "'"+p.getNome()+"',"
                     + "'"+p.getCodigoBarra()+"',"
+                    + "'"+p.getCategoria()+"',"
                     + ""+p.getValorVenda()+","
                     + ""+p.getValorCompra()+","
                     + ""+p.getQuantidade()+","
@@ -186,9 +187,10 @@ public class ProdutoDAO {
    
         try {
             stmt = con.createStatement();
-            String sql = "UPDATE CLIENTES set "
+            String sql = "UPDATE PRODUTOS set "
                     + "NOME = '"+p.getNome()+"', "
                     + "CODIGOBARRA = '"+p.getCodigoBarra()+"', "
+                    + "CATEGORIA = '"+p.getCategoria()+"', "
                     + "VALOR = "+p.getValorVenda()+", "
                     + "VALORCOMPRA = "+p.getValorCompra()+", "
                     + "QUANTIDADE = "+p.getQuantidade()+" "
