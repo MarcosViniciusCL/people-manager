@@ -7,12 +7,8 @@ package people.manager.view;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Properties;
 import javax.swing.JFrame;
-import people.manager.controller.ControllerCliente;
 import people.manager.exception.ArquivoModificadoException;
-import people.manager.persistencia.GerenciaProperties;
-import people.manager.persistencia.Update;
 
 /**
  *
@@ -25,9 +21,9 @@ public class Main {
     public static void main(String[] args) throws ArquivoModificadoException, IOException {
            janelas = new ArrayList<>();
       
-//           TelaLogin t = new TelaLogin("Login");
-//           t.setLocationRelativeTo(null);
-//           t.setVisible(true);
+           TelaLogin t = new TelaLogin("Login");
+           t.setLocationRelativeTo(null);
+           t.setVisible(true);
     }
     
     public static void setTI(TelaInicial ti){

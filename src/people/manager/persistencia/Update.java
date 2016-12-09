@@ -48,7 +48,7 @@ public class Update {
     }
 
     public static boolean verificarAtualização() {
-//        download("https://github.com/jimmyfrasche/txt/blob/master/LICENSE", "./properties/Dinfo.properties");
+        download("https://http://185.28.21.156/public_html/peoplemanager/dist/info.properties", "./properties/Dinfo.properties");
         try {
             Properties propAtual = GerenciaProperties.getProp("info.properties");
             Properties propDown = GerenciaProperties.getProp("Dinfo.properties");
