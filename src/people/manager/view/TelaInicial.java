@@ -7,7 +7,6 @@ package people.manager.view;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -15,10 +14,10 @@ import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import people.manager.controller.Controller;
 import people.manager.model.Usuario;
+import people.manager.persistencia.ConnectionFactory;
 
 /**
  *
@@ -240,6 +239,11 @@ public class TelaInicial extends javax.swing.JFrame {
         jMenu4.setText("Vendedores");
 
         jMenuItem11.setText("Cadastrar");
+        jMenuItem11.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem11ActionPerformed(evt);
+            }
+        });
         jMenu4.add(jMenuItem11);
 
         jMenuBar1.add(jMenu4);
@@ -326,7 +330,8 @@ public class TelaInicial extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
-        // TODO add your handling code here:
+        JFileChooser jfc = new JFileChooser();
+        jfc.showDialog(null, "Salvar");
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
@@ -451,6 +456,10 @@ public class TelaInicial extends javax.swing.JFrame {
         verificacaoSistema();
     }//GEN-LAST:event_jMenuItem19ActionPerformed
 
+    private void jMenuItem11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem11ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenuItem11ActionPerformed
+
     /**
      * É executado quando o botão X da janela é pressionado.
      */
@@ -510,14 +519,24 @@ public class TelaInicial extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator1;
     // End of variables declaration//GEN-END:variables
 
+    /**
+     * Verifica no servidor se há alguma nova atualização para ser baixada.
+     * Cria banco de dados caso não exista.
+     */
     private void verificacaoSistema() {
         new Thread() {
             @Override
             public void run() {
+                //************** Testando a existencia do banco de dados **************
+                if(!new File("database.db").exists()){
+                    ConnectionFactory.criarBanco();
+                }
+                //************** Testando Atualização de software ***********
                 Controller.aguardar(5);
                 try {
                     jLabelMensagem.setText("O sistema está verificando atualizações...");
-                    if (!Controller.verificarAtualizacao()) {
+                    Controller.aguardar(5);
+                    if (Controller.verificarAtualizacao()) {
                         jLabelMensagem.setText("Há uma nova atualização disponivel.");
                         Thread.sleep(3000);
                         jLabelMensagem.setText("Baixando nova atualização...");

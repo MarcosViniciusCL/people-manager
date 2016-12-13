@@ -5,8 +5,6 @@
  */
 package people.manager.view;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import people.manager.controller.Controller;
 import people.manager.controller.ControllerUsuario;

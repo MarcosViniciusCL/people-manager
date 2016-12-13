@@ -15,20 +15,23 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import people.manager.model.Cliente;
-import org.json.*;
 import people.manager.model.Endereco;
+import people.manager.model.Vendedor;
 
 /**
  *
  * @author marcos
  */
-public class ClienteDAO {
+public class VendedorDAO {
+    
     /**
      * Adiciona um novo cliente no banco de dados.
      * @param c 
      */
-    public static void create(Cliente c){
+    public static void create(Vendedor c){
         
         c.setId(quantidadeBanco()+1);
         
@@ -40,35 +43,29 @@ public class ClienteDAO {
             ativo = 1;
         
         String nascimento = calendarParaString(c.getNascimento());
-        String ultAten = calendarParaString(c.getUltimoAtendimento());
-        String proxAten = calendarParaString(c.getProximoAtendimento());
-        String historico = criarStringJSON(c.getHistorico());
-        String endereco = c.getEnd().toString();
+        String contratacao = calendarParaString(c.getContratacao());
+        String endereco = c.getEndereco().toString();
         
         try {
             stmt = con.createStatement();
-            String sql = "INSERT INTO CLIENTES(id, nome, ativo, sobrenome, celular, telefone, email, idade, nascimento, cpf, rg, endereco, historico, saldodevedor, ultimoatendimento, proximoatendimento) VALUES("
+            String sql = "INSERT INTO VENDEDORES(id, nome, ESTADO, sobrenome, celular, email, idade, nascimento, DATA_contratacao, cpf, endereco) VALUES("
                     + ""+c.getId()+","
                     + "'"+c.getNome()+"',"
                     + ""+ativo+","
                     + "'"+c.getSobrenome()+"',"
                     + "'"+c.getCelular()+"',"
-                    + "'"+c.getTelefone()+"',"
                     + "'"+c.getEmail()+"',"
                     + ""+c.getIdade()+","
                     + "'"+nascimento+"',"
+                    + "'"+contratacao+"',"
                     + "'"+c.getCpf()+"',"
-                    + "'"+c.getRg()+"',"
-                    + "'"+endereco+"',"
-                    + "'"+historico+"',"
-                    + ""+c.getSaldoDevedor()+","
-                    + "'"+ultAten+"',"
-                    + "'"+proxAten+"');";
+                    + "'"+endereco+"');";
+                    
             
             stmt.executeUpdate(sql);
             stmt.close();
         } catch (SQLException ex) {
-            Logger.getLogger(ClienteDAO.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(VendedorDAO.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             ConnectionFactory.closeConnection(con);
         }
@@ -80,10 +77,10 @@ public class ClienteDAO {
         int tamanho = 0;
         try {
             stmt = con.createStatement();
-            stmt.executeUpdate("DELETE FROM CLIENTES WHERE CPF='"+cpf+"'");
+            stmt.executeUpdate("DELETE FROM VENDEDORES WHERE CPF='"+cpf+"'");
             stmt.close();
         } catch (SQLException ex) {
-            Logger.getLogger(ClienteDAO.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(VendedorDAO.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             ConnectionFactory.closeConnection(con);
         }
@@ -92,32 +89,35 @@ public class ClienteDAO {
     
     public static ArrayList listarTodos() throws ParseException{
         Connection con = ConnectionFactory.getConnection();
-        Statement stmt = null;
-        ArrayList clientes = null;
+        Statement stmt;
+        ArrayList vendedores = null;
         
         try {
             stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM CLIENTES");
-            clientes = new ArrayList();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM VENDEDORES");
+            vendedores = new ArrayList();
             while(rs.next()){
                 SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
                 Calendar nascimento = Calendar.getInstance();
 		nascimento.setTime(sdf.parse(rs.getString("NASCIMENTO")));
-                Cliente c = new Cliente(rs.getString("NOME"), rs.getString("SOBRENOME"), rs.getString("CELULAR"), rs.getString("TELEFONE"), rs.getString("EMAIL"), nascimento, rs.getString("CPF"), rs.getString("RG"), "RUA", "numero", "cep", "bairro", "cidade", "estado");
-                if(rs.getString("ATIVO").equals("1"))
-                    c.setAtivo(true);
+                Calendar contratacao = Calendar.getInstance();
+		contratacao.setTime(sdf.parse(rs.getString("DATA_CONTRATACAO")));
+                Vendedor v = new Vendedor(rs.getInt("ID"), rs.getString("NOME"), rs.getString("SOBRENOME"),  rs.getString("CPF"), rs.getInt("IDADE"), rs.getString("CELULAR"), rs.getString("EMAIL"), contratacao, nascimento, "RUA", "numero", "cep", "bairro", "cidade", "estado");
+                if(rs.getString("ESTADO").equals("1"))
+                    v.setAtivo(true);
                 else
-                    c.setAtivo(false);
-                clientes.add(c);
+                    v.setAtivo(false);
+                
+                vendedores.add(v);
             }
             
             stmt.close();
         } catch (SQLException ex) {
-            Logger.getLogger(ClienteDAO.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(VendedorDAO.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             ConnectionFactory.closeConnection(con);
         }
-        return clientes;
+        return vendedores;
     }
     
     public static int quantidadeBanco(){
@@ -126,17 +126,17 @@ public class ClienteDAO {
         int tamanho = 0;
         try {
             stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM CLIENTES WHERE   ID = (SELECT MAX(ID)  FROM CLIENTES)");
+            ResultSet rs = stmt.executeQuery("SELECT * FROM VENDEDORES WHERE   ID = (SELECT MAX(ID)  FROM VENDEDORES)");
             tamanho = rs.getInt("ID");
             stmt.close();
         } catch (SQLException ex) {
-            Logger.getLogger(ClienteDAO.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(VendedorDAO.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            ConnectionFactory.closeConnection(con);
-            return tamanho;
+            ConnectionFactory.closeConnection(con);   
         }
-        
+        return tamanho;
     }
+    
     
     /**
      * Busca pelo nome do cliente, diretamente do banco de dados.
@@ -145,31 +145,34 @@ public class ClienteDAO {
      */
     public static ArrayList buscaNome(String nome){
         Connection con = ConnectionFactory.getConnection();
-        Statement stmt = null;
-        ArrayList clientes = null;
+        Statement stmt;
+        ArrayList vendedores = null;
         
         try {
             stmt = con.createStatement();
-            String sql = "SELECT * FROM CLIENTES WHERE NOME LIKE '"+nome+"%' OR NOME LIKE '%"+nome+"%' OR SOBRENOME LIKE '"+nome+"%' OR SOBRENOME LIKE '%"+nome+"%' ";
+            String sql = "SELECT * FROM VENDEDORES WHERE NOME LIKE '"+nome+"%' OR NOME LIKE '%"+nome+"%' OR SOBRENOME LIKE '"+nome+"%' OR SOBRENOME LIKE '%"+nome+"%' ";
             ResultSet rs = stmt.executeQuery(sql);
-            clientes = new ArrayList();
+            vendedores = new ArrayList();
             while(rs.next()){
                 SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
                 Calendar nascimento = Calendar.getInstance();
+                Calendar contratacao = Calendar.getInstance();
                 try {
                     nascimento.setTime(sdf.parse(rs.getString("NASCIMENTO")));
+                    contratacao.setTime(sdf.parse(rs.getString("DATA_CONTRATACAO")));
                 } catch (ParseException ex) {
                     Logger.getLogger(ClienteDAO.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                Cliente c = new Cliente(rs.getString("NOME"), rs.getString("SOBRENOME"), rs.getString("CELULAR"), rs.getString("TELEFONE"), rs.getString("EMAIL"), nascimento, rs.getString("CPF"), rs.getString("RG"), "RUA", "numero", "cep", "bairro", "cidade", "estado");
+   
+                Vendedor v = new Vendedor(rs.getInt("ID"), rs.getString("NOME"), rs.getString("SOBRENOME"),  rs.getString("CPF"), rs.getInt("IDADE"), rs.getString("CELULAR"), rs.getString("EMAIL"), contratacao, nascimento, "RUA", "numero", "cep", "bairro", "cidade", "estado");
+               
                 if(rs.getString("ATIVO").equals("1"))
-                    c.setAtivo(true);
+                    v.setAtivo(true);
                 else
-                    c.setAtivo(false);
-                c.setId(rs.getInt("ID"));
-                c.setEnd(obterObjetoEndereco(rs.getString("ENDERECO")));
-                c.setHistorico(criarObjectoJSON(rs.getString("HISTORICO")));
-                clientes.add(c);
+                    v.setAtivo(false);
+                v.setId(rs.getInt("ID"));
+                v.setEndereco(obterObjetoEndereco(rs.getString("ENDERECO")));
+                vendedores.add(v);
             }
             
             stmt.close();
@@ -178,68 +181,70 @@ public class ClienteDAO {
         } finally {
             ConnectionFactory.closeConnection(con);
         }
-        return clientes;
+        return vendedores;
     }
     
-    public static Cliente buscaCPF(String cpf){
+    public static Vendedor buscaCPF(String cpf){
         Connection con = ConnectionFactory.getConnection();
         Statement stmt;
-        Cliente c = null;
+        Vendedor v = null;
         
         try {
             stmt = con.createStatement();
-            String sql = "SELECT * FROM CLIENTES WHERE CPF='"+cpf+"' ";
+            String sql = "SELECT * FROM VENDEDORES WHERE CPF='"+cpf+"' ";
             ResultSet rs = stmt.executeQuery(sql);
             if(rs.isClosed())
                 return null;
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
             Calendar nascimento = Calendar.getInstance();
+            Calendar contratacao = Calendar.getInstance();
             try {
                 nascimento.setTime(sdf.parse(rs.getString("NASCIMENTO")));
+                contratacao.setTime(sdf.parse(rs.getString("DATA_CONTRATACAO")));
             } catch (ParseException ex) {
                 Logger.getLogger(ClienteDAO.class.getName()).log(Level.SEVERE, null, ex);
             }
-            c = new Cliente(rs.getString("NOME"), rs.getString("SOBRENOME"), rs.getString("CELULAR"), rs.getString("TELEFONE"), rs.getString("EMAIL"), nascimento, rs.getString("CPF"), rs.getString("RG"), "RUA", "numero", "cep", "bairro", "cidade", "estado");
+            v = new Vendedor(rs.getInt("ID"), rs.getString("NOME"), rs.getString("SOBRENOME"),  rs.getString("CPF"), rs.getInt("IDADE"), rs.getString("CELULAR"), rs.getString("EMAIL"), contratacao, nascimento, "RUA", "numero", "cep", "bairro", "cidade", "estado");
             if(rs.getString("ATIVO").equals("1"))
-                c.setAtivo(true);
+                v.setAtivo(true);
             else
-                c.setAtivo(false);
-            c.setEnd(obterObjetoEndereco(rs.getString("ENDERECO")));
-            c.setHistorico(criarObjectoJSON(rs.getString("HISTORICO")));
-            c.setId(rs.getInt("ID"));
+                v.setAtivo(false);
+            v.setEndereco(obterObjetoEndereco(rs.getString("ENDERECO")));
             stmt.close();
         } catch (SQLException ex) {
             Logger.getLogger(ClienteDAO.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             ConnectionFactory.closeConnection(con);
         }
-        return c;
+        return v;
     }
-    public static Cliente buscaRG(String rg) {
+    
+    public static Vendedor buscaID(int id){
         Connection con = ConnectionFactory.getConnection();
         Statement stmt;
-        Cliente c = null;
+        Vendedor v = null;
         
         try {
             stmt = con.createStatement();
-            String sql = "SELECT * FROM CLIENTES WHERE RG='"+rg+"' ";
+            String sql = "SELECT * FROM VENDEDORES WHERE ID="+id+"";
             ResultSet rs = stmt.executeQuery(sql);
             if(rs.isClosed())
                 return null;
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
             Calendar nascimento = Calendar.getInstance();
+            Calendar contratacao = Calendar.getInstance();
             try {
                 nascimento.setTime(sdf.parse(rs.getString("NASCIMENTO")));
+                contratacao.setTime(sdf.parse(rs.getString("DATA_CONTRATACAO")));
             } catch (ParseException ex) {
                 Logger.getLogger(ClienteDAO.class.getName()).log(Level.SEVERE, null, ex);
             }
-            c = new Cliente(rs.getString("NOME"), rs.getString("SOBRENOME"), rs.getString("CELULAR"), rs.getString("TELEFONE"), rs.getString("EMAIL"), nascimento, rs.getString("CPF"), rs.getString("RG"), "RUA", "numero", "cep", "bairro", "cidade", "estado");
+            v = new Vendedor(rs.getInt("ID"), rs.getString("NOME"), rs.getString("SOBRENOME"),  rs.getString("CPF"), rs.getInt("IDADE"), rs.getString("CELULAR"), rs.getString("EMAIL"), contratacao, nascimento, "RUA", "numero", "cep", "bairro", "cidade", "estado");
             if(rs.getString("ATIVO").equals("1"))
-                c.setAtivo(true);
+                v.setAtivo(true);
             else
-                c.setAtivo(false);
-            c.setEnd(obterObjetoEndereco(rs.getString("ENDERECO")));
-            c.setHistorico(criarObjectoJSON(rs.getString("HISTORICO")));
+                v.setAtivo(false);
+            v.setEndereco(obterObjetoEndereco(rs.getString("ENDERECO")));
             
             stmt.close();
         } catch (SQLException ex) {
@@ -247,84 +252,43 @@ public class ClienteDAO {
         } finally {
             ConnectionFactory.closeConnection(con);
         }
-        return c;
+        return v;
     }
     
-    public static Cliente buscaID(int id){
-        Connection con = ConnectionFactory.getConnection();
-        Statement stmt;
-        Cliente c = null;
-        
-        try {
-            stmt = con.createStatement();
-            String sql = "SELECT * FROM CLIENTES WHERE ID="+id+"";
-            ResultSet rs = stmt.executeQuery(sql);
-            if(rs.isClosed())
-                return null;
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-            Calendar nascimento = Calendar.getInstance();
-            try {
-                nascimento.setTime(sdf.parse(rs.getString("NASCIMENTO")));
-            } catch (ParseException ex) {
-                Logger.getLogger(ClienteDAO.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            c = new Cliente(rs.getString("NOME"), rs.getString("SOBRENOME"), rs.getString("CELULAR"), rs.getString("TELEFONE"), rs.getString("EMAIL"), nascimento, rs.getString("CPF"), rs.getString("RG"), "RUA", "numero", "cep", "bairro", "cidade", "estado");
-            if(rs.getString("ATIVO").equals("1"))
-                c.setAtivo(true);
-            else
-                c.setAtivo(false);
-            c.setEnd(obterObjetoEndereco(rs.getString("ENDERECO")));
-            c.setHistorico(criarObjectoJSON(rs.getString("HISTORICO")));
-            c.setId(rs.getInt("ID"));
-            
-            stmt.close();
-        } catch (SQLException ex) {
-            Logger.getLogger(ClienteDAO.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            ConnectionFactory.closeConnection(con);
-        }
-        return c;
-    }
-    
-    public static void edita(Cliente c){
+    public static void edita(Vendedor v){
         Connection con = ConnectionFactory.getConnection();
         Statement stmt;
         
         int ativo = 0;
-        if(c.isAtivo())
+        if(v.isAtivo())
             ativo = 1;
         
-        String nascimento = calendarParaString(c.getNascimento());
-        String ultAten = calendarParaString(c.getUltimoAtendimento());
-        String proxAten = calendarParaString(c.getProximoAtendimento());
-        String historico = criarStringJSON(c.getHistorico());
-        String endereco = c.getEnd().toString();
+        String nascimento = calendarParaString(v.getNascimento());
+        String contratacao = calendarParaString(v.getContratacao());
+        String endereco = v.getEndereco().toString();
         
         try {
             stmt = con.createStatement();
-            String sql = "UPDATE CLIENTES set "
-                    + "NOME = '"+c.getNome()+"', "
-                    + "ATIVO = "+ativo+", "
-                    + "SOBRENOME = '"+c.getSobrenome()+"', "
-                    + "CELULAR = '"+c.getCelular()+"', "
-                    + "TELEFONE = '"+c.getTelefone()+"', "
-                    + "EMAIL = '"+c.getEmail()+"', "
-                    + "IDADE = "+c.getIdade()+", "
+            String sql = "UPDATE VENDEDORES set "
+                    + "NOME = '"+v.getNome()+"', "
+                    + "ESTADO = "+ativo+", "
+                    + "SOBRENOME = '"+v.getSobrenome()+"', "
+                    + "CELULAR = '"+v.getCelular()+"', "
+                    + "EMAIL = '"+v.getEmail()+"', "
+                    + "IDADE = "+v.getIdade()+", "
                     + "NASCIMENTO = '"+nascimento+"', "
-                    + "CPF = '"+c.getCpf()+"', "
-                    + "RG = '"+c.getRg()+"', "
+                    + "DATA_CONTRATACAO = '"+contratacao+"', "
+                    + "CPF = '"+v.getCpf()+"', "
                     + "ENDERECO = '"+endereco+"', "
-                    + "HISTORICO = '"+historico+"', "
-                    + "SALDODEVEDOR = "+c.getSaldoDevedor()+", "
-                    + "ULTIMOATENDIMENTO = '"+ultAten+"', "
-                    + "PROXIMOATENDIMENTO = '"+proxAten+"' "
-                    + "where ID="+c.getId()+";";
+                    + "where ID="+v.getId()+";";
             stmt.executeUpdate(sql);
         } catch (SQLException ex) {
             Logger.getLogger(ClienteDAO.class.getName()).log(Level.SEVERE, null, ex);
         } 
     }
-    /**
+    
+    
+     /**
      * Receber um calendar e retorna o valor do dia e hora em string
      * @param calendar
      * @return 
@@ -334,27 +298,20 @@ public class ClienteDAO {
             return "NULO";
         SimpleDateFormat s = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         return s.format(calendar.getTime());
-    }    
-    /**
-     * Converte um ArrayList em uma stringo usando a bibliote JSON
-     * @param o
-     * @return String
-     */
+    }
+
     private static String criarStringJSON(ArrayList o){
         JSONObject json = new JSONObject();
         json.put("uniqueArrays", new JSONArray(o));
         return json.toString();
     }
-    /**
-     * Converte uma string, criada pelo JSON, para ArrayList
-     * @param s
-     * @return ArrayList
-     */
+    
     private static ArrayList criarObjectoJSON(String s){
         JSONObject json = new JSONObject(s);
         JSONArray a = json.optJSONArray("uniqueArrays");
         return (ArrayList) a.toList();
     }
+    
     private static Endereco obterObjetoEndereco(String endereco){
         if (endereco != null) {
             int index = endereco.indexOf("rua");
@@ -372,4 +329,5 @@ public class ClienteDAO {
         }
         return null;
     }
+    
 }

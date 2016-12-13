@@ -97,14 +97,16 @@ public class ArquivoDAO {
     }
 
     public static boolean isModificado(String path) {
-        try (BufferedReader buffRead = new BufferedReader(new FileReader(path))) {
-            StringBuilder texto = new StringBuilder();
-            String linha = buffRead.readLine();
-            if (testeModificação(path, linha)) {
-                return true;
+        if (new File(path).exists()) {
+            try (BufferedReader buffRead = new BufferedReader(new FileReader(path))) {
+                StringBuilder texto = new StringBuilder();
+                String linha = buffRead.readLine();
+                if (testeModificação(path, linha)) {
+                    return true;
+                }
+            } catch (IOException ex) {
+                Logger.getLogger(ArquivoDAO.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } catch (IOException ex) {
-            Logger.getLogger(ArquivoDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return false;
     }

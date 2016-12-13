@@ -5,17 +5,23 @@
  */
 package people.manager.view;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import people.manager.controller.ControllerCliente;
 import people.manager.controller.ControllerProduto;
+import people.manager.controller.ControllerVendedor;
+import people.manager.exception.ClienteNaoEncontradoException;
 import people.manager.exception.ProdutoNaoEncontradoException;
 import people.manager.model.Cliente;
 import people.manager.model.Produto;
+import people.manager.model.Vendedor;
 
 /**
  *
@@ -24,7 +30,8 @@ import people.manager.model.Produto;
 public class TelaVenda extends javax.swing.JFrame {
 
     private JTable table;
-    private ArrayList<Produto> produtos;
+    private final ArrayList<Produto> produtos;
+    private Cliente cliente;
 
     /**
      * Creates new form TelaVenda
@@ -34,6 +41,7 @@ public class TelaVenda extends javax.swing.JFrame {
     public TelaVenda(String title) {
         super(title);
         produtos = new ArrayList();
+        cliente = null;
         initComponents();
     }
 
@@ -51,9 +59,9 @@ public class TelaVenda extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jTextFieldTOTAL = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        jTextFieldCliente = new javax.swing.JTextField();
+        jTextFieldNomeCliente = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        jTextFieldVendedor = new javax.swing.JTextField();
+        jTextFieldNomeVendedor = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         jTextFieldCOdBarra = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
@@ -71,7 +79,16 @@ public class TelaVenda extends javax.swing.JFrame {
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jLabel10 = new javax.swing.JLabel();
-        jTextFieldID = new javax.swing.JTextField();
+        jTextFieldIDProduto = new javax.swing.JTextField();
+        jButton5 = new javax.swing.JButton();
+        jSeparator1 = new javax.swing.JSeparator();
+        jLabel11 = new javax.swing.JLabel();
+        jTextFieldIDCliente = new javax.swing.JTextField();
+        jLabel12 = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
+        jLabel14 = new javax.swing.JLabel();
+        jTextFieldIDVendedor = new javax.swing.JTextField();
+        jLabel15 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -79,20 +96,25 @@ public class TelaVenda extends javax.swing.JFrame {
         jLabel1.setText("Total:");
 
         jTextFieldTOTAL.setEditable(false);
-        jTextFieldTOTAL.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        jTextFieldTOTAL.setFont(new java.awt.Font("Dialog", 2, 18)); // NOI18N
         jTextFieldTOTAL.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextFieldTOTALActionPerformed(evt);
             }
         });
 
-        jLabel2.setText("Cliente:");
+        jLabel2.setText("Info. Cliente");
 
-        jLabel3.setText("Vendedor:");
+        jTextFieldNomeCliente.setEditable(false);
+        jTextFieldNomeCliente.setToolTipText("Nome do Cliente");
 
-        jTextFieldVendedor.addActionListener(new java.awt.event.ActionListener() {
+        jLabel3.setText("Info. Vendedor");
+
+        jTextFieldNomeVendedor.setEditable(false);
+        jTextFieldNomeVendedor.setToolTipText("Nome do vendedor");
+        jTextFieldNomeVendedor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextFieldVendedorActionPerformed(evt);
+                jTextFieldNomeVendedorActionPerformed(evt);
             }
         });
 
@@ -123,12 +145,9 @@ public class TelaVenda extends javax.swing.JFrame {
                 jTextFieldQuantidadeVendaFocusLost(evt);
             }
         });
-        jTextFieldQuantidadeVenda.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                jTextFieldQuantidadeVendaKeyTyped(evt);
-            }
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                jTextFieldQuantidadeVendaKeyPressed(evt);
+        jTextFieldQuantidadeVenda.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFieldQuantidadeVendaActionPerformed(evt);
             }
         });
 
@@ -155,16 +174,55 @@ public class TelaVenda extends javax.swing.JFrame {
         });
 
         jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/people/manager/view/search(1).png"))); // NOI18N
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/people/manager/view/search(1).png"))); // NOI18N
 
         jLabel10.setText("ID:");
 
-        jTextFieldID.addFocusListener(new java.awt.event.FocusAdapter() {
+        jTextFieldIDProduto.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
-                jTextFieldIDFocusLost(evt);
+                jTextFieldIDProdutoFocusLost(evt);
             }
         });
+        jTextFieldIDProduto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFieldIDProdutoActionPerformed(evt);
+            }
+        });
+
+        jButton5.setText("Remover Item");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+
+        jLabel11.setText("ID:");
+
+        jTextFieldIDCliente.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTextFieldIDClienteFocusLost(evt);
+            }
+        });
+        jTextFieldIDCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFieldIDClienteActionPerformed(evt);
+            }
+        });
+
+        jLabel12.setText("Nome:");
+
+        jLabel13.setFont(new java.awt.Font("Andale Mono", 0, 10)); // NOI18N
+        jLabel13.setText("Informações venda");
+
+        jLabel14.setText("ID:");
+
+        jLabel15.setText("Nome:");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -173,12 +231,7 @@ public class TelaVenda extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextFieldTOTAL, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel9)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -203,57 +256,95 @@ public class TelaVenda extends javax.swing.JFrame {
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                         .addComponent(jLabel8)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jTextFieldValorTotal, javax.swing.GroupLayout.DEFAULT_SIZE, 138, Short.MAX_VALUE))
+                                        .addComponent(jTextFieldValorTotal))
                                     .addGroup(jPanel1Layout.createSequentialGroup()
                                         .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jTextFieldID, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jTextFieldIDProduto, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(jLabel5)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(jTextFieldProduto))))
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel2)
-                                    .addComponent(jLabel3))
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel2))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel11, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel14, javax.swing.GroupLayout.Alignment.TRAILING))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jTextFieldIDVendedor, javax.swing.GroupLayout.DEFAULT_SIZE, 56, Short.MAX_VALUE)
+                                    .addComponent(jTextFieldIDCliente))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jTextFieldVendedor)
-                                    .addComponent(jTextFieldCliente))))
+                                    .addComponent(jLabel12, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel15))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jTextFieldNomeVendedor, javax.swing.GroupLayout.DEFAULT_SIZE, 351, Short.MAX_VALUE)
+                                    .addComponent(jTextFieldNomeCliente))))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jButton4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(jButton4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                            .addComponent(jButton5)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel1)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(jTextFieldTOTAL, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                            .addGap(0, 0, Short.MAX_VALUE)
+                            .addComponent(jLabel13)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 551, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jLabel2)
-                                .addComponent(jTextFieldCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jTextFieldVendedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel3)))
-                        .addGap(50, 50, 50)
+                                .addComponent(jTextFieldNomeVendedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel3))))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel4)
-                            .addComponent(jTextFieldCOdBarra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel5)
-                            .addComponent(jTextFieldProduto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel10)
-                            .addComponent(jTextFieldID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel2)
+                            .addComponent(jTextFieldNomeCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel11)
+                            .addComponent(jTextFieldIDCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel12))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel14)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jTextFieldIDVendedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel15)))))
+                .addGap(33, 33, 33)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel13))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel4)
+                        .addComponent(jTextFieldCOdBarra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel5)
+                        .addComponent(jTextFieldProduto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel10)
+                        .addComponent(jTextFieldIDProduto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jButton4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
@@ -267,13 +358,18 @@ public class TelaVenda extends javax.swing.JFrame {
                     .addComponent(jButton1)
                     .addComponent(jLabel9)
                     .addComponent(jTextFieldQuantidadeEstoque, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextFieldTOTAL, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1))
-                .addGap(59, 59, 59))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jTextFieldTOTAL, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel1)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton5)))
+                .addGap(56, 56, 56))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -284,7 +380,7 @@ public class TelaVenda extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -302,7 +398,7 @@ public class TelaVenda extends javax.swing.JFrame {
                     ArrayList<Produto> p = ControllerProduto.buscarNome(2, jTextFieldCOdBarra.getText().trim());
                     if (!p.isEmpty()) {
                         jTextFieldProduto.setText(p.get(0).getNome());
-                        jTextFieldID.setText(p.get(0).getId() + "");
+                        jTextFieldIDProduto.setText(p.get(0).getId() + "");
                         jTextFieldValorUnitario.setText(String.format("%.2f", p.get(0).getValorVenda()));
                         jTextFieldQuantidadeEstoque.setText(p.get(0).getQuantidade() + "");
                         jTextFieldValorTotal.setText(String.format("%.2f", p.get(0).getValorVenda()));
@@ -315,25 +411,28 @@ public class TelaVenda extends javax.swing.JFrame {
         }.start();
     }//GEN-LAST:event_jTextFieldCOdBarraFocusLost
 
-    private void jTextFieldVendedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldVendedorActionPerformed
+    private void jTextFieldNomeVendedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldNomeVendedorActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextFieldVendedorActionPerformed
+    }//GEN-LAST:event_jTextFieldNomeVendedorActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         Cliente c = ControllerCliente.buscarClienteInterface();
+        jTextFieldIDCliente.setText(c.getId()+"");
+        jTextFieldNomeCliente.setText(c.getNome());
     }//GEN-LAST:event_jButton2ActionPerformed
 
-    private void jTextFieldIDFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldIDFocusLost
+    private void jTextFieldIDProdutoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldIDProdutoFocusLost
         new Thread() {
             @Override
             public void run() {
                 try {
-                    ArrayList<Produto> p = ControllerProduto.buscarNome(1, jTextFieldID.getText().trim());
+                    ArrayList<Produto> p = ControllerProduto.buscarNome(1, jTextFieldIDProduto.getText().trim());
                     if (!p.isEmpty()) {
                         jTextFieldProduto.setText(p.get(0).getNome());
                         jTextFieldCOdBarra.setText(p.get(0).getCodigoBarra());
                         jTextFieldValorUnitario.setText(String.format("%.2f", p.get(0).getValorVenda()));
                         jTextFieldQuantidadeEstoque.setText(p.get(0).getQuantidade() + "");
+                        jTextFieldQuantidadeVenda.setText("1");
                         jTextFieldQuantidadeVendaFocusLost(evt);
                     }
                 } catch (ProdutoNaoEncontradoException ex) {
@@ -341,11 +440,11 @@ public class TelaVenda extends javax.swing.JFrame {
                 }
             }
         }.start();
-    }//GEN-LAST:event_jTextFieldIDFocusLost
+    }//GEN-LAST:event_jTextFieldIDProdutoFocusLost
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         try {
-            ArrayList<Produto> e = ControllerProduto.buscarNome(1, jTextFieldID.getText().trim());
+            ArrayList<Produto> e = ControllerProduto.buscarNome(1, jTextFieldIDProduto.getText().trim());
             e.get(0).setQuantidade(Integer.parseInt(jTextFieldQuantidadeVenda.getText().trim()));
             produtos.add((Produto) e.get(0));
             criarTabela(produtos);
@@ -354,17 +453,9 @@ public class TelaVenda extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void jTextFieldQuantidadeVendaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldQuantidadeVendaKeyPressed
-
-    }//GEN-LAST:event_jTextFieldQuantidadeVendaKeyPressed
-
     private void jTextFieldCOdBarraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldCOdBarraActionPerformed
-        // TODO add your handling code here:
+        jTextFieldCOdBarraFocusLost(null);
     }//GEN-LAST:event_jTextFieldCOdBarraActionPerformed
-
-    private void jTextFieldQuantidadeVendaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldQuantidadeVendaKeyTyped
-
-    }//GEN-LAST:event_jTextFieldQuantidadeVendaKeyTyped
 
     private void jTextFieldQuantidadeVendaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldQuantidadeVendaFocusLost
         if (!jTextFieldQuantidadeVenda.getText().isEmpty()) {
@@ -372,6 +463,60 @@ public class TelaVenda extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_jTextFieldQuantidadeVendaFocusLost
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        if (table != null) {
+            ArrayList c;
+            if (table.getSelectedRow() == -1) {
+                JOptionPane.showMessageDialog(null, "Selecione um item para remover");
+            } else {
+
+                Integer id = Integer.parseInt((String) table.getValueAt(table.getSelectedRow(), 0));
+                if (produtos.size() > 1) {
+                    for (Produto obj : produtos) {
+                        if (Objects.equals(obj.getId(), id)) {
+                            produtos.remove(obj);
+                        }
+                    }
+                }else{
+                    produtos.clear();
+                }
+                
+                criarTabela(produtos);
+
+            }
+        }
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jTextFieldIDProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldIDProdutoActionPerformed
+        jTextFieldIDProdutoFocusLost(null);
+    }//GEN-LAST:event_jTextFieldIDProdutoActionPerformed
+
+    private void jTextFieldQuantidadeVendaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldQuantidadeVendaActionPerformed
+        jTextFieldQuantidadeVendaFocusLost(null);
+    }//GEN-LAST:event_jTextFieldQuantidadeVendaActionPerformed
+
+    private void jTextFieldIDClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldIDClienteActionPerformed
+        if(!jTextFieldIDCliente.getText().trim().isEmpty()){
+            try {
+                ArrayList<Cliente> c = ControllerCliente.buscarCliente(3, jTextFieldIDCliente.getText().trim());
+                this.cliente = c.get(0);
+                jTextFieldNomeCliente.setText(cliente.getNome());
+            } catch (ClienteNaoEncontradoException ex) {
+                JOptionPane.showMessageDialog(null, "Cliente não encontrado");
+            }
+        }
+    }//GEN-LAST:event_jTextFieldIDClienteActionPerformed
+
+    private void jTextFieldIDClienteFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldIDClienteFocusLost
+
+    }//GEN-LAST:event_jTextFieldIDClienteFocusLost
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        Vendedor v = ControllerVendedor.buscarVendedorInterface();
+        jTextFieldIDVendedor.setText(v.getId()+"");
+        jTextFieldNomeVendedor.setText(v.getNome());
+    }//GEN-LAST:event_jButton3ActionPerformed
     private void criarTabela(ArrayList<Produto> produto) {
         String[] colunas = {"ID", "NOME", "COD. BARRA", "VALOR UNIT", "QUANTIDADE", "VALOR TOTAL"};
         List<String[]> lista = new ArrayList<>();
@@ -384,7 +529,8 @@ public class TelaVenda extends javax.swing.JFrame {
         DefaultTableModel model = new DefaultTableModel(lista.toArray(new String[lista.size()][]), colunas);
         table.setModel(model);
         jScrollPane1.setViewportView(table);
-        jTextFieldTOTAL.setText(String.format("%.2f", totalCompras));
+        jTextFieldTOTAL.setForeground(Color.red);
+        jTextFieldTOTAL.setText(String.format("R$ %.2f", totalCompras));
 
     }
 
@@ -394,8 +540,14 @@ public class TelaVenda extends javax.swing.JFrame {
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -406,15 +558,18 @@ public class TelaVenda extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTextField jTextFieldCOdBarra;
-    private javax.swing.JTextField jTextFieldCliente;
-    private javax.swing.JTextField jTextFieldID;
+    private javax.swing.JTextField jTextFieldIDCliente;
+    private javax.swing.JTextField jTextFieldIDProduto;
+    private javax.swing.JTextField jTextFieldIDVendedor;
+    private javax.swing.JTextField jTextFieldNomeCliente;
+    private javax.swing.JTextField jTextFieldNomeVendedor;
     private javax.swing.JTextField jTextFieldProduto;
     private javax.swing.JTextField jTextFieldQuantidadeEstoque;
     private javax.swing.JTextField jTextFieldQuantidadeVenda;
     private javax.swing.JTextField jTextFieldTOTAL;
     private javax.swing.JTextField jTextFieldValorTotal;
     private javax.swing.JTextField jTextFieldValorUnitario;
-    private javax.swing.JTextField jTextFieldVendedor;
     // End of variables declaration//GEN-END:variables
 }

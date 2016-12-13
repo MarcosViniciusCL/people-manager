@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 public class ConnectionFactory {
 
     private static final String DRIVE = "org.sqlite.JDBC";
-    private static final String URL = "jdbc:sqlite:/home/marcos/NetBeansProjects/PeopleManager/database.db";   //<-- MYSQL mysql://locahost:3306/database
+    private static final String URL = "jdbc:sqlite:database.db";   //<-- MYSQL mysql://locahost:3306/database
     private static final String USER = "root";
     private static final String PASS = "";
 
@@ -64,5 +64,9 @@ public class ConnectionFactory {
         } catch (SQLException ex) {
             Logger.getLogger(ConnectionFactory.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    public static void criarBanco() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
