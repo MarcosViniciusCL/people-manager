@@ -36,6 +36,14 @@ public class Produto {
     public void vendeu(){
         this.quantidade -= 1;
     }
+    
+    public void subtraiQuantidade(Integer quant){
+        this.quantidade -= quant;
+    }
+    
+    public void adicionarQuantidade(Integer quant){
+        this.quantidade += quant;
+    }
 
     public Integer getId() {
         return id;

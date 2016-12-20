@@ -20,12 +20,10 @@ public class Main {
     
     public static void main(String[] args) throws ArquivoModificadoException, IOException {
            janelas = new ArrayList<>();
-           TelaVenda tv = new TelaVenda("Venda");
-           tv.setLocationRelativeTo(null);
-           tv.setVisible(true);
-//           TelaLogin t = new TelaLogin("Login");
-//           t.setLocationRelativeTo(null);
-//           t.setVisible(true);
+
+           TelaLogin t = new TelaLogin("Login");
+           t.setLocationRelativeTo(null);
+           t.setVisible(true);
     }
     
     public static void setTI(TelaInicial ti){
@@ -41,9 +39,9 @@ public class Main {
     }
     
     public static void fecharTudo(){
-        for(JFrame j : Main.janelas){
+        Main.janelas.forEach((j) -> {
             j.dispose();
-        }
+        });
         janelas.clear();
     }
     

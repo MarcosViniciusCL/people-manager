@@ -26,7 +26,6 @@ import javax.swing.table.DefaultTableModel;
 import people.manager.model.Cliente;
 import people.manager.model.Endereco;
 import people.manager.persistencia.ClienteDAO;
-import sun.security.acl.OwnerImpl;
 
 /**
  *

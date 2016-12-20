@@ -9,7 +9,6 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -149,7 +148,7 @@ public class ProdutoDAO {
             ResultSet rs = stmt.executeQuery(sql);
             if(rs.isClosed())
                 return null;
-            produto = new Produto(rs.getString("NOME"), rs.getString("CATEGORIA"),rs.getString("CODIGOBARRA"), rs.getDouble("VALOR"), rs.getDouble("VALORCOMPRA"), rs.getInt("QUANTIDADE"));
+            produto = new Produto(rs.getString("NOME"), rs.getString("CATEGORIA"),rs.getString("CODIGOBARRA"), rs.getDouble("VALORCOMPRA"), rs.getDouble("VALOR"), rs.getInt("QUANTIDADE"));
             produto.setId(rs.getInt("ID"));
             stmt.close();
         } catch (SQLException ex) {

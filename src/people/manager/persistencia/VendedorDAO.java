@@ -166,7 +166,7 @@ public class VendedorDAO {
    
                 Vendedor v = new Vendedor(rs.getInt("ID"), rs.getString("NOME"), rs.getString("SOBRENOME"),  rs.getString("CPF"), rs.getInt("IDADE"), rs.getString("CELULAR"), rs.getString("EMAIL"), contratacao, nascimento, "RUA", "numero", "cep", "bairro", "cidade", "estado");
                
-                if(rs.getString("ATIVO").equals("1"))
+                if(rs.getString("ESTADO").equals("1"))
                     v.setAtivo(true);
                 else
                     v.setAtivo(false);
@@ -205,7 +205,7 @@ public class VendedorDAO {
                 Logger.getLogger(ClienteDAO.class.getName()).log(Level.SEVERE, null, ex);
             }
             v = new Vendedor(rs.getInt("ID"), rs.getString("NOME"), rs.getString("SOBRENOME"),  rs.getString("CPF"), rs.getInt("IDADE"), rs.getString("CELULAR"), rs.getString("EMAIL"), contratacao, nascimento, "RUA", "numero", "cep", "bairro", "cidade", "estado");
-            if(rs.getString("ATIVO").equals("1"))
+            if(rs.getString("ESTADO").equals("1"))
                 v.setAtivo(true);
             else
                 v.setAtivo(false);
@@ -240,7 +240,7 @@ public class VendedorDAO {
                 Logger.getLogger(ClienteDAO.class.getName()).log(Level.SEVERE, null, ex);
             }
             v = new Vendedor(rs.getInt("ID"), rs.getString("NOME"), rs.getString("SOBRENOME"),  rs.getString("CPF"), rs.getInt("IDADE"), rs.getString("CELULAR"), rs.getString("EMAIL"), contratacao, nascimento, "RUA", "numero", "cep", "bairro", "cidade", "estado");
-            if(rs.getString("ATIVO").equals("1"))
+            if(rs.getString("ESTADO").equals("1"))
                 v.setAtivo(true);
             else
                 v.setAtivo(false);

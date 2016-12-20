@@ -36,7 +36,6 @@ public class Vendedor {
         this.nascimento = nascimento;
         this.endereco = new Endereco(rua, numero, cep, bairro, cidade, estado);
     }
-
     
     public Integer getId() {
         return id;

@@ -15,6 +15,7 @@ import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -22,6 +23,7 @@ import people.manager.model.Produto;
 import people.manager.model.Usuario;
 import people.manager.persistencia.ArquivoDAO;
 import people.manager.persistencia.ArquivoZIP;
+import people.manager.persistencia.GerenciaProperties;
 import people.manager.persistencia.ProdutoDAO;
 import people.manager.persistencia.Update;
 import people.manager.view.Main;
@@ -36,6 +38,7 @@ public class Controller {
 
     private static Usuario user;
     private static ArrayList<String> arquivosErro;
+    private static Properties configuracoes;
 
     /**
      * Cria um codigo hash para cada String de entrada.
@@ -108,7 +111,7 @@ public class Controller {
 
     }
 
-    private static String calendarParaString(Calendar calendar) {
+    public static String calendarParaString(Calendar calendar) {
         if (calendar == null) {
             return "NULO";
         }
@@ -233,6 +236,23 @@ public class Controller {
         } catch (InterruptedException ex) {
             Logger.getLogger(TelaTrocaPropriaSenha.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    /**
+     * Ler o arquivo de configuração do disco e como atributo da classe;
+     */
+    public static void lerProperties(){
+        try {
+            Controller.configuracoes = GerenciaProperties.getProp("conf.properties");
+        } catch (IOException ex) {
+            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    /**
+     * Retorna as configurações lidas;
+     * @return Properties
+     */
+    public static Properties getConfiguracao(){
+        return Controller.configuracoes;
     }
 
 }

@@ -150,20 +150,20 @@ public class ControllerVendedor {
         
         //Eventos do Jframe
         botaoBusca.addActionListener((java.awt.event.ActionEvent e) -> {
-            ArrayList<Cliente> clientes = new ArrayList();
+            ArrayList<Vendedor> vendedor = new ArrayList();
             try {
-                clientes = ControllerCliente.buscarCliente(0, text.getText().trim());
-            } catch (ClienteNaoEncontradoException ex) {
-                Logger.getLogger(ControllerCliente.class.getName()).log(Level.SEVERE, null, ex);
+                vendedor = ControllerVendedor.buscarVendedor(0, text.getText().trim());
+            } catch (VendedorNaoEncontradoException ex) {
+                Logger.getLogger(ControllerVendedor.class.getName()).log(Level.SEVERE, null, ex);
             }
-            String[] colunas = {"ID", "NOME", "IDADE", "CPF", "DEPITO", "ESTADO"};
+            String[] colunas = {"ID", "NOME", "IDADE", "CPF", "ESTADO"};
             List<String[]> lista = new ArrayList<>();
-            for (Cliente clienteT : clientes) {
+            for (Vendedor vendedorT : vendedor) {
                 String est = "DESATIVO";
-                if (clienteT.isAtivo()) {
+                if (vendedorT.isAtivo()) {
                     est = "ATIVO";
                 }
-                lista.add(new String[]{clienteT.getId().toString(), clienteT.getNome() + " " + clienteT.getSobrenome(), clienteT.getIdade().toString(), clienteT.getCpf(), clienteT.getSaldoDevedor().toString(), est});
+                lista.add(new String[]{vendedorT.getId().toString(), vendedorT.getNome() + " " + vendedorT.getSobrenome(), vendedorT.getIdade().toString(), vendedorT.getCpf(), est});
                 
             }
             table = new JTable();
@@ -173,11 +173,11 @@ public class ControllerVendedor {
         });
         botaoSeleciona.addActionListener((java.awt.event.ActionEvent e) -> {
             try {
-                ArrayList a = ControllerCliente.buscarCliente(3, (String)table.getValueAt(table.getSelectedRow(), 0));
-                cliente = (Cliente) a.get(0);
+                ArrayList a = ControllerVendedor.buscarVendedor(2, (String)table.getValueAt(table.getSelectedRow(), 0));
+                vendedorMain = (Vendedor) a.get(0);
                 jf.dispose();
-            } catch (ClienteNaoEncontradoException ex) {
-                Logger.getLogger(ControllerCliente.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (VendedorNaoEncontradoException ex) {
+                Logger.getLogger(ControllerVendedor.class.getName()).log(Level.SEVERE, null, ex);
             }
             
         });
@@ -186,7 +186,8 @@ public class ControllerVendedor {
         });
         
         jf.setVisible(true);
-        return ControllerCliente.cliente;
+        return ControllerVendedor.vendedorMain;
     }
-    
+    private static JTable table;
+    private static Vendedor vendedorMain;
 }

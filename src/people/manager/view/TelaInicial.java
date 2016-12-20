@@ -38,7 +38,8 @@ public class TelaInicial extends javax.swing.JFrame {
         this.user = user;
         botaoX();
         initComponents();
-        verificacaoSistema();
+        Controller.lerProperties(); //<- Carrega o arquivo de configurações do disco; 
+//        verificacaoSistema();
     }
 
     /**
@@ -74,9 +75,9 @@ public class TelaInicial extends javax.swing.JFrame {
         jMenuItem10 = new javax.swing.JMenuItem();
         jMenu9 = new javax.swing.JMenu();
         jMenuItem12 = new javax.swing.JMenuItem();
-        jMenuItem13 = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
         jMenuItem11 = new javax.swing.JMenuItem();
+        jMenuItem13 = new javax.swing.JMenuItem();
         jMenu10 = new javax.swing.JMenu();
         jMenuItem15 = new javax.swing.JMenuItem();
         jMenuItem16 = new javax.swing.JMenuItem();
@@ -226,11 +227,14 @@ public class TelaInicial extends javax.swing.JFrame {
 
         jMenu9.setText("Estoque");
 
-        jMenuItem12.setText("Adicionar");
+        jMenuItem12.setText("Adic./Rem.");
+        jMenuItem12.setToolTipText("Adicionar ou remover quantidade ao estoque.");
+        jMenuItem12.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem12ActionPerformed(evt);
+            }
+        });
         jMenu9.add(jMenuItem12);
-
-        jMenuItem13.setText("Remover");
-        jMenu9.add(jMenuItem13);
 
         jMenu3.add(jMenu9);
 
@@ -245,6 +249,14 @@ public class TelaInicial extends javax.swing.JFrame {
             }
         });
         jMenu4.add(jMenuItem11);
+
+        jMenuItem13.setText("Buscar");
+        jMenuItem13.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem13ActionPerformed(evt);
+            }
+        });
+        jMenu4.add(jMenuItem13);
 
         jMenuBar1.add(jMenu4);
 
@@ -310,7 +322,9 @@ public class TelaInicial extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jSeparator1)
                 .addContainerGap())
-            .addComponent(jLabelMensagem, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jLabelMensagem, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(181, 181, 181))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -318,7 +332,7 @@ public class TelaInicial extends javax.swing.JFrame {
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 452, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 413, Short.MAX_VALUE)
                 .addComponent(jLabelMensagem, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -326,6 +340,7 @@ public class TelaInicial extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        Controller.novoLog("fechou a aplicação");
         System.exit(0);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
@@ -460,6 +475,20 @@ public class TelaInicial extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jMenuItem11ActionPerformed
 
+    private void jMenuItem12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem12ActionPerformed
+        TelaAdicRemEstoque tare = new TelaAdicRemEstoque("Gerenciar Estoque");
+        Main.guardarJanela(tare);
+        tare.setLocationRelativeTo(null);
+        tare.setVisible(true);
+    }//GEN-LAST:event_jMenuItem12ActionPerformed
+
+    private void jMenuItem13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem13ActionPerformed
+       TelaBuscaVendedores tbv = new TelaBuscaVendedores("Busca Vendedores");
+       Main.guardarJanela(tbv);
+       tbv.setLocationRelativeTo(null);
+       tbv.setVisible(true);
+    }//GEN-LAST:event_jMenuItem13ActionPerformed
+
     /**
      * É executado quando o botão X da janela é pressionado.
      */
@@ -467,10 +496,7 @@ public class TelaInicial extends javax.swing.JFrame {
         this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                //caixa de dialogo retorna um inteiro
                 int resposta = JOptionPane.showConfirmDialog(null, "Deseja fechar o programa?", "Finalizar", JOptionPane.YES_NO_OPTION);
-
-                //sim = 0, nao = 1
                 if (resposta == 0) {
                     Controller.novoLog("fechou a aplicação");
                     System.exit(0);
