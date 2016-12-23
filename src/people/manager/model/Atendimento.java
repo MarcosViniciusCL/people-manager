@@ -96,7 +96,7 @@ public class Atendimento {
         return idAtendente;
     }
 
-    public void setAtendente(Integer atendente) {
+    public void setIdAtendente(Integer atendente) {
         this.idAtendente = atendente;
     }
     

@@ -15,9 +15,11 @@ import people.manager.controller.Controller;
 import people.manager.controller.ControllerAtendimento;
 import people.manager.controller.ControllerCliente;
 import people.manager.controller.ControllerFuncionario;
+import people.manager.exception.AtendimentoNaoEncontradoException;
 import people.manager.exception.ClienteNaoEncontradoException;
-import people.manager.exception.HorarioCheioException;
+import people.manager.exception.ImpossivelRemoverException;
 import people.manager.exception.VendedorNaoEncontradoException;
+import people.manager.model.Atendimento;
 import people.manager.model.Cliente;
 import people.manager.model.Funcionario;
 
@@ -25,19 +27,31 @@ import people.manager.model.Funcionario;
  *
  * @author marcos
  */
-public class TelaNovoAgendamento extends javax.swing.JFrame {
+public class TelaEditarAgendamento extends javax.swing.JFrame {
 
     private Cliente cliente;
     private Funcionario funcionario;
+    private final Atendimento agend;
 
     /**
      * Creates new form TelaNovoAgendamento
      *
      * @param title
+     * @param agend
      */
-    public TelaNovoAgendamento(String title) {
+    public TelaEditarAgendamento(String title, Atendimento agend) {
         super(title);
         initComponents();
+        this.agend = agend;
+        jTextFieldIDAtendimento.setText(agend.getId()+"");
+        jTextFieldIDCliente.setText(agend.getIdCliente()+"");
+        jTextFieldIDClienteActionPerformed(null);
+        jTextFieldIDFunc.setText(agend.getIdAtendente()+"");
+        jTextFieldIDFuncActionPerformed(null);
+        jTextFieldValor.setText(String.format("%.2f", agend.getPreco()));
+        jTextAreaComentario.setText(agend.getComentario());
+        jDateChooser1.setCalendar(agend.getDataAtendimento());
+        jSpinnerHora.getModel().setValue(Controller.calendarParaString(agend.getDataAtendimento()).substring(11, 16));
     }
 
     /**
@@ -69,11 +83,14 @@ public class TelaNovoAgendamento extends javax.swing.JFrame {
         jTextAreaComentario = new javax.swing.JTextArea();
         jLabel6 = new javax.swing.JLabel();
         jTextFieldValor = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        jTextFieldIDAtendimento = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setText("ID. Cliente:");
 
+        jTextFieldIDCliente.setEditable(false);
         jTextFieldIDCliente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextFieldIDClienteActionPerformed(evt);
@@ -194,14 +211,13 @@ public class TelaNovoAgendamento extends javax.swing.JFrame {
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel1)
                         .addComponent(jTextFieldIDCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jTextFieldNomeCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -228,22 +244,36 @@ public class TelaNovoAgendamento extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton3)
-                    .addComponent(jButton4))
-                .addContainerGap())
+                    .addComponent(jButton4)))
         );
+
+        jLabel7.setText("ID:");
+
+        jTextFieldIDAtendimento.setEditable(false);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel7)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTextFieldIDAtendimento, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7)
+                    .addComponent(jTextFieldIDAtendimento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
@@ -273,29 +303,22 @@ public class TelaNovoAgendamento extends javax.swing.JFrame {
         } else if (jDateChooser1.getCalendar() == null) {
             JOptionPane.showMessageDialog(null, "Selecione a data atendimento.");
         } else {
-            String horaS = jSpinnerHora.getValue() + "";
-            String[] hora = horaS.split(":");
-            Calendar data = jDateChooser1.getCalendar();
-            String dataS = Controller.calendarParaString(data);
-            dataS = dataS.substring(0, 10);
-            dataS = dataS + " " + hora[0] + ":" + hora[1] + ":00";
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
             try {
+                String horaS = jSpinnerHora.getValue() + "";
+                String[] hora = horaS.split(":");
+                Calendar data = jDateChooser1.getCalendar();
+                String dataS = Controller.calendarParaString(data);
+                dataS = dataS.substring(0, 10);
+                dataS = dataS + " " + hora[0] + ":" + hora[1] + ":00";
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
                 data.setTime(sdf.parse(dataS));
-            } catch (ParseException ex) {
-                Logger.getLogger(TelaNovoAgendamento.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            if (data.compareTo(Calendar.getInstance()) > 0) {
-                try {
-
-                    ControllerAtendimento.criar(jTextAreaComentario.getText().trim(), Integer.parseInt(jTextFieldIDFunc.getText().trim()), Integer.parseInt(jTextFieldIDCliente.getText().trim()), data, Double.parseDouble(jTextFieldValor.getText().trim().replace(",", ".")));
-                    JOptionPane.showMessageDialog(null, "Agendamento cadastrado.");
-                    dispose();
-                } catch (HorarioCheioException ex) {
-                    JOptionPane.showMessageDialog(null, "Esse horário já está cheio para esse funcionario.\nSelecione outro.");
-                }
-            } else {
-                JOptionPane.showMessageDialog(null, "Data inválida.");
+                ControllerAtendimento.editar(jTextFieldIDAtendimento.getText().trim(),jTextAreaComentario.getText().trim(), Integer.parseInt(jTextFieldIDFunc.getText().trim()), Integer.parseInt(jTextFieldIDCliente.getText().trim()), data, Double.parseDouble(jTextFieldValor.getText().trim().replace(",", ".")));
+                JOptionPane.showMessageDialog(null, "Agendamento cadastrado.");
+                dispose();
+            } catch (ParseException | AtendimentoNaoEncontradoException ex) {
+                Logger.getLogger(TelaEditarAgendamento.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ImpossivelRemoverException ex) {
+                JOptionPane.showMessageDialog(null, "Esse atendimento já foi marcado como concluido.\nNão será possivel edita-lo.");
             }
 
         }
@@ -310,10 +333,10 @@ public class TelaNovoAgendamento extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextFieldValorActionPerformed
 
     private void jTextFieldIDClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldIDClienteActionPerformed
-        if (!jTextFieldIDCliente.getText().trim().equals("")) {
+        if(!jTextFieldIDCliente.getText().trim().equals("")){
             try {
                 cliente = (Cliente) ControllerCliente.buscarCliente(3, jTextFieldIDCliente.getText().trim()).get(0);
-                jTextFieldNomeCliente.setText(cliente.getNome() + " " + cliente.getSobrenome());
+                jTextFieldNomeCliente.setText(cliente.getNome()+" "+cliente.getSobrenome());
             } catch (ClienteNaoEncontradoException ex) {
                 Logger.getLogger(TelaEditarAgendamento.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -321,11 +344,12 @@ public class TelaNovoAgendamento extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextFieldIDClienteActionPerformed
 
     private void jTextFieldIDFuncActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldIDFuncActionPerformed
-        if (!jTextFieldIDFunc.getText().trim().equals("")) {
+        if(!jTextFieldIDFunc.getText().trim().equals("")){
             try {
                 funcionario = (Funcionario) ControllerFuncionario.buscarFuncionario(2, jTextFieldIDFunc.getText().trim()).get(0);
-                jTextFieldNomeFuncionario.setText(funcionario.getNome() + " " + funcionario.getSobrenome());
+                jTextFieldNomeFuncionario.setText(funcionario.getNome()+" "+funcionario.getSobrenome());
             } catch (VendedorNaoEncontradoException ex) {
+                JOptionPane.showMessageDialog(null, "Funcionario não encontrado.");
                 Logger.getLogger(TelaEditarAgendamento.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -344,10 +368,12 @@ public class TelaNovoAgendamento extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSpinner jSpinnerHora;
     private javax.swing.JTextArea jTextAreaComentario;
+    private javax.swing.JTextField jTextFieldIDAtendimento;
     private javax.swing.JTextField jTextFieldIDCliente;
     private javax.swing.JTextField jTextFieldIDFunc;
     private javax.swing.JTextField jTextFieldNomeCliente;

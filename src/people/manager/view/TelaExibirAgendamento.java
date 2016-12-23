@@ -460,7 +460,20 @@ public class TelaExibirAgendamento extends javax.swing.JFrame {
             if (jTable1.getSelectedRow() == -1) {
                 JOptionPane.showMessageDialog(null, "Selecione um evento antes");
             } else {
-                criarTabela();
+                String id = jTable1.getValueAt(jTable1.getSelectedRow(), 5) + "";
+                try {
+                    Atendimento at = ControllerAtendimento.buscarAtendimentoID(Integer.parseInt(id));
+                    if (!at.isAtendido()) {
+                        TelaEditarAgendamento tea = new TelaEditarAgendamento("Tela Edição", at);
+                        tea.setLocationRelativeTo(null);
+                        tea.setVisible(true);
+                        criarTabela();
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Esse atendimento já foi marcado como concluido.\nNão será possivel edita-lo.");
+                    }
+                } catch (AtendimentoNaoEncontradoException ex) {
+                    Logger.getLogger(TelaExibirAgendamento.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         }
     }//GEN-LAST:event_jButton3ActionPerformed

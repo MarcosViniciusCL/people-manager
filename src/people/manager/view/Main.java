@@ -20,12 +20,10 @@ public class Main {
     
     public static void main(String[] args) throws ArquivoModificadoException, IOException {
            janelas = new ArrayList<>();
-           TelaExibirAgendamento tea = new TelaExibirAgendamento("Exibição");
-           tea.setLocationRelativeTo(null);
-           tea.setVisible(true);
-//           TelaLogin t = new TelaLogin("Login");
-//           t.setLocationRelativeTo(null);
-//           t.setVisible(true);
+
+           TelaLogin t = new TelaLogin("Login");
+           t.setLocationRelativeTo(null);
+           t.setVisible(true);
     }
     
     public static void setTI(TelaInicial ti){

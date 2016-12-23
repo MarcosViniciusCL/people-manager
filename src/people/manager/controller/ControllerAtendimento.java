@@ -194,6 +194,18 @@ public class ControllerAtendimento {
     public static void editar(Atendimento a){
         AtendimentoDAO.edita(a);
     }
+    
+    public static void editar(String id, String comentario, Integer idFuncionario, Integer idCliente, Calendar dataAtendimento, Double valor) throws AtendimentoNaoEncontradoException, ImpossivelRemoverException{
+        Atendimento at = ControllerAtendimento.buscarAtendimentoID(Integer.parseInt(id));
+        if(at.isAtendido())
+            throw new ImpossivelRemoverException();
+        at.setComentario(comentario);
+        at.setIdCliente(idCliente);
+        at.setIdAtendente(idFuncionario);
+        at.setDataAtendimento(dataAtendimento);
+        at.setPreco(valor);
+        AtendimentoDAO.edita(at);
+    }
 
     private static List filtrar(Calendar dataInicial, Calendar dataFinal, ArrayList<Atendimento> array) {
         ArrayList elementos = new ArrayList();
