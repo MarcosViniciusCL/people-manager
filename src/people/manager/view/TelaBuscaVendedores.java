@@ -11,10 +11,10 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import people.manager.controller.Controller;
-import people.manager.controller.ControllerVendedor;
+import people.manager.controller.ControllerFuncionario;
 import people.manager.exception.VendedorNaoEncontradoException;
 import people.manager.model.Cliente;
-import people.manager.model.Vendedor;
+import people.manager.model.Funcionario;
 
 /**
  *
@@ -166,12 +166,12 @@ public class TelaBuscaVendedores extends javax.swing.JFrame {
 
             @Override
             public void run() {
-                ArrayList<Vendedor> vendedores;
+                ArrayList<Funcionario> vendedores;
                 jLabelImagem.setIcon(new javax.swing.ImageIcon(getClass().getResource("ajax-loader-cicle.gif")));
                 switch (jComboBoxTipoBusca.getSelectedIndex()) {
                     case 0:
                         try {
-                            vendedores = ControllerVendedor.buscarVendedor(0, jTextField1.getText().trim());
+                            vendedores = ControllerFuncionario.buscarFuncionario(0, jTextField1.getText().trim());
                             criarTabela(vendedores);
                         } catch (VendedorNaoEncontradoException ex) {
                             JOptionPane.showMessageDialog(null, "Vendedor não encontrado");
@@ -179,7 +179,7 @@ public class TelaBuscaVendedores extends javax.swing.JFrame {
                         break;
                     case 1:
                         try {
-                            vendedores = ControllerVendedor.buscarVendedor(1, jTextField1.getText().trim());
+                            vendedores = ControllerFuncionario.buscarFuncionario(1, jTextField1.getText().trim());
                             criarTabela(vendedores);
                         } catch (VendedorNaoEncontradoException ex) {
                             JOptionPane.showMessageDialog(null, "Vendedor não encontrado");
@@ -208,7 +208,7 @@ public class TelaBuscaVendedores extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jButton2ActionPerformed
 
-    private void criarTabela(ArrayList<Vendedor> vededores) {
+    private void criarTabela(ArrayList<Funcionario> vededores) {
         String[] colunas = {"ID", "NOME", "CELULAR", "EMAIL", "IDADE", "NASCIMENTO", "CPF", "ESTADO"};
         List<String[]> lista = new ArrayList<>();
         vededores.forEach((v) -> {

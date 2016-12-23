@@ -37,13 +37,17 @@ public class VendaDAO {
         
         try {
             stmt = con.createStatement();
-            String sql = "INSERT INTO VENDAS(ID, DATA_VENDA, COMENTARIO, ID_CLIENTE, PRODUTOS, VALOR) VALUES("
+            String sql = "INSERT INTO VENDAS(ID, DATA_VENDA, COMENTARIO, ID_CLIENTE, ID_VENDEDOR, PRODUTOS, VALOR, FORMA_PAGAMENTO, VALOR_RECEBIDO, VALOR_TROCO) VALUES("
                     + ""+v.getId()+","
                     + "'"+dataVenda+"',"
                     + "'"+v.getComentario()+"',"
                     + ""+v.getIdCliente()+","
+                    + ""+v.getIdVendedor()+","
                     + "'"+produtos+"',"
-                    + ""+v.getValorVenda()+");";
+                    + ""+v.getValorVenda()+","
+                    + "'"+v.getFormaPagamento()+"',"
+                    + ""+v.getValorRecebido()+","
+                    + ""+v.getValorTroco()+");";
             
             stmt.executeUpdate(sql);
             stmt.close();
@@ -88,7 +92,7 @@ public class VendaDAO {
                 Calendar dataVendaAtual = Calendar.getInstance();
 		dataVendaAtual.setTime(sdf.parse(rs.getString("DATA_VENDA")));
                 ArrayList arrayProdutos = criarObjectoJSON(rs.getString("PRODUTOS"));
-                Venda v = new Venda(rs.getString("COMENTARIO"), rs.getInt("ID_CLIENTE"), arrayProdutos, rs.getDouble("VALOR"));
+                Venda v = new Venda(rs.getString("COMENTARIO"), rs.getInt("ID_CLIENTE"), rs.getInt("ID_VENDEDOR"), arrayProdutos, rs.getDouble("VALOR"), rs.getString("FORMA_PAGAMENTO"), rs.getDouble("VALOR_RECEBIDO"), rs.getDouble("VALOR_TROCO"));
            
                 vendas.add(v);
             }
@@ -117,7 +121,7 @@ public class VendaDAO {
             Calendar dataVendaAtual = Calendar.getInstance();
             dataVendaAtual.setTime(sdf.parse(rs.getString("DATA_VENDA")));
             ArrayList arrayProdutos = criarObjectoJSON(rs.getString("PRODUTOS"));
-            v = new Venda(rs.getString("COMENTARIO"), rs.getInt("ID_CLIENTE"), arrayProdutos, rs.getDouble("VALOR"));           
+            v = new Venda(rs.getString("COMENTARIO"), rs.getInt("ID_CLIENTE"), rs.getInt("ID_VENDEDOR"), arrayProdutos, rs.getDouble("VALOR"), rs.getString("FORMA_PAGAMENTO"), rs.getDouble("VALOR_RECEBIDO"), rs.getDouble("VALOR_TROCO"));
             
             stmt.close();
         } catch (SQLException ex) {
@@ -143,7 +147,7 @@ public class VendaDAO {
                 Calendar nascimento = Calendar.getInstance();
 		nascimento.setTime(sdf.parse(rs.getString("DATA_VENDA")));
                 ArrayList arrayProdutos = criarObjectoJSON(rs.getString("PRODUTOS"));
-                Venda v = new Venda(rs.getString("COMENTARIO"), rs.getInt("ID_CLIENTE"), arrayProdutos, rs.getDouble("VALOR"));
+                Venda v = new Venda(rs.getString("COMENTARIO"), rs.getInt("ID_CLIENTE"), rs.getInt("ID_VENDEDOR"), arrayProdutos, rs.getDouble("VALOR"), rs.getString("FORMA_PAGAMENTO"), rs.getDouble("VALOR_RECEBIDO"), rs.getDouble("VALOR_TROCO"));
                 vendas.add(v);
             }
             
@@ -173,6 +177,7 @@ public class VendaDAO {
         }
         
     }
+    
     
     /**
      * Receber um calendar e retorna o valor do dia e hora em string

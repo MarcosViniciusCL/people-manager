@@ -22,31 +22,30 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import people.manager.exception.ClienteNaoEncontradoException;
-import people.manager.model.Cliente;
 import people.manager.model.Endereco;
-import people.manager.model.Vendedor;
+import people.manager.model.Funcionario;
 import people.manager.persistencia.VendedorDAO;
 
 /**
  *
  * @author Marcos Vinícius
  */
-public class ControllerVendedor {
+public class ControllerFuncionario {
 
-    public static Vendedor cadastrarVendedor(String nome, String sobrenome, String cpf, int idade, String celular, String email, Calendar contratacao, Calendar nascimento, String rua, String numero, String cep, String bairro, String cidade, String estado) throws VendedorNaoEncontradoException {
-        Vendedor vendedor;
-        Vendedor buscaCPF = VendedorDAO.buscaCPF(cpf);
+    public static Funcionario cadastrarFuncionario(String nome, String sobrenome, String cpf, int idade, String celular, String email, Calendar contratacao, Calendar nascimento, String rua, String numero, String cep, String bairro, String cidade, String estado) throws VendedorNaoEncontradoException {
+        Funcionario vendedor;
+        Funcionario buscaCPF = VendedorDAO.buscaCPF(cpf);
         
         if (buscaCPF != null) {
             throw new VendedorNaoEncontradoException();
         }
-        vendedor = new Vendedor(0, nome, sobrenome, cpf, idade, celular, email, contratacao, nascimento, rua, numero, cep, bairro, cidade, estado);
+        vendedor = new Funcionario(0, nome, sobrenome, cpf, idade, celular, email, contratacao, nascimento, rua, numero, cep, bairro, cidade, estado);
         VendedorDAO.create(vendedor);
         return vendedor;
     }
 
-    public static void desativarVendedor(String cpf) throws VendedorNaoEncontradoException {
-        Vendedor vendedor = VendedorDAO.buscaCPF(cpf);
+    public static void desativarFuncionario(String cpf) throws VendedorNaoEncontradoException {
+        Funcionario vendedor = VendedorDAO.buscaCPF(cpf);
         if (vendedor == null) {
             throw new VendedorNaoEncontradoException();
         }
@@ -54,8 +53,8 @@ public class ControllerVendedor {
         VendedorDAO.edita(vendedor);
     }
 
-    public static Vendedor editarVendedor(int id, String nome, String sobrenome, String cpf, int idade, String celular, String email, Calendar contratacao, Calendar nascimento, String rua, String numero, String cep, String bairro, String cidade, String estado) throws ClienteNaoEncontradoException {
-        Vendedor vendedor = VendedorDAO.buscaID(id);
+    public static Funcionario editarFuncionario(int id, String nome, String sobrenome, String cpf, int idade, String celular, String email, Calendar contratacao, Calendar nascimento, String rua, String numero, String cep, String bairro, String cidade, String estado) throws ClienteNaoEncontradoException {
+        Funcionario vendedor = VendedorDAO.buscaID(id);
         if (vendedor == null) {
             throw new ClienteNaoEncontradoException();
         }
@@ -80,7 +79,7 @@ public class ControllerVendedor {
      * @return ArrayList
      * @throws people.manager.exception.VendedorNaoEncontradoException
      */
-    public static ArrayList buscarVendedor(int sel, String busca) throws VendedorNaoEncontradoException {
+    public static ArrayList buscarFuncionario(int sel, String busca) throws VendedorNaoEncontradoException {
         ArrayList vendedor = new ArrayList();
         if (sel == 0) {
             vendedor = VendedorDAO.buscaNome(busca);
@@ -108,7 +107,7 @@ public class ControllerVendedor {
     }
     
     
-    public static Vendedor buscarVendedorInterface() {
+    public static Funcionario buscarFuncionarioInterface() {
         
 
         //Criando JFrame;
@@ -150,15 +149,15 @@ public class ControllerVendedor {
         
         //Eventos do Jframe
         botaoBusca.addActionListener((java.awt.event.ActionEvent e) -> {
-            ArrayList<Vendedor> vendedor = new ArrayList();
+            ArrayList<Funcionario> vendedor = new ArrayList();
             try {
-                vendedor = ControllerVendedor.buscarVendedor(0, text.getText().trim());
+                vendedor = ControllerFuncionario.buscarFuncionario(0, text.getText().trim());
             } catch (VendedorNaoEncontradoException ex) {
-                Logger.getLogger(ControllerVendedor.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ControllerFuncionario.class.getName()).log(Level.SEVERE, null, ex);
             }
             String[] colunas = {"ID", "NOME", "IDADE", "CPF", "ESTADO"};
             List<String[]> lista = new ArrayList<>();
-            for (Vendedor vendedorT : vendedor) {
+            for (Funcionario vendedorT : vendedor) {
                 String est = "DESATIVO";
                 if (vendedorT.isAtivo()) {
                     est = "ATIVO";
@@ -173,11 +172,11 @@ public class ControllerVendedor {
         });
         botaoSeleciona.addActionListener((java.awt.event.ActionEvent e) -> {
             try {
-                ArrayList a = ControllerVendedor.buscarVendedor(2, (String)table.getValueAt(table.getSelectedRow(), 0));
-                vendedorMain = (Vendedor) a.get(0);
+                ArrayList a = ControllerFuncionario.buscarFuncionario(2, (String)table.getValueAt(table.getSelectedRow(), 0));
+                funcionarioMain = (Funcionario) a.get(0);
                 jf.dispose();
             } catch (VendedorNaoEncontradoException ex) {
-                Logger.getLogger(ControllerVendedor.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ControllerFuncionario.class.getName()).log(Level.SEVERE, null, ex);
             }
             
         });
@@ -186,8 +185,8 @@ public class ControllerVendedor {
         });
         
         jf.setVisible(true);
-        return ControllerVendedor.vendedorMain;
+        return ControllerFuncionario.funcionarioMain;
     }
     private static JTable table;
-    private static Vendedor vendedorMain;
+    private static Funcionario funcionarioMain;
 }

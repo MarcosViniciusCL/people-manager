@@ -5,24 +5,15 @@
  */
 package people.manager.view;
 
-import java.awt.Image;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import people.manager.exception.CampoVazioException;
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import people.manager.controller.Controller;
 import people.manager.controller.ControllerCliente;
 import people.manager.exception.CPFExistenteException;
-import people.manager.exception.ClienteNaoEncontradoException;
 import people.manager.tools.BuscaCEP;
 
 /**

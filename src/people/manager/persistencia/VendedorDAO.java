@@ -19,7 +19,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import people.manager.model.Cliente;
 import people.manager.model.Endereco;
-import people.manager.model.Vendedor;
+import people.manager.model.Funcionario;
 
 /**
  *
@@ -31,7 +31,7 @@ public class VendedorDAO {
      * Adiciona um novo cliente no banco de dados.
      * @param c 
      */
-    public static void create(Vendedor c){
+    public static void create(Funcionario c){
         
         c.setId(quantidadeBanco()+1);
         
@@ -102,7 +102,7 @@ public class VendedorDAO {
 		nascimento.setTime(sdf.parse(rs.getString("NASCIMENTO")));
                 Calendar contratacao = Calendar.getInstance();
 		contratacao.setTime(sdf.parse(rs.getString("DATA_CONTRATACAO")));
-                Vendedor v = new Vendedor(rs.getInt("ID"), rs.getString("NOME"), rs.getString("SOBRENOME"),  rs.getString("CPF"), rs.getInt("IDADE"), rs.getString("CELULAR"), rs.getString("EMAIL"), contratacao, nascimento, "RUA", "numero", "cep", "bairro", "cidade", "estado");
+                Funcionario v = new Funcionario(rs.getInt("ID"), rs.getString("NOME"), rs.getString("SOBRENOME"),  rs.getString("CPF"), rs.getInt("IDADE"), rs.getString("CELULAR"), rs.getString("EMAIL"), contratacao, nascimento, "RUA", "numero", "cep", "bairro", "cidade", "estado");
                 if(rs.getString("ESTADO").equals("1"))
                     v.setAtivo(true);
                 else
@@ -164,7 +164,7 @@ public class VendedorDAO {
                     Logger.getLogger(ClienteDAO.class.getName()).log(Level.SEVERE, null, ex);
                 }
    
-                Vendedor v = new Vendedor(rs.getInt("ID"), rs.getString("NOME"), rs.getString("SOBRENOME"),  rs.getString("CPF"), rs.getInt("IDADE"), rs.getString("CELULAR"), rs.getString("EMAIL"), contratacao, nascimento, "RUA", "numero", "cep", "bairro", "cidade", "estado");
+                Funcionario v = new Funcionario(rs.getInt("ID"), rs.getString("NOME"), rs.getString("SOBRENOME"),  rs.getString("CPF"), rs.getInt("IDADE"), rs.getString("CELULAR"), rs.getString("EMAIL"), contratacao, nascimento, "RUA", "numero", "cep", "bairro", "cidade", "estado");
                
                 if(rs.getString("ESTADO").equals("1"))
                     v.setAtivo(true);
@@ -184,10 +184,10 @@ public class VendedorDAO {
         return vendedores;
     }
     
-    public static Vendedor buscaCPF(String cpf){
+    public static Funcionario buscaCPF(String cpf){
         Connection con = ConnectionFactory.getConnection();
         Statement stmt;
-        Vendedor v = null;
+        Funcionario v = null;
         
         try {
             stmt = con.createStatement();
@@ -204,7 +204,7 @@ public class VendedorDAO {
             } catch (ParseException ex) {
                 Logger.getLogger(ClienteDAO.class.getName()).log(Level.SEVERE, null, ex);
             }
-            v = new Vendedor(rs.getInt("ID"), rs.getString("NOME"), rs.getString("SOBRENOME"),  rs.getString("CPF"), rs.getInt("IDADE"), rs.getString("CELULAR"), rs.getString("EMAIL"), contratacao, nascimento, "RUA", "numero", "cep", "bairro", "cidade", "estado");
+            v = new Funcionario(rs.getInt("ID"), rs.getString("NOME"), rs.getString("SOBRENOME"),  rs.getString("CPF"), rs.getInt("IDADE"), rs.getString("CELULAR"), rs.getString("EMAIL"), contratacao, nascimento, "RUA", "numero", "cep", "bairro", "cidade", "estado");
             if(rs.getString("ESTADO").equals("1"))
                 v.setAtivo(true);
             else
@@ -219,10 +219,10 @@ public class VendedorDAO {
         return v;
     }
     
-    public static Vendedor buscaID(int id){
+    public static Funcionario buscaID(int id){
         Connection con = ConnectionFactory.getConnection();
         Statement stmt;
-        Vendedor v = null;
+        Funcionario v = null;
         
         try {
             stmt = con.createStatement();
@@ -239,7 +239,7 @@ public class VendedorDAO {
             } catch (ParseException ex) {
                 Logger.getLogger(ClienteDAO.class.getName()).log(Level.SEVERE, null, ex);
             }
-            v = new Vendedor(rs.getInt("ID"), rs.getString("NOME"), rs.getString("SOBRENOME"),  rs.getString("CPF"), rs.getInt("IDADE"), rs.getString("CELULAR"), rs.getString("EMAIL"), contratacao, nascimento, "RUA", "numero", "cep", "bairro", "cidade", "estado");
+            v = new Funcionario(rs.getInt("ID"), rs.getString("NOME"), rs.getString("SOBRENOME"),  rs.getString("CPF"), rs.getInt("IDADE"), rs.getString("CELULAR"), rs.getString("EMAIL"), contratacao, nascimento, "RUA", "numero", "cep", "bairro", "cidade", "estado");
             if(rs.getString("ESTADO").equals("1"))
                 v.setAtivo(true);
             else
@@ -255,7 +255,7 @@ public class VendedorDAO {
         return v;
     }
     
-    public static void edita(Vendedor v){
+    public static void edita(Funcionario v){
         Connection con = ConnectionFactory.getConnection();
         Statement stmt;
         

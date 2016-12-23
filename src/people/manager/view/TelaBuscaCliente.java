@@ -231,7 +231,6 @@ public class TelaBuscaCliente extends javax.swing.JFrame {
             if(c.isAtivo())
                 est = "ATIVO";
             lista.add(new String[]{c.getId().toString(), c.getNome() + " " + c.getSobrenome(), c.getCelular(), c.getTelefone(), c.getEmail(), c.getIdade().toString(), c.getNascimentoString(), c.getCpf(), c.getRg(), c.getSaldoDevedor().toString(), est, c.getUltimoAtendimentoString(), c.getProximoAtendimentoString()});
-
         }
         table = new JTable();
         DefaultTableModel model = new DefaultTableModel(lista.toArray(new String[lista.size()][]), colunas);

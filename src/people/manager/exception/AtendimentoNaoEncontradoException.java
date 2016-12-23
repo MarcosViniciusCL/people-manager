@@ -3,12 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package people.manager.view;
+package people.manager.exception;
 
 /**
  *
  * @author marcos
  */
-public class Vetor {
+public class AtendimentoNaoEncontradoException extends Exception {
+
+    public AtendimentoNaoEncontradoException() {
+    }
     
 }

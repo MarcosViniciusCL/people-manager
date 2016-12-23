@@ -11,7 +11,7 @@ import java.util.Calendar;
  *
  * @author marcos
  */
-public class Vendedor {
+public class Funcionario {
     private Integer id;
     private String nome;
     private String sobrenome;
@@ -24,7 +24,7 @@ public class Vendedor {
     private boolean estado;
     private Endereco endereco;
 
-    public Vendedor(int id, String nome, String sobrenome, String cpf, int idade, String celular, String email, Calendar contratacao, Calendar nascimento, String rua, String numero, String cep, String bairro, String cidade, String estado) {
+    public Funcionario(int id, String nome, String sobrenome, String cpf, int idade, String celular, String email, Calendar contratacao, Calendar nascimento, String rua, String numero, String cep, String bairro, String cidade, String estado) {
         this.id = id;
         this.nome = nome;
         this.sobrenome = sobrenome;

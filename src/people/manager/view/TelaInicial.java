@@ -75,6 +75,9 @@ public class TelaInicial extends javax.swing.JFrame {
         jMenuItem10 = new javax.swing.JMenuItem();
         jMenu9 = new javax.swing.JMenu();
         jMenuItem12 = new javax.swing.JMenuItem();
+        jMenu11 = new javax.swing.JMenu();
+        jMenuItem20 = new javax.swing.JMenuItem();
+        jMenuItem21 = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
         jMenuItem11 = new javax.swing.JMenuItem();
         jMenuItem13 = new javax.swing.JMenuItem();
@@ -240,7 +243,27 @@ public class TelaInicial extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu3);
 
-        jMenu4.setText("Vendedores");
+        jMenu11.setText("Agenda");
+
+        jMenuItem20.setText("Agendar");
+        jMenuItem20.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem20ActionPerformed(evt);
+            }
+        });
+        jMenu11.add(jMenuItem20);
+
+        jMenuItem21.setText("Gerenciar");
+        jMenuItem21.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem21ActionPerformed(evt);
+            }
+        });
+        jMenu11.add(jMenuItem21);
+
+        jMenuBar1.add(jMenu11);
+
+        jMenu4.setText("Funcionarios");
 
         jMenuItem11.setText("Cadastrar");
         jMenuItem11.addActionListener(new java.awt.event.ActionListener() {
@@ -483,11 +506,25 @@ public class TelaInicial extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem12ActionPerformed
 
     private void jMenuItem13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem13ActionPerformed
-       TelaBuscaVendedores tbv = new TelaBuscaVendedores("Busca Vendedores");
+       TelaBuscaVendedores tbv = new TelaBuscaVendedores("Busca Funcionarios");
        Main.guardarJanela(tbv);
        tbv.setLocationRelativeTo(null);
        tbv.setVisible(true);
     }//GEN-LAST:event_jMenuItem13ActionPerformed
+
+    private void jMenuItem20ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem20ActionPerformed
+        TelaNovoAgendamento tna = new TelaNovoAgendamento("Novo Agendamento");
+        Main.guardarJanela(tna);
+        tna.setLocationRelativeTo(null);
+        tna.setVisible(true);
+    }//GEN-LAST:event_jMenuItem20ActionPerformed
+
+    private void jMenuItem21ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem21ActionPerformed
+        TelaExibirAgendamento tea = new TelaExibirAgendamento("Exibição de Agenda");
+        Main.guardarJanela(tea);
+        tea.setLocationRelativeTo(null);
+        tea.setVisible(true);
+    }//GEN-LAST:event_jMenuItem21ActionPerformed
 
     /**
      * É executado quando o botão X da janela é pressionado.
@@ -513,6 +550,7 @@ public class TelaInicial extends javax.swing.JFrame {
     private javax.swing.JLabel jLabelMensagem;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu10;
+    private javax.swing.JMenu jMenu11;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
@@ -534,6 +572,8 @@ public class TelaInicial extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem18;
     private javax.swing.JMenuItem jMenuItem19;
     private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem20;
+    private javax.swing.JMenuItem jMenuItem21;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;

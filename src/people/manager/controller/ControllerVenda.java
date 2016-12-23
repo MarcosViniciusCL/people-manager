@@ -19,7 +19,7 @@ import people.manager.persistencia.VendaDAO;
  */
 public class ControllerVenda {
     
-    public static Venda cadastrarVenda(String comentario, int idCliente, ArrayList produtos) throws ParseException, SemProdutoEstoqueException, ClienteNaoEncontradoException{
+    public static Venda cadastrarVenda(String comentario, int idCliente, int idVendedor, ArrayList produtos, String formaPagamento, Double valorRecebido, Double valorTroco) throws SemProdutoEstoqueException, ClienteNaoEncontradoException{
         Double valorTotal = valorTotal(produtos);
         try {
             ControllerCliente.buscarCliente(3 ,Integer.toString(idCliente));
@@ -29,7 +29,7 @@ public class ControllerVenda {
         ArrayList prod = temEstoque(produtos);
         if(!prod.isEmpty())
             throw new SemProdutoEstoqueException(prod);
-        Venda venda = new Venda(comentario, idCliente, produtos, valorTotal);
+        Venda venda = new Venda(comentario, idCliente, idVendedor, produtos, valorTotal, formaPagamento, valorRecebido, valorTroco);
         VendaDAO.create(venda);
         return venda;
     }
@@ -40,19 +40,15 @@ public class ControllerVenda {
 
     private static Double valorTotal(ArrayList<Produto> produtos){
         Double total = 0.0;
-        for(Produto p : produtos){
-            total += p.getValorVenda();
-        }
+        total = produtos.stream().map((p) -> p.getValorVenda()).reduce(total, (accumulator, _item) -> accumulator + _item);
         return total;
     }
     
     private static ArrayList temEstoque(ArrayList<Produto> produtos){
         ArrayList produtoSemQuantidade = new ArrayList();
-        for(Produto p : produtos){
-            if(p.getQuantidade() == 0)
-                produtoSemQuantidade.add(p);
-            
-        }
+        produtos.stream().filter((p) -> (p.getQuantidade() == 0)).forEachOrdered((p) -> {
+            produtoSemQuantidade.add(p);
+        });
         return produtoSemQuantidade;
     }
     

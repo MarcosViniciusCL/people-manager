@@ -19,13 +19,14 @@ import javax.swing.table.DefaultTableModel;
 import people.manager.controller.Controller;
 import people.manager.controller.ControllerCliente;
 import people.manager.controller.ControllerProduto;
-import people.manager.controller.ControllerVendedor;
+import people.manager.controller.ControllerFuncionario;
 import people.manager.exception.ClienteNaoEncontradoException;
 import people.manager.exception.ProdutoNaoEncontradoException;
 import people.manager.exception.VendedorNaoEncontradoException;
 import people.manager.model.Cliente;
 import people.manager.model.Produto;
-import people.manager.model.Vendedor;
+import people.manager.model.Venda;
+import people.manager.model.Funcionario;
 
 /**
  *
@@ -248,6 +249,11 @@ public class TelaVenda extends javax.swing.JFrame {
         });
 
         jButton1.setText("Finalizar Venda");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -574,7 +580,7 @@ public class TelaVenda extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextFieldIDClienteFocusLost
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        Vendedor v = ControllerVendedor.buscarVendedorInterface();
+        Funcionario v = ControllerFuncionario.buscarFuncionarioInterface();
         if (v != null) {
             jTextFieldIDVendedor.setText(v.getId() + "");
             jTextFieldNomeVendedor.setText(v.getNome());
@@ -592,7 +598,7 @@ public class TelaVenda extends javax.swing.JFrame {
     private void jTextFieldIDVendedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldIDVendedorActionPerformed
         if (!jTextFieldIDVendedor.getText().trim().isEmpty()) {
             try {
-                ArrayList<Vendedor> l = ControllerVendedor.buscarVendedor(2, jTextFieldIDVendedor.getText().trim());
+                ArrayList<Funcionario> l = ControllerFuncionario.buscarFuncionario(2, jTextFieldIDVendedor.getText().trim());
                 if (l.get(0).isAtivo()) {
                     jTextFieldNomeVendedor.setText(l.get(0).getNome() + " " + l.get(0).getSobrenome());
                 } else {
@@ -619,6 +625,14 @@ public class TelaVenda extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        Venda venda = new Venda("NULO", Integer.parseInt(jTextFieldIDCliente.getText()), Integer.parseInt(jTextFieldIDVendedor.getText()), produtos, Double.parseDouble(jTextFieldTOTAL.getText().replace("R$", "").trim().replace(",", ".")), "", 0.00, 0.00);
+        TelaFinalizarVenda tfv = new TelaFinalizarVenda("Finalizar Venda", venda, this);
+        Main.guardarJanela(tfv);
+        tfv.setLocationRelativeTo(null);
+        tfv.setVisible(true);
+    }//GEN-LAST:event_jButton1ActionPerformed
     private void criarTabela(ArrayList<Produto> produto) {
         String[] colunas = {"ID", "NOME", "COD. BARRA", "VALOR UNIT", "QUANTIDADE", "VALOR TOTAL"};
         List<String[]> lista = new ArrayList<>();

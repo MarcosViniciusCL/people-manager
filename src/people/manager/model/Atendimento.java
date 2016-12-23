@@ -12,24 +12,28 @@ import java.util.Calendar;
  * @author marcos
  */
 public class Atendimento {
-    private static int id_gerador = 0;
     private int id;
-    private Calendar data;
+    private Calendar dataAgendamento;
+    private Calendar dataAtendimento;
     private String comentario;
-    private String atendente;
+    private Integer idCliente;
+    private Integer idAtendente;
     private Double preco;
+    private boolean atendido;
 
-    public Atendimento(String comentario, String atendente, Double preco) {
-        this.id = ++id_gerador;
-        this.data = Calendar.getInstance();
+    public Atendimento(String comentario, Integer idAtendente, Integer idCliente, Calendar dataAtendimento, Double preco) {
+        this.dataAgendamento = Calendar.getInstance();
         this.comentario = comentario;
-        this.atendente = atendente;
+        this.idAtendente = idAtendente;
+        this.idCliente = idCliente;
+        this.dataAtendimento = dataAtendimento;
         this.preco = preco;
+        this.atendido = false;
     }
 
     @Override
     public String toString() {
-        return "Atendimento{" + "id=" + id + ", data=" + data + ", comentario=" + comentario + ", atendente=" + atendente + '}';
+        return "Atendimento{" + "id=" + id + ", data=" + dataAgendamento + ", comentario=" + comentario + ", atendente=" + idAtendente + '}';
     }
 
     public Double getPreco() {
@@ -40,8 +44,13 @@ public class Atendimento {
         this.preco = preco;
     }
 
-    
-    
+    public boolean isAtendido() {
+        return atendido;
+    }
+
+    public void setAtendido(boolean atendido) {
+        this.atendido = atendido;
+    }
     
     public int getId() {
         return id;
@@ -49,14 +58,6 @@ public class Atendimento {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public Calendar getData() {
-        return data;
-    }
-
-    public void setData(Calendar data) {
-        this.data = data;
     }
 
     public String getComentario() {
@@ -67,12 +68,36 @@ public class Atendimento {
         this.comentario = comentario;
     }
 
-    public String getAtendente() {
-        return atendente;
+    public Calendar getDataAgendamento() {
+        return dataAgendamento;
     }
 
-    public void setAtendente(String atendente) {
-        this.atendente = atendente;
+    public void setDataAgendamento(Calendar dataAgendamento) {
+        this.dataAgendamento = dataAgendamento;
+    }
+
+    public Calendar getDataAtendimento() {
+        return dataAtendimento;
+    }
+
+    public void setDataAtendimento(Calendar dataAtendimento) {
+        this.dataAtendimento = dataAtendimento;
+    }
+
+    public Integer getIdCliente() {
+        return idCliente;
+    }
+
+    public void setIdCliente(Integer idCliente) {
+        this.idCliente = idCliente;
+    }
+
+    public Integer getIdAtendente() {
+        return idAtendente;
+    }
+
+    public void setAtendente(Integer atendente) {
+        this.idAtendente = atendente;
     }
     
     

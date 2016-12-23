@@ -18,16 +18,35 @@ public class Venda {
     private Calendar    data;
     private String      comentario;
     private Integer     idCliente;
+    private Integer     idVendedor;
+    private String      formaPagamento;
     private ArrayList   produtos;
     private Double     valorVenda;
+    private Double     valorRecebido;
+    private Double     valorTroco;
 
-    public Venda(String comentario, Integer idCliente, ArrayList produtos, Double valorVenda) {
+    /**
+     *
+     * @param comentario
+     * @param idCliente
+     * @param idVendedor
+     * @param produtos
+     * @param valorVenda
+     * @param formaPagamento
+     * @param valorRecebido
+     * @param valorTroco
+     */
+    public Venda(String comentario, Integer idCliente, Integer idVendedor, ArrayList produtos, Double valorVenda, String formaPagamento, Double valorRecebido, Double valorTroco) {
         this.id = 0;
         this.data = Calendar.getInstance();
         this.comentario = comentario;
         this.idCliente = idCliente;
+        this.idVendedor = idVendedor;
         this.produtos = produtos;
         this.valorVenda = valorVenda;
+        this.formaPagamento = formaPagamento;
+        this.valorTroco = valorTroco;
+        this.valorRecebido = valorRecebido;
     }
     
     private String calendarParaString(Calendar calendar){
@@ -61,6 +80,39 @@ public class Venda {
         return comentario;
     }
 
+    public Double getValorRecebido() {
+        return valorRecebido;
+    }
+
+    public void setValorRecebido(Double valorRecebido) {
+        this.valorRecebido = valorRecebido;
+    }
+
+    public Double getValorTroco() {
+        return valorTroco;
+    }
+
+    public void setValorTroco(Double valorTroco) {
+        this.valorTroco = valorTroco;
+    }
+
+    public Integer getIdVendedor() {
+        return idVendedor;
+    }
+
+    public void setIdVendedor(Integer idVendedor) {
+        this.idVendedor = idVendedor;
+    }
+
+    public String getFormaPagamento() {
+        return formaPagamento;
+    }
+
+    public void setFormaPagamento(String formaPagamento) {
+        this.formaPagamento = formaPagamento;
+    }
+
+    
     public void setComentario(String comentario) {
         this.comentario = comentario;
     }

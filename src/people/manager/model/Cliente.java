@@ -8,8 +8,6 @@ package people.manager.model;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
-import people.manager.exception.ClienteDesativadoException;
 
 /**
  * 
@@ -69,7 +67,7 @@ public class Cliente {
     private void gerarUltimoAtendimento(){
         if(!historico.isEmpty()){
             Atendimento a = (Atendimento) historico.get(historico.size()-1);
-            this.ultimoAtendimento = a.getData();
+            this.ultimoAtendimento = a.getDataAtendimento();
         }
     }
     /**
@@ -89,15 +87,15 @@ public class Cliente {
      * @param preco
      * @throws ClienteDesativadoException 
      */        
-    public void novoAtendimento(String comentario,Double preco) throws ClienteDesativadoException{
-        if(this.ativo){
-            Atendimento at = new Atendimento(comentario, "PADRÃO", preco);
-            historico.add(at);
-            this.gerarUltimoAtendimento();
-        }else {
-            throw new ClienteDesativadoException();
-        }
-    }
+//    public void novoAtendimento(String comentario,Double preco) throws ClienteDesativadoException{
+//        if(this.ativo){
+//            Atendimento at = new Atendimento(comentario, "PADRÃO", preco);
+//            historico.add(at);
+//            this.gerarUltimoAtendimento();
+//        }else {
+//            throw new ClienteDesativadoException();
+//       }
+//    }
     /**
      * Desalita o cliente
      * @return boolean - Retona o estado do cliente após alteração.
