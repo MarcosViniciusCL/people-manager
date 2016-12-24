@@ -25,6 +25,7 @@ import people.manager.controller.Controller;
 import people.manager.controller.ControllerCliente;
 import people.manager.exception.CPFExistenteException;
 import people.manager.exception.ClienteNaoEncontradoException;
+import people.manager.exception.SemInternetException;
 import people.manager.model.Cliente;
 import people.manager.tools.BuscaCEP;
 
@@ -403,25 +404,29 @@ public class TelaEditaCliente extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextFieldCEPKeyPressed
 
     private void jTextFieldCEPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldCEPActionPerformed
-        if (jTextFieldCEP.getText().trim().length() == 8 && Controller.temNet()) {
-            new Thread() {
-                @Override
-                public void run() {
-                    jLabelImgCep.setIcon(new javax.swing.ImageIcon(getClass().getResource("ajax-loader-barra.gif")));
-                    String CEP = jTextFieldCEP.getText().trim();
-                    if (CEP.length() == 8 && Controller.temNet()) {
-                        try {
-                            jTextFieldRua.setText(BuscaCEP.getEndereco(CEP));
-                            jTextFieldBairro.setText(BuscaCEP.getBairro(CEP));
-                            jTextFieldCidade.setText(BuscaCEP.getCidade(CEP));
-                            jTextFieldEstado.setText(BuscaCEP.getUF(CEP));
-                            jLabelImgCep.setIcon(null);
-                        } catch (IOException ex) {
-                            Logger.getLogger(TelaEditaCliente.class.getName()).log(Level.SEVERE, null, ex);
+        try {
+            if (jTextFieldCEP.getText().trim().length() == 8 && Controller.temNet()) {
+                new Thread() {
+                    @Override
+                    public void run() {
+                        jLabelImgCep.setIcon(new javax.swing.ImageIcon(getClass().getResource("ajax-loader-barra.gif")));
+                        String CEP = jTextFieldCEP.getText().trim();
+                        if (CEP.length() == 8) {
+                            try {
+                                jTextFieldRua.setText(BuscaCEP.getEndereco(CEP));
+                                jTextFieldBairro.setText(BuscaCEP.getBairro(CEP));
+                                jTextFieldCidade.setText(BuscaCEP.getCidade(CEP));
+                                jTextFieldEstado.setText(BuscaCEP.getUF(CEP));
+                                jLabelImgCep.setIcon(null);
+                            } catch (IOException ex) {
+                                Logger.getLogger(TelaEditaCliente.class.getName()).log(Level.SEVERE, null, ex);
+                            }
                         }
                     }
-                }
-            }.start();
+                }.start();
+            }
+        } catch (SemInternetException ex) {
+            Logger.getLogger(TelaEditaCliente.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }//GEN-LAST:event_jTextFieldCEPActionPerformed

@@ -16,6 +16,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import people.manager.controller.Controller;
+import people.manager.exception.SemInternetException;
 import people.manager.model.Usuario;
 import people.manager.persistencia.ConnectionFactory;
 
@@ -39,7 +40,7 @@ public class TelaInicial extends javax.swing.JFrame {
         botaoX();
         initComponents();
         Controller.lerProperties(); //<- Carrega o arquivo de configurações do disco; 
-//        verificacaoSistema();
+        verificacaoSistema();
     }
 
     /**
@@ -602,6 +603,7 @@ public class TelaInicial extends javax.swing.JFrame {
                 try {
                     jLabelMensagem.setText("O sistema está verificando atualizações...");
                     Controller.aguardar(5);
+                    Controller.temNet();
                     if (Controller.verificarAtualizacao()) {
                         jLabelMensagem.setText("Há uma nova atualização disponivel.");
                         Thread.sleep(3000);
@@ -620,6 +622,9 @@ public class TelaInicial extends javax.swing.JFrame {
 
                     }
                 } catch (InterruptedException ex) {
+                    Logger.getLogger(TelaInicial.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (SemInternetException ex) {
+                    JOptionPane.showMessageDialog(null, "Não há conexão com a internet.\nImpossivel verificar atualização.");
                     Logger.getLogger(TelaInicial.class.getName()).log(Level.SEVERE, null, ex);
                 } finally {
                     jLabelMensagem.setText(null);

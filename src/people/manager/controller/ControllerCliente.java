@@ -145,7 +145,7 @@ public class ControllerCliente {
         int max = quantidadeClientes();
         ArrayList aniv = new ArrayList();
         Cliente c;
-        for (int i = 1; i <= max; i++) {
+        for (int i = 0; i <= max; i++) {
             c = ClienteDAO.buscaID(i);
             if (c != null) {
                 if (c.getNascimento().get(Calendar.MONTH) == mes) {

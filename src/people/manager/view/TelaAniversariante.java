@@ -14,6 +14,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import people.manager.controller.ControllerCliente;
 import people.manager.model.Cliente;
+import people.manager.tools.AniversarioTableCellRenderer;
 
 /**
  *
@@ -40,21 +41,23 @@ public class TelaAniversariante extends javax.swing.JFrame {
             lista.add(new String[]{c.getId().toString(), c.getNome() + " " + c.getSobrenome(), c.getCelular(), c.getIdade().toString(), c.getNascimentoString()});
 
         }
-         DefaultTableModel model = new DefaultTableModel(lista.toArray(new String[lista.size()][]), colunas);
-        table = new JTable(model){
+        table = new JTable();
+        //Criar model e bloqueia a edição
+        table.setModel(new DefaultTableModel(lista.toArray(new String[lista.size()][]), colunas) {
+            boolean[] canEdit = new boolean[]{
+                false, false, false, false, false, false
+            };
+
             @Override
-            public Component prepareRenderer(TableCellRenderer renderer, int row, int column){
-                Component component = super.prepareRenderer(renderer, row, column);
-                if (!isRowSelected(row)){
-                    component.setBackground(getBackground());
-                    int linha = convertColumnIndexToModel(row);
-                    int idade =(int) getModel().getValueAt(linha, 3);
-                    if(idade> 30)
-                        component.setBackground(Color.BLACK);
-                }
-                return component;
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit[columnIndex];
             }
-        };
+        });
+        //Habilitar a troca de cor da tabela
+        TableCellRenderer renderer = new AniversarioTableCellRenderer();
+        for (int c = 0; c < table.getColumnCount(); c++) {
+            table.setDefaultRenderer(table.getColumnClass(c), renderer);
+        }
 
         jScrollPane1.setViewportView(table);
 

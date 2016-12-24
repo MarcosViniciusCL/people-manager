@@ -13,12 +13,15 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 import people.manager.controller.Controller;
 import people.manager.controller.ControllerCliente;
 import people.manager.controller.ControllerProduto;
 import people.manager.exception.ClienteNaoEncontradoException;
 import people.manager.exception.ProdutoNaoEncontradoException;
 import people.manager.model.Produto;
+import people.manager.tools.AniversarioTableCellRenderer;
+import people.manager.tools.ProdutoTableCellRenderer;
 
 /**
  *
@@ -183,8 +186,20 @@ public class TelaBuscaProduto extends javax.swing.JFrame {
         for (Produto p : produto) 
             lista.add(new String[]{p.getId().toString(), p.getNome(), p.getCodigoBarra(), p.getValorVenda().toString(), p.getQuantidade().toString()});
         table = new JTable();
-        DefaultTableModel model = new DefaultTableModel(lista.toArray(new String[lista.size()][]), colunas);
-        table.setModel(model);
+        table.setModel(new DefaultTableModel(lista.toArray(new String[lista.size()][]), colunas) {
+            boolean[] canEdit = new boolean[]{
+                false, false, false, false, false, false
+            };
+
+            @Override
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit[columnIndex];
+            }
+        });
+        TableCellRenderer renderer = new ProdutoTableCellRenderer();
+        for (int c = 0; c < table.getColumnCount(); c++) {
+            table.setDefaultRenderer(table.getColumnClass(c), renderer);
+        }
         jScrollPane1.setViewportView(table);
 
     }

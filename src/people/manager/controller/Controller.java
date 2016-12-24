@@ -5,6 +5,7 @@
  */
 package people.manager.controller;
 
+import people.manager.exception.SemInternetException;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -12,6 +13,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -66,13 +68,14 @@ public class Controller {
      * Verifica se há conexão com a internet
      *
      * @return boolean
+     * @throws people.manager.exception.SemInternetException
      */
-    public static boolean temNet() {
+    public static boolean temNet() throws SemInternetException {
         InetAddress endereco = null;
         try {
             endereco = InetAddress.getByName("www.google.com");
         } catch (UnknownHostException ex) {
-            return false;
+            throw new SemInternetException();
         }
         return true;
 
@@ -117,6 +120,17 @@ public class Controller {
         }
         SimpleDateFormat s = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         return s.format(calendar.getTime());
+    }
+
+    public static Calendar stringParaCalendar(String data) {
+        Calendar dataR = Calendar.getInstance();
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+            dataR.setTime(sdf.parse(data));
+        } catch (ParseException ex) {
+            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return dataR;
     }
 
     public static void setUser(Usuario user) {
@@ -185,9 +199,10 @@ public class Controller {
         return Update.verificarAtualização();
     }
 
-    public static boolean baixarAtualixacao(){
+    public static boolean baixarAtualixacao() {
         return Update.baixarAtualizacao();
     }
+
     public static boolean instalarAtualizacao() {
         try {
             ArquivoZIP.unzip(new File("PeopleManager.zip"), new File("PeopleManagerAt"));
@@ -227,7 +242,8 @@ public class Controller {
 
     /**
      * Faz o programa esperar por um tempo especificado.
-     * @param seg 
+     *
+     * @param seg
      */
     public static void aguardar(int seg) {
         int tempo = Integer.parseInt(seg + "000");
@@ -237,21 +253,24 @@ public class Controller {
             Logger.getLogger(TelaTrocaPropriaSenha.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
     /**
      * Ler o arquivo de configuração do disco e como atributo da classe;
      */
-    public static void lerProperties(){
+    public static void lerProperties() {
         try {
             Controller.configuracoes = GerenciaProperties.getProp("conf.properties");
         } catch (IOException ex) {
             Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
     /**
      * Retorna as configurações lidas;
+     *
      * @return Properties
      */
-    public static Properties getConfiguracao(){
+    public static Properties getConfiguracao() {
         return Controller.configuracoes;
     }
 
