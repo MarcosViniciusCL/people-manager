@@ -46,16 +46,16 @@
                               <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                               <Component id="jLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace max="32767" attributes="0"/>
-                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" attributes="0">
                                   <Component id="jComboBoxTipoBusca" min="-2" pref="86" max="-2" attributes="0"/>
-                                  <EmptySpace max="32767" attributes="0"/>
+                                  <EmptySpace pref="643" max="32767" attributes="0"/>
                                   <Component id="jLabelImagem" min="-2" pref="45" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="jButton1" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <Component id="jTextField1" min="-2" pref="692" max="-2" attributes="0"/>
+                              <Component id="jTextField1" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                       <Component id="jScrollPane3" alignment="0" max="32767" attributes="0"/>
