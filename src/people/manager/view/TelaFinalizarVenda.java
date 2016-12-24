@@ -234,7 +234,7 @@ public class TelaFinalizarVenda extends javax.swing.JFrame {
 
     private void jTextFieldValorRecebidoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldValorRecebidoKeyReleased
         if (!jTextFieldValorRecebido.getText().trim().isEmpty()) {
-            if (Double.parseDouble(jTextFieldValorRecebido.getText().trim().replace(",", ".")) > Double.parseDouble(jTextFieldValorTotal.getText().trim().replace(",", "."))) {
+            if (Double.parseDouble(jTextFieldValorRecebido.getText().trim().replace(",", ".")) >= Double.parseDouble(jTextFieldValorTotal.getText().trim().replace(",", "."))) {
                 jTextFieldValorTroco.setText(String.format("%.2f", Double.parseDouble(jTextFieldValorRecebido.getText().trim().replace(",", ".")) - Double.parseDouble(jTextFieldValorTotal.getText().replace(",", "."))));
             } else {
                 jTextFieldValorTroco.setText("#######");

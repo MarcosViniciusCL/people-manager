@@ -17,6 +17,7 @@ import people.manager.controller.ControllerCliente;
 import people.manager.controller.ControllerFuncionario;
 import people.manager.exception.AtendimentoNaoEncontradoException;
 import people.manager.exception.ClienteNaoEncontradoException;
+import people.manager.exception.HorarioCheioException;
 import people.manager.exception.ImpossivelRemoverException;
 import people.manager.exception.VendedorNaoEncontradoException;
 import people.manager.model.Atendimento;
@@ -319,6 +320,8 @@ public class TelaEditarAgendamento extends javax.swing.JFrame {
                 Logger.getLogger(TelaEditarAgendamento.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ImpossivelRemoverException ex) {
                 JOptionPane.showMessageDialog(null, "Esse atendimento já foi marcado como concluido.\nNão será possivel edita-lo.");
+            } catch (HorarioCheioException ex) {
+                JOptionPane.showMessageDialog(null, "Esse horário já está cheio para esse funcionario.\nSelecione outro ou mude as configurações de tempo minimo.");
             }
 
         }

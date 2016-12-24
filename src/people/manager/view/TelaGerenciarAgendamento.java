@@ -27,14 +27,14 @@ import people.manager.model.Funcionario;
  *
  * @author marcos
  */
-public class TelaExibirAgendamento extends javax.swing.JFrame {
+public class TelaGerenciarAgendamento extends javax.swing.JFrame {
 
     /**
      * Creates new form Calendario
      *
      * @param title
      */
-    public TelaExibirAgendamento(String title) {
+    public TelaGerenciarAgendamento(String title) {
         super(title);
         initComponents();
     }
@@ -271,11 +271,8 @@ public class TelaExibirAgendamento extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(0, 0, 0)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jDateChooserDataInicial, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jCheckBoxFiltroBusca)))
+                            .addComponent(jDateChooserDataInicial, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jCheckBoxFiltroBusca)
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addGroup(jPanel1Layout.createSequentialGroup()
                                     .addGap(4, 4, 4)
@@ -329,7 +326,7 @@ public class TelaExibirAgendamento extends javax.swing.JFrame {
             array = ControllerAtendimento.buscar(jCalendar1.getCalendar());
             criarTabela();
         } catch (AtendimentoNaoEncontradoException ex) {
-            Logger.getLogger(TelaExibirAgendamento.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(TelaGerenciarAgendamento.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }//GEN-LAST:event_jCalendar1PropertyChange
@@ -339,6 +336,7 @@ public class TelaExibirAgendamento extends javax.swing.JFrame {
         Main.guardarJanela(tna);
         tna.setLocationRelativeTo(null);
         tna.setVisible(true);
+        jCalendar1PropertyChange(null);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -352,11 +350,11 @@ public class TelaExibirAgendamento extends javax.swing.JFrame {
                     try {
                         ControllerAtendimento.remover(id);
                         JOptionPane.showMessageDialog(null, "Removido");
-                        criarTabela();
+                        jCalendar1PropertyChange(null);
                     } catch (ImpossivelRemoverException ex) {
                         JOptionPane.showMessageDialog(null, "Esse atendimento já foi marcado como concluido.\nNão será possivel apaga-lo.");
                     } catch (AtendimentoNaoEncontradoException ex) {
-                        Logger.getLogger(TelaExibirAgendamento.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(TelaGerenciarAgendamento.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
 
@@ -467,12 +465,12 @@ public class TelaExibirAgendamento extends javax.swing.JFrame {
                         TelaEditarAgendamento tea = new TelaEditarAgendamento("Tela Edição", at);
                         tea.setLocationRelativeTo(null);
                         tea.setVisible(true);
-                        criarTabela();
+                        jCalendar1PropertyChange(null);
                     } else {
                         JOptionPane.showMessageDialog(null, "Esse atendimento já foi marcado como concluido.\nNão será possivel edita-lo.");
                     }
                 } catch (AtendimentoNaoEncontradoException ex) {
-                    Logger.getLogger(TelaExibirAgendamento.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(TelaGerenciarAgendamento.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }
@@ -490,9 +488,9 @@ public class TelaExibirAgendamento extends javax.swing.JFrame {
                         at = ControllerAtendimento.buscarAtendimentoID((int) jTable1.getValueAt(jTable1.getSelectedRow(), 5));
                         at.setAtendido(true);
                         ControllerAtendimento.editar(at);
-                        criarTabela();
+                        jCalendar1PropertyChange(null);
                     } catch (AtendimentoNaoEncontradoException ex) {
-                        Logger.getLogger(TelaExibirAgendamento.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(TelaGerenciarAgendamento.class.getName()).log(Level.SEVERE, null, ex);
                     }
 
                 }

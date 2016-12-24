@@ -292,7 +292,7 @@ public class TelaNovoAgendamento extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(null, "Agendamento cadastrado.");
                     dispose();
                 } catch (HorarioCheioException ex) {
-                    JOptionPane.showMessageDialog(null, "Esse horário já está cheio para esse funcionario.\nSelecione outro.");
+                    JOptionPane.showMessageDialog(null, "Esse horário já está cheio para esse funcionario.\nSelecione outro ou mude as configurações de tempo minimo.");
                 }
             } else {
                 JOptionPane.showMessageDialog(null, "Data inválida.");

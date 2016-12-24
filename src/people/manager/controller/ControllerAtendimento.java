@@ -26,7 +26,7 @@ import people.manager.persistencia.AtendimentoDAO;
 public class ControllerAtendimento {
 
     public static void criar(String comentario, Integer idFuncionario, Integer idCliente, Calendar dataAtendimento, Double valor) throws HorarioCheioException {
-        if (!funcionarioLivre(idFuncionario, dataAtendimento)) {
+        if (!funcionarioLivre(idFuncionario, dataAtendimento, null)) {
             throw new HorarioCheioException();
         }
         Atendimento a = new Atendimento(comentario, idFuncionario, idCliente, dataAtendimento, valor);
@@ -92,14 +92,14 @@ public class ControllerAtendimento {
                 env.add(obj);
             });
             return env;
-        } else if(dataInicial != null && dataFinal != null && cliente != null && funcionario != null){
+        } else if (dataInicial != null && dataFinal != null && cliente != null && funcionario != null) {
             ArrayList<Atendimento> to = buscar(dataInicial, dataFinal);
             ArrayList<Atendimento> env = new ArrayList();
             to.stream().filter((obj) -> (Objects.equals(obj.getIdAtendente(), funcionario.getId())) && Objects.equals(obj.getIdCliente(), cliente.getId())).forEachOrdered((obj) -> {
                 env.add(obj);
             });
             return env;
-        } else{
+        } else {
             return new ArrayList();
         }
     }
@@ -163,22 +163,35 @@ public class ControllerAtendimento {
         return elementos;
     }
 
-    public static boolean funcionarioLivre(Integer id, Calendar data) {
+    public static boolean funcionarioLivre(Integer id, Calendar data, Integer ignorar) {
         ArrayList<Atendimento> atend = buscar(id);
-        for (Atendimento obj : atend) {
-            int anoObj = obj.getDataAtendimento().get(Calendar.YEAR);
-            int mesObj = obj.getDataAtendimento().get(Calendar.MONTH);
-            int diaObj = obj.getDataAtendimento().get(Calendar.DAY_OF_YEAR);
-            int horaObj = obj.getDataAtendimento().get(Calendar.HOUR_OF_DAY);
-            int minObj = obj.getDataAtendimento().get(Calendar.MINUTE);
-            int ano = data.get(Calendar.YEAR);
-            int mes = data.get(Calendar.MONTH);
-            int dia = data.get(Calendar.DAY_OF_YEAR);
-            int hora = data.get(Calendar.HOUR_OF_DAY);
-            int min = data.get(Calendar.MINUTE);
-//            int valor = Integer.parseInt(Controller.getConfiguracao().getProperty("tempo.min_entre_consul"));
-            if (anoObj == ano && mesObj == mes && diaObj == dia && horaObj == hora && minObj == min) {
-                return false;
+        if (ignorar != null) {
+            for (Atendimento obj : atend) {
+                if (obj.getId() != ignorar) {
+                    Calendar objTempoLimite = Calendar.getInstance();
+                    objTempoLimite.setTime(obj.getDataAtendimento().getTime());
+                    objTempoLimite.add(Calendar.MINUTE, Integer.parseInt(Controller.getConfiguracao().getProperty("tempo.min_entre_consul")));
+
+                    int resp1 = obj.getDataAtendimento().compareTo(data);
+                    int resp2 = objTempoLimite.compareTo(data);
+
+                    if (resp1 <= 0 && resp2 > 0) {
+                        return false;
+                    }
+                }
+            }
+        } else {
+            for (Atendimento obj : atend) {
+                Calendar objTempoLimite = Calendar.getInstance();
+                objTempoLimite.setTime(obj.getDataAtendimento().getTime());
+                objTempoLimite.add(Calendar.MINUTE, Integer.parseInt(Controller.getConfiguracao().getProperty("tempo.min_entre_consul")));
+
+                int resp1 = obj.getDataAtendimento().compareTo(data);
+                int resp2 = objTempoLimite.compareTo(data);
+
+                if (resp1 <= 0 && resp2 > 0) {
+                    return false;
+                }
             }
         }
         return true;
@@ -186,19 +199,24 @@ public class ControllerAtendimento {
 
     public static void remover(String id) throws ImpossivelRemoverException, AtendimentoNaoEncontradoException {
         Atendimento at = buscarAtendimentoID(Integer.parseInt(id));
-        if( at == null || at.isAtendido())
+        if (at == null || at.isAtendido()) {
             throw new ImpossivelRemoverException();
+        }
         AtendimentoDAO.remover(id);
     }
-    
-    public static void editar(Atendimento a){
+
+    public static void editar(Atendimento a) {
         AtendimentoDAO.edita(a);
     }
-    
-    public static void editar(String id, String comentario, Integer idFuncionario, Integer idCliente, Calendar dataAtendimento, Double valor) throws AtendimentoNaoEncontradoException, ImpossivelRemoverException{
+
+    public static void editar(String id, String comentario, Integer idFuncionario, Integer idCliente, Calendar dataAtendimento, Double valor) throws AtendimentoNaoEncontradoException, ImpossivelRemoverException, HorarioCheioException {
         Atendimento at = ControllerAtendimento.buscarAtendimentoID(Integer.parseInt(id));
-        if(at.isAtendido())
+        if (at.isAtendido()) {
             throw new ImpossivelRemoverException();
+        }
+        if (!funcionarioLivre(idFuncionario, dataAtendimento, Integer.parseInt(id))) {
+            throw new HorarioCheioException();
+        }
         at.setComentario(comentario);
         at.setIdCliente(idCliente);
         at.setIdAtendente(idFuncionario);

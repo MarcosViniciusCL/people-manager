@@ -520,7 +520,7 @@ public class TelaInicial extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem20ActionPerformed
 
     private void jMenuItem21ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem21ActionPerformed
-        TelaExibirAgendamento tea = new TelaExibirAgendamento("Exibição de Agenda");
+        TelaGerenciarAgendamento tea = new TelaGerenciarAgendamento("Exibição de Agenda");
         Main.guardarJanela(tea);
         tea.setLocationRelativeTo(null);
         tea.setVisible(true);

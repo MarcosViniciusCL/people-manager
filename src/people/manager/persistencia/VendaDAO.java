@@ -166,7 +166,7 @@ public class VendaDAO {
         int tamanho = 0;
         try {
             stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM VENDAS WHERE   ID = (SELECT MAX(ID)  FROM CLIENTES)");
+            ResultSet rs = stmt.executeQuery("SELECT * FROM VENDAS WHERE   ID = (SELECT MAX(ID)  FROM VENDAS)");
             tamanho = rs.getInt("ID");
             stmt.close();
         } catch (SQLException ex) {
