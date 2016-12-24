@@ -5,6 +5,7 @@
  */
 package people.manager.controller;
 
+import java.awt.Font;
 import people.manager.exception.SemInternetException;
 import java.io.File;
 import java.io.IOException;
@@ -17,10 +18,23 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
+import people.manager.exception.ClienteNaoEncontradoException;
+import people.manager.model.Cliente;
 import people.manager.model.Produto;
 import people.manager.model.Usuario;
 import people.manager.persistencia.ArquivoDAO;
@@ -273,5 +287,50 @@ public class Controller {
     public static Properties getConfiguracao() {
         return Controller.configuracoes;
     }
+    
+    public static boolean senhaInterface() {
+        
+
+        //Criando JFrame;
+        JDialog jf = new JDialog();
+        jf.setModal(true);
+        jf.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        jf.setSize(510, 80);
+        jf.setLocationRelativeTo(null);
+
+        JPanel jpanel = new JPanel();
+        jpanel.setLayout(null);
+        JLabel jlabel = new JLabel("Senha:");
+        jlabel.setBounds(10, 10, 50, 20);
+        JPasswordField senha = new JPasswordField(250);
+        senha.setFont(new Font("Tahoma", 0, 11));
+        senha.setBounds(60, 10, 240, 20);
+        jpanel.add(jlabel);
+        jpanel.add(senha);
+
+        jf.add(jpanel);
+
+        //Criando botoes
+        JButton botaoCancelar = new JButton("Cancelar");
+        botaoCancelar.setBounds(400, 10, 96, 21);
+        JButton botaoBusca = new JButton("OK");
+        botaoBusca.setBounds(300, 10, 96, 21);
+        jpanel.add(botaoBusca);
+        jpanel.add(botaoCancelar);
+        
+        
+        
+        //Eventos do Jframe
+        botaoBusca.addActionListener((java.awt.event.ActionEvent e) -> {
+            getUser().testarSenha(new String(senha.getPassword()));
+        });
+        botaoCancelar.addActionListener((java.awt.event.ActionEvent e) -> {
+            jf.dispose();
+        });
+        
+        jf.setVisible(true);
+        return Controller.resp_senha;
+    }
+    private static boolean resp_senha;
 
 }
