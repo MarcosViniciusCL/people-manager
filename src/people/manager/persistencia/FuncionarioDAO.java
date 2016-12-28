@@ -17,7 +17,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import people.manager.model.Cliente;
 import people.manager.model.Endereco;
 import people.manager.model.Funcionario;
 
@@ -25,7 +24,7 @@ import people.manager.model.Funcionario;
  *
  * @author marcos
  */
-public class VendedorDAO {
+public class FuncionarioDAO {
     
     /**
      * Adiciona um novo cliente no banco de dados.
@@ -48,8 +47,7 @@ public class VendedorDAO {
         
         try {
             stmt = con.createStatement();
-            String sql = "INSERT INTO VENDEDORES(id, nome, ESTADO, sobrenome, celular, email, idade, nascimento, DATA_contratacao, cpf, endereco) VALUES("
-                    + ""+c.getId()+","
+            String sql = "INSERT INTO VENDEDORES(nome, ESTADO, sobrenome, celular, email, idade, nascimento, DATA_contratacao, cpf, endereco) VALUES("
                     + "'"+c.getNome()+"',"
                     + ""+ativo+","
                     + "'"+c.getSobrenome()+"',"
@@ -65,7 +63,7 @@ public class VendedorDAO {
             stmt.executeUpdate(sql);
             stmt.close();
         } catch (SQLException ex) {
-            Logger.getLogger(VendedorDAO.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(FuncionarioDAO.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             ConnectionFactory.closeConnection(con);
         }
@@ -80,7 +78,7 @@ public class VendedorDAO {
             stmt.executeUpdate("DELETE FROM VENDEDORES WHERE CPF='"+cpf+"'");
             stmt.close();
         } catch (SQLException ex) {
-            Logger.getLogger(VendedorDAO.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(FuncionarioDAO.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             ConnectionFactory.closeConnection(con);
         }
@@ -113,7 +111,7 @@ public class VendedorDAO {
             
             stmt.close();
         } catch (SQLException ex) {
-            Logger.getLogger(VendedorDAO.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(FuncionarioDAO.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             ConnectionFactory.closeConnection(con);
         }
@@ -130,7 +128,7 @@ public class VendedorDAO {
             tamanho = rs.getInt("ID");
             stmt.close();
         } catch (SQLException ex) {
-            Logger.getLogger(VendedorDAO.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(FuncionarioDAO.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             ConnectionFactory.closeConnection(con);   
         }

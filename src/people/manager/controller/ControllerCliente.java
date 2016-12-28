@@ -60,31 +60,40 @@ public class ControllerCliente {
     }
 
     public static void desativarCliente(String cpf) throws ClienteNaoEncontradoException {
-        Cliente cliente = ClienteDAO.buscaCPF(cpf);
-        if (cliente == null) {
+        Cliente cli = ClienteDAO.buscaCPF(cpf);
+        if (cli == null) {
             throw new ClienteNaoEncontradoException();
         }
-        cliente.desabilitar();
-        ClienteDAO.edita(cliente);
+        cli.desabilitar();
+        ClienteDAO.edita(cli);
+    }
+    
+    public static void ativarCliente(String cpf) throws ClienteNaoEncontradoException {
+        Cliente cli = ClienteDAO.buscaCPF(cpf);
+        if (cli == null) {
+            throw new ClienteNaoEncontradoException();
+        }
+        cli.habilitar();
+        ClienteDAO.edita(cli);
     }
 
     public static Cliente editarCliente(int id, String nome, String sobrenome, String celular, String telefone, String email, Calendar nascimento, String cpf, String rg, String rua, String numero, String cep, String bairro, String cidade, String estado) throws ClienteNaoEncontradoException {
-        Cliente cliente = ClienteDAO.buscaID(id);
-        if (cliente == null) {
+        Cliente cli = ClienteDAO.buscaID(id);
+        if (cli == null) {
             throw new ClienteNaoEncontradoException();
         }
-        cliente.setNome(nome);
-        cliente.setSobrenome(sobrenome);
-        cliente.setCelular(celular);
-        cliente.setTelefone(telefone);
-        cliente.setEmail(email);
-        cliente.setNascimento(nascimento);
-        cliente.setCpf(cpf);
-        cliente.setRg(rg);
+        cli.setNome(nome);
+        cli.setSobrenome(sobrenome);
+        cli.setCelular(celular);
+        cli.setTelefone(telefone);
+        cli.setEmail(email);
+        cli.setNascimento(nascimento);
+        cli.setCpf(cpf);
+        cli.setRg(rg);
         Endereco end = new Endereco(rua, numero, cep, bairro, cidade, estado);
-        cliente.setEnd(end);
-        ClienteDAO.edita(cliente);
-        return cliente;
+        cli.setEnd(end);
+        ClienteDAO.edita(cli);
+        return cli;
     }
 
     /**

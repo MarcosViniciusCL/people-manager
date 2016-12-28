@@ -20,7 +20,6 @@ public class Main {
     
     public static void main(String[] args) throws ArquivoModificadoException, IOException {
            janelas = new ArrayList<>();
-           
            TelaLogin t = new TelaLogin("Login");
            t.setLocationRelativeTo(null);
            t.setVisible(true);

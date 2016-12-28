@@ -24,7 +24,7 @@ import javax.swing.table.DefaultTableModel;
 import people.manager.exception.ClienteNaoEncontradoException;
 import people.manager.model.Endereco;
 import people.manager.model.Funcionario;
-import people.manager.persistencia.VendedorDAO;
+import people.manager.persistencia.FuncionarioDAO;
 
 /**
  *
@@ -34,27 +34,27 @@ public class ControllerFuncionario {
 
     public static Funcionario cadastrarFuncionario(String nome, String sobrenome, String cpf, int idade, String celular, String email, Calendar contratacao, Calendar nascimento, String rua, String numero, String cep, String bairro, String cidade, String estado) throws VendedorNaoEncontradoException {
         Funcionario vendedor;
-        Funcionario buscaCPF = VendedorDAO.buscaCPF(cpf);
+        Funcionario buscaCPF = FuncionarioDAO.buscaCPF(cpf);
         
         if (buscaCPF != null) {
             throw new VendedorNaoEncontradoException();
         }
         vendedor = new Funcionario(0, nome, sobrenome, cpf, idade, celular, email, contratacao, nascimento, rua, numero, cep, bairro, cidade, estado);
-        VendedorDAO.create(vendedor);
+        FuncionarioDAO.create(vendedor);
         return vendedor;
     }
 
     public static void desativarFuncionario(String cpf) throws VendedorNaoEncontradoException {
-        Funcionario vendedor = VendedorDAO.buscaCPF(cpf);
+        Funcionario vendedor = FuncionarioDAO.buscaCPF(cpf);
         if (vendedor == null) {
             throw new VendedorNaoEncontradoException();
         }
         vendedor.desabilitar();
-        VendedorDAO.edita(vendedor);
+        FuncionarioDAO.edita(vendedor);
     }
 
     public static Funcionario editarFuncionario(int id, String nome, String sobrenome, String cpf, int idade, String celular, String email, Calendar contratacao, Calendar nascimento, String rua, String numero, String cep, String bairro, String cidade, String estado) throws ClienteNaoEncontradoException {
-        Funcionario vendedor = VendedorDAO.buscaID(id);
+        Funcionario vendedor = FuncionarioDAO.buscaID(id);
         if (vendedor == null) {
             throw new ClienteNaoEncontradoException();
         }
@@ -66,7 +66,7 @@ public class ControllerFuncionario {
         vendedor.setCpf(cpf);
         Endereco end = new Endereco(rua, numero, cep, bairro, cidade, estado);
         vendedor.setEndereco(end);
-        VendedorDAO.edita(vendedor);
+        FuncionarioDAO.edita(vendedor);
         return vendedor;
     }
     
@@ -82,14 +82,14 @@ public class ControllerFuncionario {
     public static ArrayList buscarFuncionario(int sel, String busca) throws VendedorNaoEncontradoException {
         ArrayList vendedor = new ArrayList();
         if (sel == 0) {
-            vendedor = VendedorDAO.buscaNome(busca);
+            vendedor = FuncionarioDAO.buscaNome(busca);
             if (vendedor.isEmpty()) {
                 throw new VendedorNaoEncontradoException();
             }
             return vendedor;
         }
         if (sel == 1) {
-            vendedor.add(VendedorDAO.buscaCPF(busca));
+            vendedor.add(FuncionarioDAO.buscaCPF(busca));
             if (vendedor.get(0) == null) {
                 throw new VendedorNaoEncontradoException();
             }
@@ -97,7 +97,7 @@ public class ControllerFuncionario {
         }
         if (sel == 2) {
             int idBusca = Integer.parseInt(busca);
-            vendedor.add(VendedorDAO.buscaID(idBusca));
+            vendedor.add(FuncionarioDAO.buscaID(idBusca));
             if (vendedor.isEmpty() || vendedor.get(0) == null) {
                 throw new VendedorNaoEncontradoException();
             }

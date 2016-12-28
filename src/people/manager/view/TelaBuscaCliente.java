@@ -11,12 +11,17 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.plaf.basic.BasicListUI;
+import javax.swing.plaf.basic.BasicListUI.ListSelectionHandler;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
+import people.manager.controller.Controller;
 import people.manager.controller.ControllerCliente;
 import people.manager.exception.ClienteNaoEncontradoException;
 import people.manager.model.Cliente;
-import people.manager.tools.AniversarioTableCellRenderer;
 import people.manager.tools.ClienteTableCellRenderer;
 
 /**
@@ -55,6 +60,7 @@ public class TelaBuscaCliente extends javax.swing.JFrame {
         jLabelImagem = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
         jButton2 = new javax.swing.JButton();
+        jButtonAtivarCliente = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -84,6 +90,14 @@ public class TelaBuscaCliente extends javax.swing.JFrame {
             }
         });
 
+        jButtonAtivarCliente.setText("Ativar");
+        jButtonAtivarCliente.setEnabled(false);
+        jButtonAtivarCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAtivarClienteActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -107,6 +121,8 @@ public class TelaBuscaCliente extends javax.swing.JFrame {
                     .addComponent(jScrollPane3)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jButtonAtivarCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
@@ -130,7 +146,9 @@ public class TelaBuscaCliente extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 391, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton2)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton2)
+                    .addComponent(jButtonAtivarCliente))
                 .addContainerGap())
         );
 
@@ -198,7 +216,7 @@ public class TelaBuscaCliente extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Selecione um cliente antes");
             } else {
                 try {
-                    c = ControllerCliente.buscarCliente(3, (String)table.getValueAt(table.getSelectedRow(), 0));
+                    c = ControllerCliente.buscarCliente(3, (String) table.getValueAt(table.getSelectedRow(), 0));
                     TelaEditaCliente te = new TelaEditaCliente("Edição de Cliente", c);
                     te.setLocationRelativeTo(null);
                     te.setVisible(true);
@@ -210,13 +228,35 @@ public class TelaBuscaCliente extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    private void jButtonAtivarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAtivarClienteActionPerformed
+        if(Controller.getUser().getLevel() > 0){
+            try {
+                ControllerCliente.ativarCliente((String) table.getValueAt(table.getSelectedRow(), 7));
+                JOptionPane.showMessageDialog(null, "Cliente foi ativado.");
+            } catch (ClienteNaoEncontradoException ex) {
+                Logger.getLogger(TelaBuscaCliente.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }else {
+            JOptionPane.showMessageDialog(null, "Você não tem permição para ativar esse cliente.");
+        }
+    }//GEN-LAST:event_jButtonAtivarClienteActionPerformed
+    
+    private void tableFocusEvent(){
+       if(table.getValueAt(table.getSelectedRow(), 10).equals("DESATIVO")){
+           jButtonAtivarCliente.setEnabled(true);
+       }else{
+           jButtonAtivarCliente.setEnabled(false);
+       }
+    }
+    
     private void criarTabela(ArrayList<Cliente> clientes) {
         String[] colunas = {"ID", "NOME", "CELULAR", "TELEFONE", "EMAIL", "IDADE", "NASCIMENTO", "CPF", "RG", "DEPITO", "ESTADO", "ULTIMO ATENDIMENTO", "PROXIMO ATENDIMENTO"};
         List<String[]> lista = new ArrayList<>();
         for (Cliente c : clientes) {
             String est = "DESATIVO";
-            if(c.isAtivo())
+            if (c.isAtivo()) {
                 est = "ATIVO";
+            }
             lista.add(new String[]{c.getId().toString(), c.getNome() + " " + c.getSobrenome(), c.getCelular(), c.getTelefone(), c.getEmail(), c.getIdade().toString(), c.getNascimentoString(), c.getCpf(), c.getRg(), c.getSaldoDevedor().toString(), est, c.getUltimoAtendimentoString(), c.getProximoAtendimentoString()});
         }
         table = new JTable();
@@ -235,12 +275,20 @@ public class TelaBuscaCliente extends javax.swing.JFrame {
             table.setDefaultRenderer(table.getColumnClass(c), renderer);
         }
         //tamanho de colunas
+        table.setAutoCreateRowSorter(true);
         table.getColumnModel().getColumn(0).setPreferredWidth(50);
         table.getColumnModel().getColumn(1).setPreferredWidth(200);
         table.getColumnModel().getColumn(2).setPreferredWidth(120);
         table.getColumnModel().getColumn(3).setPreferredWidth(120);
         table.getColumnModel().getColumn(4).setPreferredWidth(100);
         table.getColumnModel().getColumn(5).setPreferredWidth(60);
+        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        table.getSelectionModel().addListSelectionListener((ListSelectionEvent evt) -> { //Evento na tabela
+            if (evt.getValueIsAdjusting()) {
+                return;
+            }
+            tableFocusEvent();
+        }); 
         jScrollPane3.setViewportView(table);
 
     }
@@ -248,6 +296,7 @@ public class TelaBuscaCliente extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButtonAtivarCliente;
     private javax.swing.JComboBox<String> jComboBoxTipoBusca;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -256,4 +305,5 @@ public class TelaBuscaCliente extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
+
 }

@@ -25,8 +25,8 @@ public class ClienteTableCellRenderer extends DefaultTableCellRenderer {
             String estado = (String) table.getValueAt(row, 10);
             if (estado.equals("DESATIVO")) {
                 result.setFont(new Font("arial", Font.PLAIN, 12));
-                result.setForeground(Color.white);
-                result.setBackground(Color.red);
+                result.setForeground(Color.black);
+                result.setBackground(Color.orange);
             } else {
                 result.setFont(new Font("arial", Font.PLAIN, 12));
                 result.setForeground(Color.black);

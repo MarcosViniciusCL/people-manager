@@ -386,6 +386,7 @@ public class TelaEditaCliente extends javax.swing.JFrame {
             ControllerCliente.editarCliente(Integer.parseInt(jTextFieldID.getText().trim()), jTextFieldNome.getText().trim(), jTextFieldSobreNome.getText().trim(), jTextFieldCelular.getText().trim(), jTextFieldTelefone.getText().trim(), jTextFieldEmail.getText().trim(), nascimento, jTextFieldCPF.getText(), jTextFieldRG.getText().trim(), jTextFieldRua.getText().trim(), jTextFieldNumero.getText().trim(), jTextFieldCEP.getText().trim(), jTextFieldBairro.getText().trim(), jTextFieldCidade.getText().trim(), jTextFieldEstado.getText().trim());
             jLabelImagem.setIcon(null);
             JOptionPane.showMessageDialog(null, "Cliente foi editado com sucesso");
+            dispose();
             Controller.novoLog("editou cliente "+nomeAntigo+" e CPF:"+cpfAntigo);
         } catch (CampoVazioException | ClienteNaoEncontradoException ex) {
             jLabelImagem.setIcon(null);

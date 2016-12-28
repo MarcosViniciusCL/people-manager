@@ -30,7 +30,7 @@ public class ClienteDAO {
      */
     public static void create(Cliente c){
         
-        c.setId(quantidadeBanco()+1);
+//        c.setId(quantidadeBanco()+1);
         
         Connection con = ConnectionFactory.getConnection();
         Statement stmt;
@@ -47,8 +47,7 @@ public class ClienteDAO {
         
         try {
             stmt = con.createStatement();
-            String sql = "INSERT INTO CLIENTES(id, nome, ativo, sobrenome, celular, telefone, email, idade, nascimento, cpf, rg, endereco, historico, saldodevedor, ultimoatendimento, proximoatendimento) VALUES("
-                    + ""+c.getId()+","
+            String sql = "INSERT INTO CLIENTES(nome, ativo, sobrenome, celular, telefone, email, idade, nascimento, cpf, rg, endereco, historico, saldodevedor, ultimoatendimento, proximoatendimento) VALUES("
                     + "'"+c.getNome()+"',"
                     + ""+ativo+","
                     + "'"+c.getSobrenome()+"',"

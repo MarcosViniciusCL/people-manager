@@ -216,7 +216,6 @@
         <Component class="javax.swing.JTextField" name="jTextFieldCompra">
           <Events>
             <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="jTextFieldCompraFocusLost"/>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jTextFieldCompraActionPerformed"/>
           </Events>
         </Component>
       </SubComponents>

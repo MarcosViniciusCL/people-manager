@@ -103,11 +103,6 @@ public class TelaCadastroProduto extends javax.swing.JFrame {
                 jTextFieldCompraFocusLost(evt);
             }
         });
-        jTextFieldCompra.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextFieldCompraActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -232,38 +227,44 @@ public class TelaCadastroProduto extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        if (!testeCampo() && ProdutoDAO.buscaNome(jTextFieldNome.getText().trim()).isEmpty()) {
-            ControllerProduto.cadastrarProduto(jTextFieldNome.getText().trim(), (String) jComboBox1.getSelectedItem(), jTextFieldCodBarra.getText().trim(), Double.parseDouble(jTextFieldCompra.getText().trim()), Double.parseDouble(jTextFieldVenda.getText().trim()), Integer.parseInt(jTextFieldQuantidade.getText().trim()));
+        if (!testeCampo()) {
+            ControllerProduto.cadastrarProduto(jTextFieldNome.getText().trim(), (String) jComboBox1.getSelectedItem(), jTextFieldCodBarra.getText().trim(), Double.parseDouble(jTextFieldCompra.getText().trim().replace(",", ".")), Double.parseDouble(jTextFieldVenda.getText().trim().replace(",", ".")), Integer.parseInt(jTextFieldQuantidade.getText().trim()));
             JOptionPane.showMessageDialog(null, "Produto cadastrado");
+            clear();
         }
     }//GEN-LAST:event_jButton2ActionPerformed
 
-    private void jTextFieldCompraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldCompraActionPerformed
-        Double vVenda = Double.parseDouble(jTextFieldVenda.getText().trim());
-        Double vCompra = Double.parseDouble(jTextFieldCompra.getText().trim());
-        jTextFieldGanho.setText((vVenda * 100 / vCompra - 100) + "%");
-    }//GEN-LAST:event_jTextFieldCompraActionPerformed
-
     private void jTextFieldCompraFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldCompraFocusLost
-        Double vVenda = Double.parseDouble(jTextFieldVenda.getText().trim());
-        Double vCompra = Double.parseDouble(jTextFieldCompra.getText().trim());
-        jTextFieldGanho.setText(String.format("%.2f", vVenda * 100 / vCompra - 100) + "%");
+        if (!jTextFieldVenda.getText().trim().equals("")) {
+            Double vVenda = Double.parseDouble(jTextFieldVenda.getText().trim().replace(",", "."));
+            Double vCompra = Double.parseDouble(jTextFieldCompra.getText().trim().replace(",", "."));
+            jTextFieldGanho.setText(String.format("%.2f", vVenda * 100 / vCompra - 100) + "%");
+        }
     }//GEN-LAST:event_jTextFieldCompraFocusLost
 
-    private boolean testeCampo(){
-        if(jTextFieldNome.getText().trim().isEmpty()){
+    private boolean testeCampo() {
+        if (jTextFieldNome.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Nome não pode ficar vazio.");
             return true;
         }
-        if(jTextFieldVenda.getText().trim().isEmpty()){
+        if (jTextFieldVenda.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Valor de venda não pode ficar vazio.");
             return true;
         }
-        if(jTextFieldQuantidade.getText().trim().isEmpty()){
+        if (jTextFieldQuantidade.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Qunatidade em estoque não pode ficar vazio.");
             return true;
         }
         return false;
+    }
+
+    private void clear() {
+        jTextFieldNome.setText("");
+        jTextFieldCodBarra.setText("");
+        jTextFieldCompra.setText("");
+        jTextFieldGanho.setText("");
+        jTextFieldQuantidade.setText("");
+        jTextFieldVenda.setText("");
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;

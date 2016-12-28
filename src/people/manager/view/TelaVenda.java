@@ -10,7 +10,6 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -195,11 +194,6 @@ public class TelaVenda extends javax.swing.JFrame {
 
         jLabel10.setText("ID:");
 
-        jTextFieldIDProduto.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                jTextFieldIDProdutoFocusLost(evt);
-            }
-        });
         jTextFieldIDProduto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextFieldIDProdutoActionPerformed(evt);
@@ -442,33 +436,12 @@ public class TelaVenda extends javax.swing.JFrame {
         if (c != null && c.isAtivo()) {
             jTextFieldIDCliente.setText(c.getId() + "");
             jTextFieldNomeCliente.setText(c.getNome());
-        } else {
+        } else if (c != null && !c.isAtivo()){
             JOptionPane.showMessageDialog(null, "Esse cliente não pode fazer compras.\nCliente dasativado.");
+        } else{
+            
         }
     }//GEN-LAST:event_jButton2ActionPerformed
-
-    private void jTextFieldIDProdutoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldIDProdutoFocusLost
-        new Thread() {
-            @Override
-            public void run() {
-                if (!jTextFieldIDProduto.getText().trim().equals("")) {
-                    try {
-                        ArrayList<Produto> p = ControllerProduto.buscarNome(1, jTextFieldIDProduto.getText().trim());
-                        if (p != null && !p.isEmpty()) {
-                            jTextFieldNomeProduto.setText(p.get(0).getNome());
-                            jTextFieldCOdBarra.setText(p.get(0).getCodigoBarra());
-                            jTextFieldValorUnitario.setText(String.format("%.2f", p.get(0).getValorVenda()));
-                            jTextFieldQuantidadeEstoque.setText(p.get(0).getQuantidade() + "");
-                            jTextFieldQuantidadeVenda.setText("1");
-                            jTextFieldQuantidadeVendaFocusLost(evt);
-                        }
-                    } catch (ProdutoNaoEncontradoException ex) {
-                        JOptionPane.showMessageDialog(null, "Produto não encontrado");
-                    }
-                }
-            }
-        }.start();
-    }//GEN-LAST:event_jTextFieldIDProdutoFocusLost
 
     private void jButtonAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAdicionarActionPerformed
         if (!jTextFieldIDProduto.getText().trim().equals("") && !jTextFieldNomeProduto.getText().trim().equals("")) {
@@ -551,7 +524,25 @@ public class TelaVenda extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jTextFieldIDProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldIDProdutoActionPerformed
-        jTextFieldIDProdutoFocusLost(null);
+        new Thread() {
+            @Override
+            public void run() {
+                if (!jTextFieldIDProduto.getText().trim().equals("")) {
+                    try {
+                        ArrayList<Produto> p = ControllerProduto.buscarNome(1, jTextFieldIDProduto.getText().trim());
+                        if (p != null && !p.isEmpty()) {
+                            jTextFieldNomeProduto.setText(p.get(0).getNome());
+                            jTextFieldCOdBarra.setText(p.get(0).getCodigoBarra());
+                            jTextFieldValorUnitario.setText(String.format("%.2f", p.get(0).getValorVenda()));
+                            jTextFieldQuantidadeEstoque.setText(p.get(0).getQuantidade() + "");
+                            jTextFieldQuantidadeVenda.setText("1");
+                        }
+                    } catch (ProdutoNaoEncontradoException ex) {
+                        JOptionPane.showMessageDialog(null, "Produto não encontrado");
+                    }
+                }
+            }
+        }.start();
     }//GEN-LAST:event_jTextFieldIDProdutoActionPerformed
 
     private void jTextFieldQuantidadeVendaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldQuantidadeVendaActionPerformed

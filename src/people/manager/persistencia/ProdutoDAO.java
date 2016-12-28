@@ -22,15 +22,14 @@ public class ProdutoDAO {
     
     public static void create(Produto p){
         
-        p.setId(quantidadeBanco()+1);
+//        p.setId(quantidadeBanco()+1);
         
         Connection con = ConnectionFactory.getConnection();
         Statement stmt;
         
         try {
             stmt = con.createStatement();
-            String sql = "INSERT INTO PRODUTOS(ID, NOME, CODIGOBARRA, CATEGORIA, VALOR, VALORCOMPRA, QUANTIDADE, CATEGORIA) VALUES("
-                    + ""+p.getId()+","
+            String sql = "INSERT INTO PRODUTOS(NOME, CODIGOBARRA, CATEGORIA, VALOR, VALORCOMPRA, QUANTIDADE, CATEGORIA) VALUES("
                     + "'"+p.getNome()+"',"
                     + "'"+p.getCodigoBarra()+"',"
                     + "'"+p.getCategoria()+"',"

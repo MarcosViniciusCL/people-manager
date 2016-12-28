@@ -34,9 +34,6 @@ public class Update {
                     fileOut.write(umByte);
                 }
             }
-
-            System.out.println("Arquivo baixado com sucesso");
-
         } catch (IOException e) {
             return false;
         }
