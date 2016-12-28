@@ -30,8 +30,10 @@ import people.manager.tools.ProdutoTableCellRenderer;
 public class TelaBuscaProduto extends javax.swing.JFrame {
 
     private JTable table;
+
     /**
      * Creates new form TelaBuscaProduto
+     *
      * @param title
      */
     public TelaBuscaProduto(String title) {
@@ -101,12 +103,12 @@ public class TelaBuscaProduto extends javax.swing.JFrame {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(34, 34, 34)
+                .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(jTextFieldBusca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 299, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 321, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
@@ -143,8 +145,11 @@ public class TelaBuscaProduto extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Selecione um produto antes");
             } else {
                 try {
-                    c = ControllerProduto.buscarNome(1, (String)table.getValueAt(table.getSelectedRow(), 0));
+                    c = ControllerProduto.buscarNome(1, (String) table.getValueAt(table.getSelectedRow(), 0));
                     TelaEditarProduto tep = new TelaEditarProduto("Editar Produto", c);
+                    Main.guardarJanela(tep);
+                    tep.setLocationRelativeTo(null);
+                    tep.setVisible(true);
                 } catch (ProdutoNaoEncontradoException ex) {
                     Logger.getLogger(TelaBuscaCliente.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -159,16 +164,16 @@ public class TelaBuscaProduto extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Selecione um produto antes");
             } else {
                 try {
-                    c = ControllerProduto.buscarNome(1, (String)table.getValueAt(table.getSelectedRow(), 0));
-                    if(c.get(0).getQuantidade() > 0 && Controller.getUser().getLevel() == 1){
-                        if(JOptionPane.showConfirmDialog(null, "O produto tem "+c.get(0).getQuantidade()+" itens no estoque.\nTem certeza que deseja remover?") == 0){
+                    c = ControllerProduto.buscarNome(1, (String) table.getValueAt(table.getSelectedRow(), 0));
+                    if (c.get(0).getQuantidade() > 0 && Controller.getUser().getLevel() == 1) {
+                        if (JOptionPane.showConfirmDialog(null, "O produto tem " + c.get(0).getQuantidade() + " itens no estoque.\nTem certeza que deseja remover?") == 0) {
                             ControllerProduto.apagarProduto(c.get(0).getId());
                             JOptionPane.showMessageDialog(null, "Produto apagado");
                         }
-                    } else if(c.get(0).getQuantidade() > 0 && Controller.getUser().getLevel() == 0){
+                    } else if (c.get(0).getQuantidade() > 0 && Controller.getUser().getLevel() == 0) {
                         JOptionPane.showMessageDialog(null, "Você não tem permissão para apagar produtos\nque tem quantidade maior que zero em estoque.");
                     } else {
-                        if(JOptionPane.showConfirmDialog(null, "Tem certeza que deseja remover?") == 0){
+                        if (JOptionPane.showConfirmDialog(null, "Tem certeza que deseja remover?") == 0) {
                             ControllerProduto.apagarProduto(c.get(0).getId());
                             JOptionPane.showMessageDialog(null, "Produto apagado");
                         }
@@ -181,26 +186,32 @@ public class TelaBuscaProduto extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void criarTabela(ArrayList<Produto> produto) {
-        String[] colunas = {"ID", "NOME", "COD. BARRA", "VALOR", "QUANTIDADE"};
-        List<String[]> lista = new ArrayList<>();
-        for (Produto p : produto) 
-            lista.add(new String[]{p.getId().toString(), p.getNome(), p.getCodigoBarra(), p.getValorVenda().toString(), p.getQuantidade().toString()});
-        table = new JTable();
-        table.setModel(new DefaultTableModel(lista.toArray(new String[lista.size()][]), colunas) {
-            boolean[] canEdit = new boolean[]{
-                false, false, false, false, false, false
-            };
-
+        new Thread() {
             @Override
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit[columnIndex];
+            public void run() {
+                String[] colunas = {"ID", "NOME", "COD. BARRA", "VALOR", "QUANTIDADE"};
+                List<String[]> lista = new ArrayList<>();
+                for (Produto p : produto) {
+                    lista.add(new String[]{p.getId().toString(), p.getNome(), p.getCodigoBarra(), p.getValorVenda().toString(), p.getQuantidade().toString()});
+                }
+                table = new JTable();
+                table.setModel(new DefaultTableModel(lista.toArray(new String[lista.size()][]), colunas) {
+                    boolean[] canEdit = new boolean[]{
+                        false, false, false, false, false, false
+                    };
+
+                    @Override
+                    public boolean isCellEditable(int rowIndex, int columnIndex) {
+                        return canEdit[columnIndex];
+                    }
+                });
+                TableCellRenderer renderer = new ProdutoTableCellRenderer();
+                for (int c = 0; c < table.getColumnCount(); c++) {
+                    table.setDefaultRenderer(table.getColumnClass(c), renderer);
+                }
+                jScrollPane1.setViewportView(table);
             }
-        });
-        TableCellRenderer renderer = new ProdutoTableCellRenderer();
-        for (int c = 0; c < table.getColumnCount(); c++) {
-            table.setDefaultRenderer(table.getColumnClass(c), renderer);
-        }
-        jScrollPane1.setViewportView(table);
+        }.start();
 
     }
 

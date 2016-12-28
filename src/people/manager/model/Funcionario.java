@@ -24,7 +24,7 @@ public class Funcionario {
     private boolean estado;
     private Endereco endereco;
 
-    public Funcionario(int id, String nome, String sobrenome, String cpf, int idade, String celular, String email, Calendar contratacao, Calendar nascimento, String rua, String numero, String cep, String bairro, String cidade, String estado) {
+    public Funcionario(Integer id, String nome, String sobrenome, String cpf, int idade, String celular, String email, Calendar contratacao, Calendar nascimento, String rua, String numero, String cep, String bairro, String cidade, String estado) {
         this.id = id;
         this.nome = nome;
         this.sobrenome = sobrenome;

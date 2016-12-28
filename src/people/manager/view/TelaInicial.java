@@ -19,6 +19,7 @@ import people.manager.controller.Controller;
 import people.manager.exception.SemInternetException;
 import people.manager.model.Usuario;
 import people.manager.persistencia.ConnectionFactory;
+import people.manager.tools.PDF;
 
 /**
  *
@@ -89,6 +90,7 @@ public class TelaInicial extends javax.swing.JFrame {
         jMenuItem17 = new javax.swing.JMenuItem();
         jMenuItem18 = new javax.swing.JMenuItem();
         jMenu5 = new javax.swing.JMenu();
+        jMenuItem22 = new javax.swing.JMenuItem();
         jMenu7 = new javax.swing.JMenu();
         jMenuItem19 = new javax.swing.JMenuItem();
 
@@ -333,6 +335,15 @@ public class TelaInicial extends javax.swing.JFrame {
         jMenuBar1.add(jMenu10);
 
         jMenu5.setText("Ferramentas");
+
+        jMenuItem22.setText("Gerar PDF");
+        jMenuItem22.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem22ActionPerformed(evt);
+            }
+        });
+        jMenu5.add(jMenuItem22);
+
         jMenuBar1.add(jMenu5);
 
         jMenu7.setText("Sobre");
@@ -513,11 +524,13 @@ public class TelaInicial extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jMenuItem19ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem19ActionPerformed
-        verificacaoSistema();
+        verificarAtualizacao();
     }//GEN-LAST:event_jMenuItem19ActionPerformed
 
     private void jMenuItem11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem11ActionPerformed
-        // TODO add your handling code here:
+        TelaCadastroFuncionario tcf = new TelaCadastroFuncionario("Cadastro Funcionários");
+        tcf.setLocationRelativeTo(null);
+        tcf.setVisible(true);
     }//GEN-LAST:event_jMenuItem11ActionPerformed
 
     private void jMenuItem12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem12ActionPerformed
@@ -528,10 +541,10 @@ public class TelaInicial extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem12ActionPerformed
 
     private void jMenuItem13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem13ActionPerformed
-       TelaBuscaVendedores tbv = new TelaBuscaVendedores("Busca Funcionarios");
-       Main.guardarJanela(tbv);
-       tbv.setLocationRelativeTo(null);
-       tbv.setVisible(true);
+        TelaBuscaVendedores tbv = new TelaBuscaVendedores("Busca Funcionarios");
+        Main.guardarJanela(tbv);
+        tbv.setLocationRelativeTo(null);
+        tbv.setVisible(true);
     }//GEN-LAST:event_jMenuItem13ActionPerformed
 
     private void jMenuItem20ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem20ActionPerformed
@@ -547,6 +560,10 @@ public class TelaInicial extends javax.swing.JFrame {
         tea.setLocationRelativeTo(null);
         tea.setVisible(true);
     }//GEN-LAST:event_jMenuItem21ActionPerformed
+
+    private void jMenuItem22ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem22ActionPerformed
+         PDF.criarPDFVendas();
+    }//GEN-LAST:event_jMenuItem22ActionPerformed
 
     /**
      * É executado quando o botão X da janela é pressionado.
@@ -596,6 +613,7 @@ public class TelaInicial extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem20;
     private javax.swing.JMenuItem jMenuItem21;
+    private javax.swing.JMenuItem jMenuItem22;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
@@ -609,17 +627,29 @@ public class TelaInicial extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     /**
-     * Verifica no servidor se há alguma nova atualização para ser baixada.
-     * Cria banco de dados caso não exista.
+     * Verifica no servidor se há alguma nova atualização para ser baixada. Cria
+     * banco de dados caso não exista.
      */
     private void verificacaoSistema() {
         new Thread() {
             @Override
             public void run() {
                 //************** Testando a existencia do banco de dados **************
-                if(!new File("database.db").exists()){
+                if (!new File("database.db").exists()) {
                     ConnectionFactory.criarBanco();
                 }
+                if (Controller.getConfiguracao().getProperty("atualizar_inicializacao").equals("true")) {
+                    verificarAtualizacao();
+                }
+
+            }
+        }.start();
+    }
+
+    private void verificarAtualizacao() {
+        new Thread() {
+            @Override
+            public void run() {
                 //************** Testando Atualização de software ***********
                 Controller.aguardar(5);
                 try {

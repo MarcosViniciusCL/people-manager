@@ -91,7 +91,7 @@ public class ClienteDAO {
     
     public static ArrayList listarTodos() throws ParseException{
         Connection con = ConnectionFactory.getConnection();
-        Statement stmt = null;
+        Statement stmt;
         ArrayList clientes = null;
         
         try {
@@ -132,9 +132,8 @@ public class ClienteDAO {
             Logger.getLogger(ClienteDAO.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             ConnectionFactory.closeConnection(con);
-            return tamanho;
         }
-        
+        return tamanho;
     }
     
     /**
@@ -144,7 +143,7 @@ public class ClienteDAO {
      */
     public static ArrayList buscaNome(String nome){
         Connection con = ConnectionFactory.getConnection();
-        Statement stmt = null;
+        Statement stmt;
         ArrayList clientes = null;
         
         try {

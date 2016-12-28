@@ -8,22 +8,25 @@ package people.manager.model;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Iterator;
 
 /**
  *
  * @author marcos
  */
 public class Venda {
-    private Integer     id; 
-    private Calendar    data;
-    private String      comentario;
-    private Integer     idCliente;
-    private Integer     idVendedor;
-    private String      formaPagamento;
-    private ArrayList   produtos;
-    private Double     valorVenda;
-    private Double     valorRecebido;
-    private Double     valorTroco;
+
+    private Integer id;
+    private Calendar data;
+    private String comentario;
+    private Integer idCliente;
+    private Integer idVendedor;
+    private String formaPagamento;
+    private ArrayList<HashMap> produtos;
+    private Double valorVenda;
+    private Double valorRecebido;
+    private Double valorTroco;
 
     /**
      *
@@ -48,13 +51,22 @@ public class Venda {
         this.valorTroco = valorTroco;
         this.valorRecebido = valorRecebido;
     }
-    
-    private String calendarParaString(Calendar calendar){
-        if(calendar == null)
+
+    public String getNomesProdutos() {
+        String prod = "";
+        for (HashMap object : produtos) {
+            prod += object.get("nome") + ", ";
+        }
+        return prod.substring(0, prod.length()-2);
+    }
+
+    private String calendarParaString(Calendar calendar) {
+        if (calendar == null) {
             return "NULO";
+        }
         SimpleDateFormat s = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         return s.format(calendar.getTime());
-    } 
+    }
 
     public Integer getId() {
         return id;
@@ -67,7 +79,7 @@ public class Venda {
     public Calendar getData() {
         return data;
     }
-    
+
     public String getDataString() {
         return this.calendarParaString(data);
     }
@@ -112,7 +124,6 @@ public class Venda {
         this.formaPagamento = formaPagamento;
     }
 
-    
     public void setComentario(String comentario) {
         this.comentario = comentario;
     }
@@ -140,11 +151,5 @@ public class Venda {
     public void setValorVenda(Double valorVenda) {
         this.valorVenda = valorVenda;
     }
-    
-    
-    
-    
-    
-    
-    
+
 }

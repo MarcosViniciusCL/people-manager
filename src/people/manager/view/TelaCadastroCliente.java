@@ -425,7 +425,7 @@ public class TelaCadastroCliente extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Celular precisa ser preenchido");
             erro = true;
         }
-        if (jDateChooserNascimento.isValid()) {
+        if (jDateChooserNascimento.getCalendar() == null) {
             JOptionPane.showMessageDialog(null, "Data de nascimento precisa ser preenchido");
             erro = true;
         }

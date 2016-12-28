@@ -15,36 +15,38 @@ import people.manager.exception.ArquivoModificadoException;
  * @author marcos
  */
 public class Main {
+
     private static TelaInicial ti;
     private static ArrayList<JFrame> janelas;
-    
+
     public static void main(String[] args) throws ArquivoModificadoException, IOException {
-           janelas = new ArrayList<>();
-           TelaLogin t = new TelaLogin("Login");
-           t.setLocationRelativeTo(null);
-           t.setVisible(true);
+        janelas = new ArrayList<>();
+
+        TelaLogin t = new TelaLogin("Login");
+        t.setLocationRelativeTo(null);
+        t.setVisible(true);
     }
-    
-    public static void setTI(TelaInicial ti){
+
+    public static void setTI(TelaInicial ti) {
         Main.ti = ti;
     }
-    
-    public static TelaInicial getTI(){
+
+    public static TelaInicial getTI() {
         return Main.ti;
     }
-    
-    public static void guardarJanela(JFrame jframe){
+
+    public static void guardarJanela(JFrame jframe) {
         janelas.add(jframe);
     }
-    
-    public static void fecharTudo(){
+
+    public static void fecharTudo() {
         Main.janelas.forEach((j) -> {
             j.dispose();
         });
         janelas.clear();
     }
-    
-    public static void remover(JFrame j){
+
+    public static void remover(JFrame j) {
         janelas.remove(j);
-    } 
+    }
 }
