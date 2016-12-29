@@ -148,6 +148,7 @@ public class TelaNovoUsuario extends javax.swing.JFrame {
         try {
             ControllerUsuario.adicionarUsuario(jTextField1.getText().trim(), new String(jPasswordField1.getPassword()), jComboBoxSelecao.getSelectedIndex());
             JOptionPane.showMessageDialog(null, "Novo usuario cadastrador com sucesso.");
+            dispose();
         } catch (UsuarioExistenteException ex) {
             JOptionPane.showMessageDialog(null, "Esse nome não pode ser usado.\nEscolha outro nomede usuario.");
         }

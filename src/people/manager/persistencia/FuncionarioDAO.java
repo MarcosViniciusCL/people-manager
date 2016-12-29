@@ -32,7 +32,7 @@ public class FuncionarioDAO {
      */
     public static void create(Funcionario c){
         
-        c.setId(quantidadeBanco()+1);
+//        c.setId(quantidadeBanco()+1);
         
         Connection con = ConnectionFactory.getConnection();
         Statement stmt;

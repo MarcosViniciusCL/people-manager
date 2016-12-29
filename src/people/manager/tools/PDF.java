@@ -38,26 +38,30 @@ public class PDF {
             document.add(new Paragraph("Relatório de Vendas"));
             document.add(new Paragraph(" "));
             document.add(new LineSeparator());
-            PdfPTable table = new PdfPTable(3);
+            PdfPTable table = new PdfPTable(5);
             Paragraph p1 = new Paragraph("Vendas Realizadas");
             PdfPCell header = new PdfPCell(p1);
-            header.setColspan(3);
+            header.setColspan(5);
             table.addCell(header);
             ArrayList<Venda> vendas = ControllerVenda.todasVendas();
             Double valorTotal = 0.0;
             table.addCell("DATA");
+            table.addCell("ID CLIENTE");
+            table.addCell("ID VENDEDO");
             table.addCell("PRODUTOS");
             table.addCell("VALOR");
             for (Venda venda : vendas) {
                 table.addCell(Controller.calendarParaString(venda.getData()));
+                table.addCell(venda.getIdCliente()+"");
+                table.addCell(venda.getIdVendedor()+"");
                 table.addCell(venda.getNomesProdutos());
                 table.addCell(String.format("R$ %.2f", venda.getValorVenda()));
                 valorTotal += venda.getValorVenda();
             }
-            table.addCell("");
-            table.addCell("");
-            table.addCell("");
+
             table.addCell("TOTAL");
+            table.addCell("");
+            table.addCell("");
             table.addCell("");
             table.addCell(String.format("R$ %.2f", valorTotal));
             

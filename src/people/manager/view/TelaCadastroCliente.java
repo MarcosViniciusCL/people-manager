@@ -319,11 +319,9 @@ public class TelaCadastroCliente extends javax.swing.JFrame {
             try {
 
                 Calendar nascimento = jDateChooserNascimento.getCalendar();
-//                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-//                jDateChooserNascimento.
-//                nascimento.setTime(sdf.parse(jFormattedTextFieldNascimento.getText().trim()));
                 ControllerCliente.cadastrarCliente(jTextFieldNome.getText().trim(), jTextFieldSobreNome.getText().trim(), jTextFieldCelular.getText().trim(), jTextFieldTelefone.getText().trim(), jTextFieldEmail.getText().trim(), nascimento, jTextFieldCPF.getText(), jTextFieldRG.getText().trim(), jTextFieldRua.getText().trim(), jTextFieldNumero.getText().trim(), jTextFieldCEP.getText().trim(), jTextFieldBairro.getText().trim(), jTextFieldCidade.getText().trim(), jTextFieldEstado.getText().trim());
                 JOptionPane.showMessageDialog(null, "Cliente cadastrado com sucesso");
+                clear();
                 Controller.novoLog("cadastrou um novo cliente onde o CPF é "+jTextFieldCPF.getText().trim());
             } catch (CPFExistenteException ex) {
                 JOptionPane.showMessageDialog(null, "Cliente já existe, verifique o CPF");
@@ -438,4 +436,22 @@ public class TelaCadastroCliente extends javax.swing.JFrame {
         }
 
     }
+    
+    private void clear(){
+        jTextFieldBairro.setText("");
+        jTextFieldCEP.setText("");
+        jTextFieldCPF.setText("");
+        jTextFieldCelular.setText("");
+        jTextFieldCidade.setText("");
+        jTextFieldCidade.setText("");
+        jTextFieldEmail.setText("");
+        jTextFieldEstado.setText("");
+        jTextFieldNome.setText("");
+        jTextFieldNumero.setText("");
+        jTextFieldRua.setText("");
+        jTextFieldSobreNome.setText("");
+        jDateChooserNascimento.setCalendar(null);
+        jTextFieldRG.setText("");
+        jTextFieldTelefone.setText("");
+   }
 }

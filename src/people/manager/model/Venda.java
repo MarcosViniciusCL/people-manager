@@ -27,9 +27,11 @@ public class Venda {
     private Double valorVenda;
     private Double valorRecebido;
     private Double valorTroco;
+    private String estado;
 
     /**
      *
+     * @param id
      * @param comentario
      * @param idCliente
      * @param idVendedor
@@ -38,9 +40,10 @@ public class Venda {
      * @param formaPagamento
      * @param valorRecebido
      * @param valorTroco
+     * @param estado
      */
-    public Venda(String comentario, Integer idCliente, Integer idVendedor, ArrayList produtos, Double valorVenda, String formaPagamento, Double valorRecebido, Double valorTroco) {
-        this.id = 0;
+    public Venda(int id, String comentario, Integer idCliente, Integer idVendedor, ArrayList produtos, Double valorVenda, String formaPagamento, Double valorRecebido, Double valorTroco, String estado) {
+        this.id = id;
         this.data = Calendar.getInstance();
         this.comentario = comentario;
         this.idCliente = idCliente;
@@ -50,6 +53,7 @@ public class Venda {
         this.formaPagamento = formaPagamento;
         this.valorTroco = valorTroco;
         this.valorRecebido = valorRecebido;
+        this.estado = estado;
     }
 
     public String getNomesProdutos() {
@@ -82,6 +86,14 @@ public class Venda {
 
     public String getDataString() {
         return this.calendarParaString(data);
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
     }
 
     public void setData(Calendar data) {

@@ -5,10 +5,13 @@
  */
 package people.manager.view;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import javax.swing.JFrame;
 import people.manager.exception.ArquivoModificadoException;
+import people.manager.model.Usuario;
+import people.manager.persistencia.ConnectionFactory;
 
 /**
  *
@@ -22,9 +25,18 @@ public class Main {
     public static void main(String[] args) throws ArquivoModificadoException, IOException {
         janelas = new ArrayList<>();
 
+        
         TelaLogin t = new TelaLogin("Login");
         t.setLocationRelativeTo(null);
         t.setVisible(true);
+        //Teste primeiro execução;
+        if (!new File("database.db").exists()) {
+            ConnectionFactory.criarBanco();
+            Usuario user = new Usuario("CLEAR", "CLEAR", 1);
+            TelaNovoUsuario tnu = new TelaNovoUsuario("Primeiro Usuario", user);
+            tnu.setLocationRelativeTo(null);
+            tnu.setVisible(true);
+        }
     }
 
     public static void setTI(TelaInicial ti) {

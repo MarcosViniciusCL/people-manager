@@ -436,17 +436,17 @@ public class TelaVenda extends javax.swing.JFrame {
         if (c != null && c.isAtivo()) {
             jTextFieldIDCliente.setText(c.getId() + "");
             jTextFieldNomeCliente.setText(c.getNome());
-        } else if (c != null && !c.isAtivo()){
+        } else if (c != null && !c.isAtivo()) {
             JOptionPane.showMessageDialog(null, "Esse cliente não pode fazer compras.\nCliente dasativado.");
-        } else{
-            
+        } else {
+
         }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButtonAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAdicionarActionPerformed
         if (!jTextFieldIDProduto.getText().trim().equals("") && !jTextFieldNomeProduto.getText().trim().equals("")) {
             try {
-                
+
                 ArrayList<Produto> e = ControllerProduto.buscarNome(1, jTextFieldIDProduto.getText().trim());
                 if (e.get(0).getQuantidade() > 0 && e.get(0).getQuantidade() >= Integer.parseInt(jTextFieldQuantidadeVenda.getText().trim())) {
                     if (e.get(0).getQuantidade() <= Integer.parseInt(Controller.getConfiguracao().getProperty("quantidade.min_estoque"))) {
@@ -572,10 +572,14 @@ public class TelaVenda extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         Funcionario v = ControllerFuncionario.buscarFuncionarioInterface();
-        if (v != null) {
+        if (v.isAtivo()) {
             jTextFieldIDVendedor.setText(v.getId() + "");
-            jTextFieldNomeVendedor.setText(v.getNome());
+            jTextFieldNomeVendedor.setText(v.getNome() + " " + v.getSobrenome());
+        } else {
+            jTextFieldIDVendedor.setText("");
+            JOptionPane.showMessageDialog(null, "Esse vendedor não pode vender.\nVendedor dasativado.");
         }
+
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
@@ -618,7 +622,7 @@ public class TelaVenda extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        Venda venda = new Venda("NULO", Integer.parseInt(jTextFieldIDCliente.getText()), Integer.parseInt(jTextFieldIDVendedor.getText()), produtos, Double.parseDouble(jTextFieldTOTAL.getText().replace("R$", "").trim().replace(",", ".")), "", 0.00, 0.00);
+        Venda venda = new Venda(0, "NULO", Integer.parseInt(jTextFieldIDCliente.getText()), Integer.parseInt(jTextFieldIDVendedor.getText()), produtos, Double.parseDouble(jTextFieldTOTAL.getText().replace("R$", "").trim().replace(",", ".")), "", 0.00, 0.00, "PENDENTE");
         TelaFinalizarVenda tfv = new TelaFinalizarVenda("Finalizar Venda", venda, this);
         Main.guardarJanela(tfv);
         tfv.setLocationRelativeTo(null);

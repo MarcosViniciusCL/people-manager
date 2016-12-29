@@ -1,4 +1,4 @@
-1482966354000:32996:::::::::::::::::::::::::::::::::::::
+1482971088000:35207:::::::::::::::::::::::::::::::::::::
 03/12/2016 17:51:04-> Usuario 'root' fez login no sistema;
 03/12/2016 17:51:50-> OS ARQUIVOS DO SISTEMA FORAM ALTERADOS, A APLICAÇÃO VAI TENTAR RECUMPERA-LOS;
 03/12/2016 17:53:55-> OS ARQUIVOS DO SISTEMA FORAM ALTERADOS, A APLICAÇÃO VAI TENTAR RECUMPERA-LOS;
@@ -550,3 +550,38 @@
 28/12/2016 21:04:38-> Usuario 'root' fez login no sistema;
 28/12/2016 21:05:22-> Usuario 'root' cadastrou um novo funcionario onde o CPF é 06453705508;
 28/12/2016 21:05:54-> Usuario 'root' fechou a aplicação;
+28/12/2016 21:25:35-> Usuario 'root' fez login no sistema;
+28/12/2016 21:26:42-> Usuario 'root' cadastrou um novo cliente onde o CPF é 06453705508;
+28/12/2016 21:26:50-> Usuario 'root' fechou a aplicação;
+28/12/2016 21:28:12-> Usuario 'root' fez login no sistema;
+28/12/2016 21:31:25-> Usuario 'root' fechou a aplicação;
+28/12/2016 21:31:35-> Usuario 'root' fez login no sistema;
+28/12/2016 21:34:42-> Usuario 'root' fez login no sistema;
+28/12/2016 21:35:14-> Usuario 'root' cadastrou um novo cliente onde o CPF é ;
+28/12/2016 21:35:17-> Usuario 'root' fechou a aplicação;
+28/12/2016 21:36:27-> Usuario 'root' fez login no sistema;
+28/12/2016 21:37:42-> Usuario 'root' removeu um cliente onde Nome: E Tel: w CPF: 646464;
+28/12/2016 21:38:37-> Usuario 'root' fechou a aplicação;
+28/12/2016 21:40:31-> Usuario 'root' fez login no sistema;
+28/12/2016 21:40:59-> Usuario 'root' cadastrou um novo cliente onde o CPF é ;
+28/12/2016 21:42:33-> Usuario 'root' editou cliente e e CPF:87878787;
+28/12/2016 21:43:13-> Usuario 'root' fechou a aplicação;
+28/12/2016 21:44:56-> Usuario 'root' fez login no sistema;
+28/12/2016 21:48:10-> Usuario 'root' cadastrou um novo funcionario onde o CPF é 6565656565;
+28/12/2016 21:49:40-> Usuario 'root' fechou a aplicação;
+28/12/2016 21:49:51-> Usuario 'root' fez login no sistema;
+28/12/2016 21:53:09-> Usuario 'root' fechou a aplicação;
+28/12/2016 21:53:28-> Usuario 'root' fez login no sistema;
+28/12/2016 21:57:33-> Usuario 'root' fechou a aplicação;
+28/12/2016 22:13:14-> Usuario 'root' fez login no sistema;
+28/12/2016 22:13:55-> Usuario 'root' fechou a aplicação;
+28/12/2016 22:17:35-> Usuario 'root' fez login no sistema;
+28/12/2016 22:19:24-> Usuario 'root' fechou a aplicação;
+28/12/2016 22:21:49-> Usuario 'root' fez login no sistema;
+28/12/2016 22:22:24-> Usuario 'root' fechou a aplicação;
+28/12/2016 22:22:32-> Usuario 'root' fez login no sistema;
+28/12/2016 22:23:07-> Usuario 'root' fechou a aplicação;
+28/12/2016 22:23:14-> Usuario 'root' fez login no sistema;
+28/12/2016 22:23:52-> Usuario 'root' fechou a aplicação;
+28/12/2016 22:24:00-> Usuario 'root' fez login no sistema;
+28/12/2016 22:24:48-> Usuario 'root' fechou a aplicação;

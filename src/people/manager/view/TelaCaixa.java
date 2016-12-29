@@ -116,7 +116,7 @@ public class TelaCaixa extends javax.swing.JFrame {
         for (Venda v : venda){
             try {
                 ArrayList<Cliente> c = ControllerCliente.buscarCliente(3, v.getIdCliente()+"");
-                lista.add(new String[]{v.getId().toString(), v.getDataString(), v.getProdutos().get(0).toString(), c.get(0).getNome(), String.format("%.2f", v.getValorVenda())});
+                lista.add(new String[]{v.getId().toString(), v.getDataString(), v.getNomesProdutos(), c.get(0).getNome(), String.format("%.2f", v.getValorVenda())});
             } catch (ClienteNaoEncontradoException ex) {
                 Logger.getLogger(TelaCaixa.class.getName()).log(Level.SEVERE, null, ex);
             }

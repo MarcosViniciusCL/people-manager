@@ -35,6 +35,7 @@ public class Funcionario {
         this.contratacao = contratacao;
         this.nascimento = nascimento;
         this.endereco = new Endereco(rua, numero, cep, bairro, cidade, estado);
+        gerarIdade();
     }
     
     public Integer getId() {
@@ -51,6 +52,9 @@ public class Funcionario {
     
     public void desabilitar(){
         this.estado = false;
+    }
+    public void habilitar(){
+        this.estado = true;
     }
 
     public void setNome(String nome) {
@@ -131,7 +135,9 @@ public class Funcionario {
         this.celular = celular;
     }
     
-    
+    private void gerarIdade(){
+        this.idade = Calendar.getInstance().get(Calendar.YEAR) - this.nascimento.get(Calendar.YEAR);
+    }
     
     
 }

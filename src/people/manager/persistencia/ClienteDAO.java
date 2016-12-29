@@ -183,6 +183,8 @@ public class ClienteDAO {
         Connection con = ConnectionFactory.getConnection();
         Statement stmt;
         Cliente c = null;
+        if(cpf == null)
+            return null;
         
         try {
             stmt = con.createStatement();
@@ -217,6 +219,8 @@ public class ClienteDAO {
         Connection con = ConnectionFactory.getConnection();
         Statement stmt;
         Cliente c = null;
+        if(rg == null)
+            return null;
         
         try {
             stmt = con.createStatement();
@@ -238,7 +242,7 @@ public class ClienteDAO {
                 c.setAtivo(false);
             c.setEnd(obterObjetoEndereco(rs.getString("ENDERECO")));
             c.setHistorico(criarObjectoJSON(rs.getString("HISTORICO")));
-            
+            c.setId(rs.getInt("ID"));
             stmt.close();
         } catch (SQLException ex) {
             Logger.getLogger(ClienteDAO.class.getName()).log(Level.SEVERE, null, ex);

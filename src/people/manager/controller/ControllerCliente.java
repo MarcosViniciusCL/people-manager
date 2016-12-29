@@ -48,15 +48,17 @@ public class ControllerCliente {
      * @throws CPFExistenteException
      */
     public static Cliente cadastrarCliente(String nome, String sobrenome, String celular, String telefone, String email, Calendar nascimento, String cpf, String rg, String rua, String numero, String cep, String bairro, String cidade, String estado) throws CPFExistenteException {
-        Cliente cliente;
+        Cliente client;
         Cliente buscaCPF = ClienteDAO.buscaCPF(cpf);
-        Cliente buscaRG = ClienteDAO.buscaRG(rg);
+        Cliente buscaRG = null;
+        if(!rg.equals(""))
+            buscaRG = ClienteDAO.buscaRG(rg);
         if (buscaCPF != null || buscaRG != null) {
             throw new CPFExistenteException();
         }
-        cliente = new Cliente(nome, sobrenome, celular, telefone, email, nascimento, cpf, rg, rua, numero, cep, bairro, cidade, estado);
-        ClienteDAO.create(cliente);
-        return cliente;
+        client = new Cliente(nome, sobrenome, celular, telefone, email, nascimento, cpf, rg, rua, numero, cep, bairro, cidade, estado);
+        ClienteDAO.create(client);
+        return client;
     }
 
     public static void desativarCliente(String cpf) throws ClienteNaoEncontradoException {

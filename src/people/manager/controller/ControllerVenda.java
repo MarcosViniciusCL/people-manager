@@ -19,8 +19,8 @@ import people.manager.persistencia.VendaDAO;
  */
 public class ControllerVenda {
     
-    public static Venda cadastrarVenda(String comentario, int idCliente, int idVendedor, ArrayList produtos, String formaPagamento, Double valorRecebido, Double valorTroco) throws SemProdutoEstoqueException, ClienteNaoEncontradoException{
-        Double valorTotal = valorTotal(produtos);
+    public static Venda cadastrarVenda(String comentario, int idCliente, int idVendedor, ArrayList produtos, String formaPagamento, Double valorTotal, Double valorRecebido, Double valorTroco, String estado) throws SemProdutoEstoqueException, ClienteNaoEncontradoException{
+//        Double valorTotal = valorTotal(produtos);
         try {
             ControllerCliente.buscarCliente(3 ,Integer.toString(idCliente));
         } catch (ClienteNaoEncontradoException ex) {
@@ -29,7 +29,7 @@ public class ControllerVenda {
         ArrayList prod = temEstoque(produtos);
         if(!prod.isEmpty())
             throw new SemProdutoEstoqueException(prod);
-        Venda venda = new Venda(comentario, idCliente, idVendedor, produtos, valorTotal, formaPagamento, valorRecebido, valorTroco);
+        Venda venda = new Venda(0, comentario, idCliente, idVendedor, produtos, valorTotal, formaPagamento, valorRecebido, valorTroco, estado);
         VendaDAO.create(venda);
         return venda;
     }

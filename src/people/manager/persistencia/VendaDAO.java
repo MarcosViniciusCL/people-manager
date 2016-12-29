@@ -26,7 +26,7 @@ import people.manager.model.Venda;
 public class VendaDAO {
     public static void create(Venda v){
         
-        v.setId(quantidadeBanco()+1);
+//        v.setId(quantidadeBanco()+1);
         
         Connection con = ConnectionFactory.getConnection();
         Statement stmt;
@@ -37,8 +37,7 @@ public class VendaDAO {
         
         try {
             stmt = con.createStatement();
-            String sql = "INSERT INTO VENDAS(ID, DATA_VENDA, COMENTARIO, ID_CLIENTE, ID_VENDEDOR, PRODUTOS, VALOR, FORMA_PAGAMENTO, VALOR_RECEBIDO, VALOR_TROCO) VALUES("
-                    + ""+v.getId()+","
+            String sql = "INSERT INTO VENDAS(DATA_VENDA, COMENTARIO, ID_CLIENTE, ID_VENDEDOR, PRODUTOS, VALOR, FORMA_PAGAMENTO, VALOR_RECEBIDO, VALOR_TROCO, ESTADO) VALUES("
                     + "'"+dataVenda+"',"
                     + "'"+v.getComentario()+"',"
                     + ""+v.getIdCliente()+","
@@ -47,7 +46,8 @@ public class VendaDAO {
                     + ""+v.getValorVenda()+","
                     + "'"+v.getFormaPagamento()+"',"
                     + ""+v.getValorRecebido()+","
-                    + ""+v.getValorTroco()+");";
+                    + ""+v.getValorTroco()+", "
+                    + "'"+v.getEstado()+"');";
             
             stmt.executeUpdate(sql);
             stmt.close();
@@ -92,7 +92,7 @@ public class VendaDAO {
                 Calendar dataVendaAtual = Calendar.getInstance();
 		dataVendaAtual.setTime(sdf.parse(rs.getString("DATA_VENDA")));
                 ArrayList arrayProdutos = criarObjectoJSON(rs.getString("PRODUTOS"));
-                Venda v = new Venda(rs.getString("COMENTARIO"), rs.getInt("ID_CLIENTE"), rs.getInt("ID_VENDEDOR"), arrayProdutos, rs.getDouble("VALOR"), rs.getString("FORMA_PAGAMENTO"), rs.getDouble("VALOR_RECEBIDO"), rs.getDouble("VALOR_TROCO"));
+                Venda v = new Venda(rs.getInt("ID"), rs.getString("COMENTARIO"), rs.getInt("ID_CLIENTE"), rs.getInt("ID_VENDEDOR"), arrayProdutos, rs.getDouble("VALOR"), rs.getString("FORMA_PAGAMENTO"), rs.getDouble("VALOR_RECEBIDO"), rs.getDouble("VALOR_TROCO"), rs.getString("ESTADO"));
            
                 vendas.add(v);
             }
@@ -121,7 +121,7 @@ public class VendaDAO {
             Calendar dataVendaAtual = Calendar.getInstance();
             dataVendaAtual.setTime(sdf.parse(rs.getString("DATA_VENDA")));
             ArrayList arrayProdutos = criarObjectoJSON(rs.getString("PRODUTOS"));
-            v = new Venda(rs.getString("COMENTARIO"), rs.getInt("ID_CLIENTE"), rs.getInt("ID_VENDEDOR"), arrayProdutos, rs.getDouble("VALOR"), rs.getString("FORMA_PAGAMENTO"), rs.getDouble("VALOR_RECEBIDO"), rs.getDouble("VALOR_TROCO"));
+            v = new Venda(rs.getInt("ID"), rs.getString("COMENTARIO"), rs.getInt("ID_CLIENTE"), rs.getInt("ID_VENDEDOR"), arrayProdutos, rs.getDouble("VALOR"), rs.getString("FORMA_PAGAMENTO"), rs.getDouble("VALOR_RECEBIDO"), rs.getDouble("VALOR_TROCO"), rs.getString("ESTADO"));
             
             stmt.close();
         } catch (SQLException ex) {
@@ -147,7 +147,7 @@ public class VendaDAO {
                 Calendar nascimento = Calendar.getInstance();
 		nascimento.setTime(sdf.parse(rs.getString("DATA_VENDA")));
                 ArrayList arrayProdutos = criarObjectoJSON(rs.getString("PRODUTOS"));
-                Venda v = new Venda(rs.getString("COMENTARIO"), rs.getInt("ID_CLIENTE"), rs.getInt("ID_VENDEDOR"), arrayProdutos, rs.getDouble("VALOR"), rs.getString("FORMA_PAGAMENTO"), rs.getDouble("VALOR_RECEBIDO"), rs.getDouble("VALOR_TROCO"));
+                Venda v = new Venda(rs.getInt("ID"), rs.getString("COMENTARIO"), rs.getInt("ID_CLIENTE"), rs.getInt("ID_VENDEDOR"), arrayProdutos, rs.getDouble("VALOR"), rs.getString("FORMA_PAGAMENTO"), rs.getDouble("VALOR_RECEBIDO"), rs.getDouble("VALOR_TROCO"), rs.getString("ESTADO"));
                 vendas.add(v);
             }
             
@@ -173,9 +173,9 @@ public class VendaDAO {
             Logger.getLogger(VendaDAO.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             ConnectionFactory.closeConnection(con);
-            return tamanho;
+            
         }
-        
+        return tamanho;
     }
     
     
