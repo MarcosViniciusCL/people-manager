@@ -342,29 +342,26 @@ public class TelaCadastroCliente extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextFieldCEPKeyPressed
 
     private void jTextFieldCEPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldCEPActionPerformed
-        try {
-            if (jTextFieldCEP.getText().trim().length() == 8 && Controller.temNet()) {
-                new Thread() {
-                    @Override
-                    public void run() {
-                        jLabelImgCep.setIcon(new javax.swing.ImageIcon(getClass().getResource("ajax-loader-barra.gif")));
-                        String CEP = jTextFieldCEP.getText().trim();
-                        if (CEP.length() == 8) {
-                            try {
-                                jTextFieldRua.setText(BuscaCEP.getEndereco(CEP));
-                                jTextFieldBairro.setText(BuscaCEP.getBairro(CEP));
-                                jTextFieldCidade.setText(BuscaCEP.getCidade(CEP));
-                                jTextFieldEstado.setText(BuscaCEP.getUF(CEP));
-                                jLabelImgCep.setIcon(null);
-                            } catch (IOException ex) {
-                                Logger.getLogger(TelaCadastroCliente.class.getName()).log(Level.SEVERE, null, ex);
-                            }
+        if (jTextFieldCEP.getText().trim().length() == 8) {
+            new Thread() {
+                @Override
+                public void run() {
+                    jLabelImgCep.setIcon(new javax.swing.ImageIcon(getClass().getResource("ajax-loader-barra.gif")));
+                    String CEP = jTextFieldCEP.getText().trim();
+                    if (CEP.length() == 8) {
+                        try {
+                            jTextFieldRua.setText(BuscaCEP.getEndereco(CEP));
+                            jTextFieldBairro.setText(BuscaCEP.getBairro(CEP));
+                            jTextFieldCidade.setText(BuscaCEP.getCidade(CEP));
+                            jTextFieldEstado.setText(BuscaCEP.getUF(CEP));
+                            jLabelImgCep.setIcon(null);
+                        } catch (IOException ex) {
+                            jLabelImgCep.setIcon(null);
+                            Logger.getLogger(TelaCadastroCliente.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
-                }.start();
-            }
-        } catch (SemInternetException ex) {
-            Logger.getLogger(TelaCadastroCliente.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }.start();
         }
 
     }//GEN-LAST:event_jTextFieldCEPActionPerformed

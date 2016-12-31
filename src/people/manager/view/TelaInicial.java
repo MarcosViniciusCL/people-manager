@@ -9,6 +9,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
@@ -16,7 +17,9 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import people.manager.controller.Controller;
+import people.manager.controller.ControllerCliente;
 import people.manager.exception.SemInternetException;
+import people.manager.model.Cliente;
 import people.manager.model.Usuario;
 import people.manager.persistencia.ConnectionFactory;
 import people.manager.tools.PDF;
@@ -42,6 +45,7 @@ public class TelaInicial extends javax.swing.JFrame {
         initComponents();
         Controller.lerProperties(); //<- Carrega o arquivo de configurações do disco; 
         verificacaoSistema();
+        temAniversariante();
     }
 
     /**
@@ -562,7 +566,12 @@ public class TelaInicial extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem21ActionPerformed
 
     private void jMenuItem22ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem22ActionPerformed
-         PDF.criarPDFVendas();
+        new Thread() {
+            @Override
+            public void run() {
+                PDF.criarPDFVendas();
+            }
+        }.start();
     }//GEN-LAST:event_jMenuItem22ActionPerformed
 
     /**
@@ -646,6 +655,9 @@ public class TelaInicial extends javax.swing.JFrame {
         }.start();
     }
 
+    /**
+     * Verifica se há uma nova atualização disponivel.
+     */
     private void verificarAtualizacao() {
         new Thread() {
             @Override
@@ -683,5 +695,25 @@ public class TelaInicial extends javax.swing.JFrame {
                 }
             }
         }.start();
+    }
+
+    private void temAniversariante() {
+        new Thread() {
+            @Override
+            public void run() {
+                Controller.aguardar(10);
+                ArrayList<Cliente> aniv = ControllerCliente.aniversariantesDia();
+                if (aniv.size() >= 3) {
+                    JOptionPane.showMessageDialog(null, "Há " + aniv.size() + " pessoas fazendo aniversário hoje. \nAbra a janela de aniversáriantes para ver mais informação.");
+                } else if (aniv.size() == 2) {
+                    JOptionPane.showMessageDialog(null, aniv.get(0).getNome() + " e " + aniv.get(1).getNome() + " estão fazendo aniversário hoje. \nAbra a janela de aniversáriantes para ver mais informação.");
+                } else if (aniv.size() == 1) {
+                    JOptionPane.showMessageDialog(null, aniv.get(0).getNome() + " está fazendo aniversário hoje. \nAbra a janela de aniversáriantes para ver mais informação.");
+                } else {
+
+                }
+            }
+        }.start();
+
     }
 }

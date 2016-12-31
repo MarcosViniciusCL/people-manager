@@ -35,17 +35,25 @@ public class TelaVenda extends javax.swing.JFrame {
 
     private JTable table;
     private final ArrayList<Produto> produtos;
+    private final Venda venda;
 
     /**
      * Creates new form TelaVenda
      *
      * @param title
+     * @param venda
      */
-    public TelaVenda(String title) {
+    public TelaVenda(String title, Venda venda) {
         super(title);
         botaoX();
-        produtos = new ArrayList();
+        this.venda = venda;
         initComponents();
+        if(venda != null){ // <-- Teste para continuar uma venda;
+            produtos = venda.getProdutos();
+            continuarVenda();
+        }else{
+            produtos = new ArrayList();
+        }
     }
 
     /**
@@ -622,7 +630,7 @@ public class TelaVenda extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        Venda venda = new Venda(0, "NULO", Integer.parseInt(jTextFieldIDCliente.getText()), Integer.parseInt(jTextFieldIDVendedor.getText()), produtos, Double.parseDouble(jTextFieldTOTAL.getText().replace("R$", "").trim().replace(",", ".")), "", 0.00, 0.00, "PENDENTE");
+        Venda venda = new Venda(0, null, "NULO", Integer.parseInt(jTextFieldIDCliente.getText()), Integer.parseInt(jTextFieldIDVendedor.getText()), produtos, Double.parseDouble(jTextFieldTOTAL.getText().replace("R$", "").trim().replace(",", ".")), "", 0.00, 0.00, "PENDENTE");
         TelaFinalizarVenda tfv = new TelaFinalizarVenda("Finalizar Venda", venda, this);
         Main.guardarJanela(tfv);
         tfv.setLocationRelativeTo(null);
@@ -723,4 +731,12 @@ public class TelaVenda extends javax.swing.JFrame {
     private javax.swing.JTextField jTextFieldValorTotal;
     private javax.swing.JTextField jTextFieldValorUnitario;
     // End of variables declaration//GEN-END:variables
+
+    private void continuarVenda() {
+        jTextFieldIDCliente.setText(venda.getIdCliente()+"");
+        jTextFieldIDClienteActionPerformed(null);
+        jTextFieldIDVendedor.setText(venda.getIdVendedor()+"");
+        jTextFieldIDVendedorActionPerformed(null);
+        criarTabela(produtos);
+    }
 }

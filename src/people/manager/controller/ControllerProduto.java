@@ -9,6 +9,7 @@ import java.awt.Font;
 import people.manager.exception.ProdutoNaoEncontradoException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -130,6 +131,19 @@ public class ControllerProduto {
         Produto p = ProdutoDAO.buscaID(id);
         p.adicionarQuantidade(quantidadeA);
         ProdutoDAO.edita(p);
+    }
+    
+    public static ArrayList hashMapParaArray(ArrayList<HashMap> produtos){
+        ArrayList convertidos = new ArrayList();
+        for (HashMap object : produtos) {
+            Integer quantidade = Integer.parseInt(object.get("quantidade").toString());
+            Double valorCompra = Double.parseDouble(object.get("valorCompra").toString());
+            Double valorVenda = Double.parseDouble(object.get("valorVenda").toString());
+            Produto prod = new Produto((String)object.get("nome"), (String)object.get("categoria"), (String)object.get("codigoBarra"), valorCompra, valorVenda, quantidade);
+            prod.setId(Integer.parseInt(object.get("id").toString()));
+            convertidos.add(prod);
+        }
+        return convertidos;
     }
     
     public static Produto buscarProdutoInterface() {

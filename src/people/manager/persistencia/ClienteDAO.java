@@ -125,8 +125,8 @@ public class ClienteDAO {
         int tamanho = 0;
         try {
             stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM CLIENTES WHERE   ID = (SELECT MAX(ID)  FROM CLIENTES)");
-            tamanho = rs.getInt("ID");
+            ResultSet rs = stmt.executeQuery("SELECT seq FROM sqlite_sequence WHERE name ='CLIENTES'");
+            tamanho = rs.getInt("seq");
             stmt.close();
         } catch (SQLException ex) {
             Logger.getLogger(ClienteDAO.class.getName()).log(Level.SEVERE, null, ex);

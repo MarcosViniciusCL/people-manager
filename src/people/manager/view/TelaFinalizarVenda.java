@@ -5,6 +5,8 @@
  */
 package people.manager.view;
 
+import java.util.Calendar;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
@@ -244,7 +246,7 @@ public class TelaFinalizarVenda extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         try {
-            ControllerVenda.cadastrarVenda(jTextAreaComentario.getText().trim(), venda.getIdCliente(), venda.getIdVendedor(), venda.getProdutos(), (String) jComboBox1.getSelectedItem(), Double.parseDouble(jTextFieldValorTotal.getText().replace(",", ".")), Double.parseDouble(jTextFieldValorRecebido.getText().replace(",", ".")), Double.parseDouble(jTextFieldValorTroco.getText().replace(",", ".")), "CONCLUIDO");
+            ControllerVenda.cadastrarVenda(Calendar.getInstance(), jTextAreaComentario.getText().trim(), venda.getIdCliente(), venda.getIdVendedor(), venda.getProdutos(), (String) jComboBox1.getSelectedItem(), Double.parseDouble(jTextFieldValorTotal.getText().replace(",", ".")), Double.parseDouble(jTextFieldValorRecebido.getText().replace(",", ".")), Double.parseDouble(jTextFieldValorTroco.getText().replace(",", ".")), "CONCLUIDO");
             JOptionPane.showMessageDialog(null, "Venda realizada com sucesso");
             frameVenda.dispose();
             dispose();

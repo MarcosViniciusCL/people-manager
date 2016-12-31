@@ -8,6 +8,7 @@ package people.manager.controller;
 import people.manager.exception.SemProdutoEstoqueException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import people.manager.exception.ClienteNaoEncontradoException;
 import people.manager.model.Produto;
 import people.manager.model.Venda;
@@ -19,7 +20,7 @@ import people.manager.persistencia.VendaDAO;
  */
 public class ControllerVenda {
     
-    public static Venda cadastrarVenda(String comentario, int idCliente, int idVendedor, ArrayList produtos, String formaPagamento, Double valorTotal, Double valorRecebido, Double valorTroco, String estado) throws SemProdutoEstoqueException, ClienteNaoEncontradoException{
+    public static Venda cadastrarVenda(Calendar dataVenda, String comentario, int idCliente, int idVendedor, ArrayList produtos, String formaPagamento, Double valorTotal, Double valorRecebido, Double valorTroco, String estado) throws SemProdutoEstoqueException, ClienteNaoEncontradoException{
 //        Double valorTotal = valorTotal(produtos);
         try {
             ControllerCliente.buscarCliente(3 ,Integer.toString(idCliente));
@@ -29,13 +30,24 @@ public class ControllerVenda {
         ArrayList prod = temEstoque(produtos);
         if(!prod.isEmpty())
             throw new SemProdutoEstoqueException(prod);
-        Venda venda = new Venda(0, comentario, idCliente, idVendedor, produtos, valorTotal, formaPagamento, valorRecebido, valorTroco, estado);
+        Venda venda = new Venda(0, dataVenda, comentario, idCliente, idVendedor, produtos, valorTotal, formaPagamento, valorRecebido, valorTroco, estado);
         VendaDAO.create(venda);
         return venda;
     }
     
     public static ArrayList todasVendas(){
         return VendaDAO.listarTodos();
+    }
+    
+    public static ArrayList todasVendas(Calendar dataInicial, Calendar dataFinal){
+        int max = VendaDAO.quantidadeBanco();
+        ArrayList vendas = new ArrayList();
+        for (int i = 1; i <= max; i++) {
+            Venda venda = VendaDAO.buscaID(i);
+            if(venda.getData().compareTo(dataInicial) > 0 && venda.getData().compareTo(dataFinal) < 0)
+                vendas.add(venda);
+        }
+        return vendas;
     }
 
     private static Double valorTotal(ArrayList<Produto> produtos){
@@ -66,5 +78,9 @@ public class ControllerVenda {
           total += v.getValorVenda();
       }
       return total;
+    }
+
+    public static Venda buscaId(int id) {
+        return VendaDAO.buscaID(id);
     }
 }

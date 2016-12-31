@@ -9,7 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.Iterator;
+import people.manager.controller.ControllerProduto;
 
 /**
  *
@@ -32,6 +32,7 @@ public class Venda {
     /**
      *
      * @param id
+     * @param data
      * @param comentario
      * @param idCliente
      * @param idVendedor
@@ -42,9 +43,9 @@ public class Venda {
      * @param valorTroco
      * @param estado
      */
-    public Venda(int id, String comentario, Integer idCliente, Integer idVendedor, ArrayList produtos, Double valorVenda, String formaPagamento, Double valorRecebido, Double valorTroco, String estado) {
+    public Venda(int id, Calendar data, String comentario, Integer idCliente, Integer idVendedor, ArrayList produtos, Double valorVenda, String formaPagamento, Double valorRecebido, Double valorTroco, String estado) {
         this.id = id;
-        this.data = Calendar.getInstance();
+        this.data = data;
         this.comentario = comentario;
         this.idCliente = idCliente;
         this.idVendedor = idVendedor;
@@ -149,7 +150,7 @@ public class Venda {
     }
 
     public ArrayList getProdutos() {
-        return produtos;
+        return ControllerProduto.hashMapParaArray(produtos);
     }
 
     public void setProdutos(ArrayList produtos) {

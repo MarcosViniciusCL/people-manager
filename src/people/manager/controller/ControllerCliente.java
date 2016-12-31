@@ -167,6 +167,21 @@ public class ControllerCliente {
         }
         return aniv;
     }
+    
+    public static ArrayList aniversariantesDia(){
+        int max = quantidadeClientes();
+        ArrayList aniv = new ArrayList();
+        Cliente c;
+        for (int i = 1; i <= max; i++) {
+            c = ClienteDAO.buscaID(i);
+            if (c != null) {
+                if (c.isAniversariante()) {
+                    aniv.add(c);
+                }
+            }
+        }
+        return aniv;
+    }
 
     /**
      * Retorna os clientes que deverão voltar a loja na quantidade de dias

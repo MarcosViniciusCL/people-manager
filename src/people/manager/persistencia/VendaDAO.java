@@ -17,6 +17,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import people.manager.controller.Controller;
 import people.manager.model.Venda;
 
 /**
@@ -92,7 +93,7 @@ public class VendaDAO {
                 Calendar dataVendaAtual = Calendar.getInstance();
 		dataVendaAtual.setTime(sdf.parse(rs.getString("DATA_VENDA")));
                 ArrayList arrayProdutos = criarObjectoJSON(rs.getString("PRODUTOS"));
-                Venda v = new Venda(rs.getInt("ID"), rs.getString("COMENTARIO"), rs.getInt("ID_CLIENTE"), rs.getInt("ID_VENDEDOR"), arrayProdutos, rs.getDouble("VALOR"), rs.getString("FORMA_PAGAMENTO"), rs.getDouble("VALOR_RECEBIDO"), rs.getDouble("VALOR_TROCO"), rs.getString("ESTADO"));
+                Venda v = new Venda(rs.getInt("ID"), Controller.stringParaCalendar(rs.getString("DATA_VENDA")), rs.getString("COMENTARIO"), rs.getInt("ID_CLIENTE"), rs.getInt("ID_VENDEDOR"), arrayProdutos, rs.getDouble("VALOR"), rs.getString("FORMA_PAGAMENTO"), rs.getDouble("VALOR_RECEBIDO"), rs.getDouble("VALOR_TROCO"), rs.getString("ESTADO"));
            
                 vendas.add(v);
             }
@@ -106,7 +107,7 @@ public class VendaDAO {
         return vendas;
     }
     
-    public static Venda buscaID(int id) throws ParseException{
+    public static Venda buscaID(int id){
         Connection con = ConnectionFactory.getConnection();
         Statement stmt;
         Venda v = null;
@@ -121,10 +122,10 @@ public class VendaDAO {
             Calendar dataVendaAtual = Calendar.getInstance();
             dataVendaAtual.setTime(sdf.parse(rs.getString("DATA_VENDA")));
             ArrayList arrayProdutos = criarObjectoJSON(rs.getString("PRODUTOS"));
-            v = new Venda(rs.getInt("ID"), rs.getString("COMENTARIO"), rs.getInt("ID_CLIENTE"), rs.getInt("ID_VENDEDOR"), arrayProdutos, rs.getDouble("VALOR"), rs.getString("FORMA_PAGAMENTO"), rs.getDouble("VALOR_RECEBIDO"), rs.getDouble("VALOR_TROCO"), rs.getString("ESTADO"));
+            v = new Venda(rs.getInt("ID"), Controller.stringParaCalendar(rs.getString("DATA_VENDA")), rs.getString("COMENTARIO"), rs.getInt("ID_CLIENTE"), rs.getInt("ID_VENDEDOR"), arrayProdutos, rs.getDouble("VALOR"), rs.getString("FORMA_PAGAMENTO"), rs.getDouble("VALOR_RECEBIDO"), rs.getDouble("VALOR_TROCO"), rs.getString("ESTADO"));
             
             stmt.close();
-        } catch (SQLException ex) {
+        } catch (SQLException | ParseException ex) {
             Logger.getLogger(VendaDAO.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             ConnectionFactory.closeConnection(con);
@@ -147,7 +148,7 @@ public class VendaDAO {
                 Calendar nascimento = Calendar.getInstance();
 		nascimento.setTime(sdf.parse(rs.getString("DATA_VENDA")));
                 ArrayList arrayProdutos = criarObjectoJSON(rs.getString("PRODUTOS"));
-                Venda v = new Venda(rs.getInt("ID"), rs.getString("COMENTARIO"), rs.getInt("ID_CLIENTE"), rs.getInt("ID_VENDEDOR"), arrayProdutos, rs.getDouble("VALOR"), rs.getString("FORMA_PAGAMENTO"), rs.getDouble("VALOR_RECEBIDO"), rs.getDouble("VALOR_TROCO"), rs.getString("ESTADO"));
+                Venda v = new Venda(rs.getInt("ID"), Controller.stringParaCalendar(rs.getString("DATA_VENDA")), rs.getString("COMENTARIO"), rs.getInt("ID_CLIENTE"), rs.getInt("ID_VENDEDOR"), arrayProdutos, rs.getDouble("VALOR"), rs.getString("FORMA_PAGAMENTO"), rs.getDouble("VALOR_RECEBIDO"), rs.getDouble("VALOR_TROCO"), rs.getString("ESTADO"));
                 vendas.add(v);
             }
             
@@ -165,9 +166,9 @@ public class VendaDAO {
         Statement stmt;
         int tamanho = 0;
         try {
-            stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM VENDAS WHERE   ID = (SELECT MAX(ID)  FROM VENDAS)");
-            tamanho = rs.getInt("ID");
+             stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT seq FROM sqlite_sequence WHERE name ='VENDAS'");
+            tamanho = rs.getInt("seq");
             stmt.close();
         } catch (SQLException ex) {
             Logger.getLogger(VendaDAO.class.getName()).log(Level.SEVERE, null, ex);

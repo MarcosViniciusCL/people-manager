@@ -130,7 +130,12 @@ public class Cliente {
             return "NULO";
         SimpleDateFormat s = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         return s.format(calendar.getTime());
-    } 
+    }
+    
+    public boolean isAniversariante(){
+        Calendar dataAtual = Calendar.getInstance();
+        return this.nascimento.get(Calendar.MONTH) == dataAtual.get(Calendar.MONTH) &&  this.nascimento.get(Calendar.DAY_OF_MONTH) == dataAtual.get(Calendar.DAY_OF_MONTH);
+    }
     
     
   
