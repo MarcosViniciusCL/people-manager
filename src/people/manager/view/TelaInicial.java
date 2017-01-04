@@ -730,6 +730,6 @@ public class TelaInicial extends javax.swing.JFrame {
     }
 
     private void setIcons() {
-        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("1_Primary_logo_on_transparent_157x73.png")));
+        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("icon.png")));
     }
 }

@@ -1,4 +1,4 @@
-1483538080929:49139:::::::::::::::::::::::::::::::::::::
+1483547378190:51130:::::::::::::::::::::::::::::::::::::
 03/12/2016 17:51:04-> Usuario 'root' fez login no sistema;
 03/12/2016 17:51:50-> OS ARQUIVOS DO SISTEMA FORAM ALTERADOS, A APLICAÇÃO VAI TENTAR RECUMPERA-LOS;
 03/12/2016 17:53:55-> OS ARQUIVOS DO SISTEMA FORAM ALTERADOS, A APLICAÇÃO VAI TENTAR RECUMPERA-LOS;
@@ -800,3 +800,36 @@
 04/01/2017 11:50:36-> Usuario 'user' fez login no sistema;
 04/01/2017 11:54:26-> Usuario 'user' fez login no sistema;
 04/01/2017 11:54:40-> Usuario 'user' fechou a aplicação;
+04/01/2017 14:04:43-> Usuario 'user' fez login no sistema;
+04/01/2017 14:04:59-> Usuario 'user' fechou a aplicação;
+04/01/2017 14:07:23-> Usuario 'user' fez login no sistema;
+04/01/2017 14:08:43-> Usuario 'user' fechou a aplicação;
+04/01/2017 14:08:55-> Usuario 'user' fez login no sistema;
+04/01/2017 14:09:18-> Usuario 'user' fechou a aplicação;
+04/01/2017 14:09:33-> Usuario 'user' fez login no sistema;
+04/01/2017 14:10:30-> Usuario 'user' fechou a aplicação;
+04/01/2017 14:10:44-> Usuario 'user' fez login no sistema;
+04/01/2017 14:13:20-> Usuario 'user' fechou a aplicação;
+04/01/2017 14:13:30-> Usuario 'user' fez login no sistema;
+04/01/2017 14:14:13-> Usuario 'user' fechou a aplicação;
+04/01/2017 14:14:27-> Usuario 'user' fez login no sistema;
+04/01/2017 14:14:41-> Usuario 'user' fechou a aplicação;
+04/01/2017 14:15:32-> Usuario 'user' fez login no sistema;
+04/01/2017 14:15:42-> Usuario 'user' fechou a aplicação;
+04/01/2017 14:16:37-> Usuario 'user' fez login no sistema;
+04/01/2017 14:18:12-> Usuario 'user' fechou a aplicação;
+04/01/2017 14:18:25-> Usuario 'user' fez login no sistema;
+04/01/2017 14:18:55-> Usuario 'user' fechou a aplicação;
+04/01/2017 14:19:53-> Usuario 'user' fez login no sistema;
+04/01/2017 14:21:43-> Usuario 'user' fechou a aplicação;
+04/01/2017 14:22:01-> Usuario 'user' fez login no sistema;
+04/01/2017 14:22:33-> Usuario 'user' fechou a aplicação;
+04/01/2017 14:22:46-> Usuario 'user' fez login no sistema;
+04/01/2017 14:25:14-> Usuario 'user' fez login no sistema;
+04/01/2017 14:26:12-> Usuario 'user' fez login no sistema;
+04/01/2017 14:26:41-> Usuario 'user' fechou a aplicação;
+04/01/2017 14:27:18-> Usuario 'user' fez login no sistema;
+04/01/2017 14:28:41-> Usuario 'user' fez logout no sistema;
+04/01/2017 14:28:45-> OS ARQUIVOS DO SISTEMA FORAM ALTERADOS, A APLICAÇÃO VAI TENTAR RECUMPERA-LOS;
+04/01/2017 14:28:50-> Usuario 'user' fez login no sistema;
+04/01/2017 14:29:38-> Usuario 'user' fechou a aplicação;

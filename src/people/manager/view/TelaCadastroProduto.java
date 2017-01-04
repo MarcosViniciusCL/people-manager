@@ -13,7 +13,6 @@ import people.manager.controller.Controller;
 import people.manager.controller.ControllerProduto;
 import people.manager.exception.ArquivoModificadoException;
 import people.manager.persistencia.ArquivoDAO;
-import people.manager.persistencia.ProdutoDAO;
 
 /**
  *
@@ -29,7 +28,7 @@ public class TelaCadastroProduto extends javax.swing.JFrame {
     public TelaCadastroProduto(String title) {
         super(title);
         initComponents();
-//        atualizarComboBox();
+        atualizarComboBox();
     }
 
     /**
@@ -68,9 +67,9 @@ public class TelaCadastroProduto extends javax.swing.JFrame {
         jLabel3.setText("Categoria:");
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Sem Categoria", "Adicionar" }));
-        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
+        jComboBox1.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jComboBox1ItemStateChanged(evt);
             }
         });
 
@@ -194,20 +193,6 @@ public class TelaCadastroProduto extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
-        if (jComboBox1.getSelectedItem().equals("Adicionar")) {
-            String resp = JOptionPane.showInputDialog(null, "Escreva o nome da nova categoria");
-            if (!resp.isEmpty()) {
-                try {
-                    ArquivoDAO.escritor("categ", resp.toUpperCase() + ";");
-                    atualizarComboBox();
-                } catch (IOException ex) {
-                    Logger.getLogger(TelaCadastroProduto.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        }
-    }//GEN-LAST:event_jComboBox1ActionPerformed
-
     private void atualizarComboBox() {
         try {
             String returno = ArquivoDAO.leitor("categ");
@@ -231,7 +216,7 @@ public class TelaCadastroProduto extends javax.swing.JFrame {
         if (!testeCampo()) {
             ControllerProduto.cadastrarProduto(jTextFieldNome.getText().trim(), (String) jComboBox1.getSelectedItem(), jTextFieldCodBarra.getText().trim(), Double.parseDouble(jTextFieldCompra.getText().trim().replace(",", ".")), Double.parseDouble(jTextFieldVenda.getText().trim().replace(",", ".")), Integer.parseInt(jTextFieldQuantidade.getText().trim()));
             JOptionPane.showMessageDialog(null, "Produto cadastrado");
-            Controller.novoLog(" cadastrou um novo produto Nome: "+jTextFieldNome.getText().trim());
+            Controller.novoLog(" cadastrou um novo produto Nome: " + jTextFieldNome.getText().trim());
             clear();
         }
     }//GEN-LAST:event_jButton2ActionPerformed
@@ -243,6 +228,22 @@ public class TelaCadastroProduto extends javax.swing.JFrame {
             jTextFieldGanho.setText(String.format("%.2f", vVenda * 100 / vCompra - 100) + "%");
         }
     }//GEN-LAST:event_jTextFieldCompraFocusLost
+
+    private void jComboBox1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox1ItemStateChanged
+        if (jComboBox1.getSelectedIndex() != -1) {
+            if (jComboBox1.getSelectedItem().equals("Adicionar")) {
+                String resp = JOptionPane.showInputDialog(null, "Escreva o nome da nova categoria");
+                if (!resp.isEmpty()) {
+                    try {
+                        ArquivoDAO.escritor("categ", resp.toUpperCase() + ";");
+                        atualizarComboBox();
+                    } catch (IOException ex) {
+                        Logger.getLogger(TelaCadastroProduto.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        }
+    }//GEN-LAST:event_jComboBox1ItemStateChanged
 
     private boolean testeCampo() {
         if (jTextFieldNome.getText().trim().isEmpty()) {
