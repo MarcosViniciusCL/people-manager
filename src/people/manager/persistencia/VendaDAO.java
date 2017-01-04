@@ -18,6 +18,7 @@ import java.util.logging.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import people.manager.controller.Controller;
+import people.manager.controller.ControllerProduto;
 import people.manager.model.Venda;
 
 /**
@@ -57,6 +58,32 @@ public class VendaDAO {
         } finally {
             ConnectionFactory.closeConnection(con);
         }
+    }
+    
+        public static void edita(Venda v){
+        Connection con = ConnectionFactory.getConnection();
+        Statement stmt;
+        
+        String dataVenda = calendarParaString(v.getData());
+        String produtos = criarStringJSON(v.getProdutos());
+        try {
+            stmt = con.createStatement();
+            String sql = "UPDATE VENDAS set "
+                    + "DATA_VENDA = '"+dataVenda+"', "
+                    + "COMENTARIO = '"+v.getComentario()+"', "
+                    + "ID_CLIENTE = "+v.getIdCliente()+", "
+                    + "ID_VENDEDOR = "+v.getIdVendedor()+", "
+                    + "PRODUTOS = '"+produtos+"', "
+                    + "VALOR = "+v.getValorVenda()+", "
+                    + "FORMA_PAGAMENTO = '"+v.getFormaPagamento()+"', "
+                    + "VALOR_RECEBIDO = "+v.getValorRecebido()+", "
+                    + "VALOR_TROCO = "+v.getValorTroco()+", "
+                    + "ESTADO = '"+v.getEstado()+"' "
+                    + "where ID="+v.getId()+";";
+            stmt.executeUpdate(sql);
+        } catch (SQLException ex) {
+            Logger.getLogger(VendaDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } 
     }
     
     public static void remover(int id){
@@ -209,6 +236,6 @@ public class VendaDAO {
     private static ArrayList criarObjectoJSON(String s){
         JSONObject json = new JSONObject(s);
         JSONArray a = json.optJSONArray("uniqueArrays");
-        return (ArrayList) a.toList();
+        return ControllerProduto.hashMapParaArray((ArrayList) a.toList());
     }
 }

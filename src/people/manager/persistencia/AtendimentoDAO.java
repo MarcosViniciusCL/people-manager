@@ -43,7 +43,7 @@ public class AtendimentoDAO {
 
         try {
             stmt = con.createStatement();
-            String sql = "INSERT INTO ATENDIMENTOS(ID, DATA_AGENDAMENTO, DATA_ATENDIMENTO, COMENTARIO, ID_CLIENTE, ID_FUNCIONARIO, VALOR, ATENDIDO) VALUES("
+            String sql = "INSERT INTO ATENDIMENTOS(ID, DATA_AGENDAMENTO, DATA_ATENDIMENTO, COMENTARIO, ID_CLIENTE, ID_FUNCIONARIO, VALOR, ATENDIMENTO) VALUES("
                     + "" + a.getId() + ","
                     + "'" + agendamento + "',"
                     + "'" + atendimento + "',"
@@ -152,7 +152,7 @@ public class AtendimentoDAO {
             a.setDataAgendamento(agendamento);
             a.setId(rs.getInt("ID"));
             boolean atendido = false;
-            if (rs.getInt("ATENDIDO") == 1) {
+            if (rs.getInt("ATENDIMENTO") == 1) {
                 atendido = true;
             }
             a.setAtendido(atendido);
@@ -185,7 +185,7 @@ public class AtendimentoDAO {
                     + "ID_CLIENTE = " + a.getIdCliente() + ", "
                     + "ID_FUNCIONARIO = " + a.getIdAtendente() + ", "
                     + "VALOR = " + a.getPreco() + ", "
-                    + "ATENDIDO = " + atendido + " "
+                    + "ATENDIMENTO = " + atendido + " "
                     + "where ID=" + a.getId() + ";";
             stmt.executeUpdate(sql);
         } catch (SQLException ex) {

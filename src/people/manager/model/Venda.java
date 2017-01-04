@@ -23,7 +23,7 @@ public class Venda {
     private Integer idCliente;
     private Integer idVendedor;
     private String formaPagamento;
-    private ArrayList<HashMap> produtos;
+    private ArrayList<Produto> produtos;
     private Double valorVenda;
     private Double valorRecebido;
     private Double valorTroco;
@@ -59,8 +59,8 @@ public class Venda {
 
     public String getNomesProdutos() {
         String prod = "";
-        for (HashMap object : produtos) {
-            prod += object.get("nome") + ", ";
+        for (Produto object : produtos) {
+            prod += object.getNome() + ", ";
         }
         return prod.substring(0, prod.length()-2);
     }
@@ -150,7 +150,7 @@ public class Venda {
     }
 
     public ArrayList getProdutos() {
-        return ControllerProduto.hashMapParaArray(produtos);
+        return produtos;
     }
 
     public void setProdutos(ArrayList produtos) {

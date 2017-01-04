@@ -290,6 +290,7 @@ public class TelaNovoAgendamento extends javax.swing.JFrame {
 
                     ControllerAtendimento.criar(jTextAreaComentario.getText().trim(), Integer.parseInt(jTextFieldIDFunc.getText().trim()), Integer.parseInt(jTextFieldIDCliente.getText().trim()), data, Double.parseDouble(jTextFieldValor.getText().trim().replace(",", ".")));
                     JOptionPane.showMessageDialog(null, "Agendamento cadastrado.");
+                    Controller.novoLog("agendou um novo atendimento para o cliente CPF: "+cliente.getCpf()+" DATA: "+Controller.calendarParaString(jDateChooser1.getCalendar()));
                     dispose();
                 } catch (HorarioCheioException ex) {
                     JOptionPane.showMessageDialog(null, "Esse horário já está cheio para esse funcionario.\nSelecione outro ou mude as configurações de tempo minimo.");

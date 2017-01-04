@@ -22,6 +22,7 @@ import people.manager.exception.VendedorNaoEncontradoException;
 import people.manager.model.Atendimento;
 import people.manager.model.Cliente;
 import people.manager.model.Funcionario;
+import people.manager.model.Venda;
 
 /**
  *
@@ -351,6 +352,7 @@ public class TelaGerenciarAgendamento extends javax.swing.JFrame {
                     try {
                         ControllerAtendimento.remover(id);
                         JOptionPane.showMessageDialog(null, "Removido");
+                        Controller.novoLog("removeu um agendamento do cliente "+ jTable1.getValueAt(jTable1.getSelectedRow(), 1)+" agendado para " +jTable1.getValueAt(jTable1.getSelectedRow(), 0));
                         jCalendar1PropertyChange(null);
                     } catch (ImpossivelRemoverException ex) {
                         JOptionPane.showMessageDialog(null, "Esse atendimento já foi marcado como concluido.\nNão será possivel apaga-lo.");
@@ -487,6 +489,15 @@ public class TelaGerenciarAgendamento extends javax.swing.JFrame {
                     Atendimento at;
                     try {
                         at = ControllerAtendimento.buscarAtendimentoID((int) jTable1.getValueAt(jTable1.getSelectedRow(), 5));
+                        
+                        //Tela para venda
+                        ArrayList produto = new ArrayList();
+                        produto.add(at);
+                        Venda venda = new Venda(0, null, "", at.getIdCliente(), at.getIdAtendente(), produto, at.getPreco(), "", 0.0, 0.0, "PENDENTE");
+                        TelaFinalizarVenda tfv = new TelaFinalizarVenda("Pagamento do Atendimento", venda, null);
+                        tfv.setLocationRelativeTo(null);
+                        tfv.setVisible(true);
+                        
                         at.setAtendido(true);
                         ControllerAtendimento.editar(at);
                         jCalendar1PropertyChange(null);

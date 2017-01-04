@@ -326,4 +326,18 @@ public class Controller {
     }
     private static boolean resp_senha;
 
+    /**
+     * Cria arquivo que evita que o programa seja executado mais de uma instancia.
+     */
+    public static void criarLock(){
+        ArquivoDAO.novoArquivo("./lock");
+    }
+    
+    /**
+     * Remover arquivo que impede a execussão de mais de uma instancia do programa.
+     */
+    public static void removerLock(){
+        ArquivoDAO.remover("./lock");
+    }
 }
+

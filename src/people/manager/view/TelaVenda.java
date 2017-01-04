@@ -9,9 +9,11 @@ import java.awt.Color;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -19,8 +21,10 @@ import people.manager.controller.Controller;
 import people.manager.controller.ControllerCliente;
 import people.manager.controller.ControllerProduto;
 import people.manager.controller.ControllerFuncionario;
+import people.manager.controller.ControllerVenda;
 import people.manager.exception.ClienteNaoEncontradoException;
 import people.manager.exception.ProdutoNaoEncontradoException;
+import people.manager.exception.SemProdutoEstoqueException;
 import people.manager.exception.VendedorNaoEncontradoException;
 import people.manager.model.Cliente;
 import people.manager.model.Produto;
@@ -34,24 +38,27 @@ import people.manager.model.Funcionario;
 public class TelaVenda extends javax.swing.JFrame {
 
     private JTable table;
-    private final ArrayList<Produto> produtos;
+    private static ArrayList<Produto> produtos;
     private final Venda venda;
+    private static TelaCaixa caixa;
 
     /**
      * Creates new form TelaVenda
      *
      * @param title
      * @param venda
+     * @param caixa
      */
-    public TelaVenda(String title, Venda venda) {
+    public TelaVenda(String title, Venda venda, TelaCaixa caixa) {
         super(title);
         botaoX();
         this.venda = venda;
+        this.caixa = caixa;
         initComponents();
-        if(venda != null){ // <-- Teste para continuar uma venda;
+        if (venda != null) { // <-- Teste para continuar uma venda;
             produtos = venda.getProdutos();
             continuarVenda();
-        }else{
+        } else {
             produtos = new ArrayList();
         }
     }
@@ -467,6 +474,7 @@ public class TelaVenda extends javax.swing.JFrame {
                 } else {
                     JOptionPane.showMessageDialog(null, "Não há quantidade suficiente de produto no estoque");
                 }
+                jTextFieldIDProdutoActionPerformed(null);
             } catch (ProdutoNaoEncontradoException ex) {
                 Logger.getLogger(TelaVenda.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -524,8 +532,8 @@ public class TelaVenda extends javax.swing.JFrame {
                 } else {
                     produtos.clear();
                 }
-
                 criarTabela(produtos);
+                jTextFieldIDProdutoActionPerformed(evt);
 
             }
         }
@@ -594,8 +602,9 @@ public class TelaVenda extends javax.swing.JFrame {
         produtos.forEach((produto) -> {
             ControllerProduto.adicionaEstoque(produto.getId(), produto.getQuantidade());
         });
-        this.produtos.clear();
+        TelaVenda.produtos.clear();
         criarTabela(produtos);
+        jTextFieldIDProdutoActionPerformed(evt);
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jTextFieldIDVendedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldIDVendedorActionPerformed
@@ -630,8 +639,13 @@ public class TelaVenda extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        Venda venda = new Venda(0, null, "NULO", Integer.parseInt(jTextFieldIDCliente.getText()), Integer.parseInt(jTextFieldIDVendedor.getText()), produtos, Double.parseDouble(jTextFieldTOTAL.getText().replace("R$", "").trim().replace(",", ".")), "", 0.00, 0.00, "PENDENTE");
-        TelaFinalizarVenda tfv = new TelaFinalizarVenda("Finalizar Venda", venda, this);
+        TelaFinalizarVenda tfv;
+        if (this.venda == null) {
+            Venda vend = new Venda(0, null, "NULO", Integer.parseInt(jTextFieldIDCliente.getText()), Integer.parseInt(jTextFieldIDVendedor.getText()), produtos, Double.parseDouble(jTextFieldTOTAL.getText().replace("R$", "").trim().replace(",", ".")), "", 0.00, 0.00, "PENDENTE");
+            tfv = new TelaFinalizarVenda("Finalizar Venda", vend, this);
+        } else {
+            tfv = new TelaFinalizarVenda("Finalizar Venda", this.venda, this);
+        }
         Main.guardarJanela(tfv);
         tfv.setLocationRelativeTo(null);
         tfv.setVisible(true);
@@ -647,6 +661,9 @@ public class TelaVenda extends javax.swing.JFrame {
         table = new JTable();
         DefaultTableModel model = new DefaultTableModel(lista.toArray(new String[lista.size()][]), colunas);
         table.setModel(model);
+        
+        table.setAutoCreateRowSorter(true);
+        
         jScrollPane1.setViewportView(table);
         jTextFieldTOTAL.setForeground(Color.red);
         jTextFieldTOTAL.setText(String.format("R$ %.2f", totalCompras));
@@ -670,25 +687,39 @@ public class TelaVenda extends javax.swing.JFrame {
         this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                if (!produtos.isEmpty()) {
-                    int resposta = JOptionPane.showConfirmDialog(null, "Se você fechar essa janela toda a compra será cancelada.\nDeseja continuar?", "Fechar compra", JOptionPane.YES_NO_OPTION);
-                    if (resposta == 0) {
-                        new Thread() {
-                            @Override
-                            public void run() {
-                                produtos.forEach((produto) -> {
-                                    ControllerProduto.adicionaEstoque(produto.getId(), produto.getQuantidade());
-                                });
-                            }
-                        }.start();
-                        dispose();
+                new Thread() {
+                    @Override
+                    public void run() {
+                        if (!produtos.isEmpty()) {
+                            int resposta = JOptionPane.showConfirmDialog(null, "Se você fechar essa janela a venda vai ficar como \"PENDENDE\".\nDeseja continuar?", "Fechar compra", JOptionPane.YES_NO_OPTION);
+                            if (resposta == 0) {
+                                dispose();
+                                if (venda == null) {
+                                    try {
+                                        ControllerVenda.cadastrarVenda(Calendar.getInstance(), "*******", Integer.parseInt(jTextFieldIDCliente.getText().trim()), Integer.parseInt(jTextFieldIDVendedor.getText().trim()), TelaVenda.produtos, "*******", Double.parseDouble(jTextFieldTOTAL.getText().substring(2).trim().replace(",", ".")), 0.0, 0.0, "PENDENTE");
+                                    } catch (SemProdutoEstoqueException | ClienteNaoEncontradoException ex) {
+                                        Logger.getLogger(TelaVenda.class.getName()).log(Level.SEVERE, null, ex);
+                                    }
+                                } else {
+                                    ControllerVenda.atualizarVenda(venda.getId(), Calendar.getInstance(), "*******", venda.getIdCliente(), venda.getIdVendedor(), venda.getProdutos(), "*******", Double.parseDouble(jTextFieldTOTAL.getText().substring(2).trim().replace(",", ".")), 0.0, 0.0, "PENDENTE");
+                                }
+                                TelaVenda.caixa.atualizar();
+                            }    
+                        } else{
+                            dispose();
+                        }
                     }
-                } else {
-                    dispose();
-                }
+                }.start();
+                
 
             }
         });
+    }
+
+    @Override
+    public void dispose() {
+        TelaVenda.caixa.atualizar();
+        super.dispose();
     }
 
 
@@ -733,10 +764,11 @@ public class TelaVenda extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private void continuarVenda() {
-        jTextFieldIDCliente.setText(venda.getIdCliente()+"");
+        jTextFieldIDCliente.setText(venda.getIdCliente() + "");
         jTextFieldIDClienteActionPerformed(null);
-        jTextFieldIDVendedor.setText(venda.getIdVendedor()+"");
+        jTextFieldIDVendedor.setText(venda.getIdVendedor() + "");
         jTextFieldIDVendedorActionPerformed(null);
         criarTabela(produtos);
     }
+
 }

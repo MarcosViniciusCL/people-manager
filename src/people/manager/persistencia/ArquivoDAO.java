@@ -10,6 +10,7 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -135,5 +136,18 @@ public class ArquivoDAO {
         } catch (IOException ex) {
 
         }
+    }
+    
+    public static FileOutputStream novoArquivo(String caminho){
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(new File(caminho));
+            fos.close();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(ArquivoDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(ArquivoDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return fos;
     }
 }

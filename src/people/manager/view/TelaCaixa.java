@@ -61,6 +61,7 @@ public class TelaCaixa extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextPane1 = new javax.swing.JTextPane();
         jButtonContinuarVenda = new javax.swing.JButton();
+        jButtonCancelarVenda = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -103,6 +104,14 @@ public class TelaCaixa extends javax.swing.JFrame {
             }
         });
 
+        jButtonCancelarVenda.setText("Cancelar Venda");
+        jButtonCancelarVenda.setEnabled(false);
+        jButtonCancelarVenda.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonCancelarVendaActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -124,7 +133,9 @@ public class TelaCaixa extends javax.swing.JFrame {
                         .addComponent(jScrollPane2))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButtonContinuarVenda)))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jButtonContinuarVenda, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButtonCancelarVenda, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -145,7 +156,9 @@ public class TelaCaixa extends javax.swing.JFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 345, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButtonContinuarVenda)
-                .addGap(37, 37, 37))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButtonCancelarVenda)
+                .addGap(6, 6, 6))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -163,7 +176,7 @@ public class TelaCaixa extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        TelaVenda tv = new TelaVenda("Nova Venda", null);
+        TelaVenda tv = new TelaVenda("Nova Venda", null, this);
         Main.guardarJanela(tv);
         tv.setLocationRelativeTo(null);
         tv.setVisible(true);
@@ -191,11 +204,19 @@ public class TelaCaixa extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonFiltroActionPerformed
 
     private void jButtonContinuarVendaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonContinuarVendaActionPerformed
-        TelaVenda tv = new TelaVenda("Nova Venda", ControllerVenda.buscaId(Integer.parseInt((String) table.getValueAt(table.getSelectedRow(), 0))));
+        TelaVenda tv = new TelaVenda("Nova Venda", ControllerVenda.buscaId(Integer.parseInt((String) table.getValueAt(table.getSelectedRow(), 0))), this);
         Main.guardarJanela(tv);
         tv.setLocationRelativeTo(null);
         tv.setVisible(true);
     }//GEN-LAST:event_jButtonContinuarVendaActionPerformed
+
+    private void jButtonCancelarVendaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelarVendaActionPerformed
+        if(JOptionPane.showConfirmDialog(null,"Cancelar Venda?") == 0){
+            ControllerVenda.cancelarVenda(Integer.parseInt((String) table.getValueAt(table.getSelectedRow(), 0)));
+            JOptionPane.showMessageDialog(null, "Compra cancelada.");
+            atualizar();
+        }
+    }//GEN-LAST:event_jButtonCancelarVendaActionPerformed
 
     private void criarTabela(ArrayList<Venda> venda) {
         String[] colunas = {"ID", "DATA VENDA", "PRODUTOS", "CLIENTE", "VALOR DA VENDA", "ESTADO"};
@@ -210,7 +231,7 @@ public class TelaCaixa extends javax.swing.JFrame {
 
         }
         table = new JTable();
-        table = new JTable();
+        
         table.setModel(new DefaultTableModel(lista.toArray(new String[lista.size()][]), colunas) {
             boolean[] canEdit = new boolean[]{
                 false, false, false, false, false, false
@@ -221,6 +242,12 @@ public class TelaCaixa extends javax.swing.JFrame {
                 return canEdit[columnIndex];
             }
         });
+        table.getColumnModel().getColumn(0).setPreferredWidth(10);
+        table.getColumnModel().getColumn(1).setPreferredWidth(100);
+        table.getColumnModel().getColumn(2).setPreferredWidth(120);
+        table.getColumnModel().getColumn(3).setPreferredWidth(100);
+        table.getColumnModel().getColumn(4).setPreferredWidth(50);
+        table.getColumnModel().getColumn(5).setPreferredWidth(60);
         TableCellRenderer renderer = new VendaTableCellRenderer();
         for (int c = 0; c < table.getColumnCount(); c++) {
             table.setDefaultRenderer(table.getColumnClass(c), renderer);
@@ -233,6 +260,8 @@ public class TelaCaixa extends javax.swing.JFrame {
             tableFocusEvent();
         }); 
         
+        
+        
         jScrollPane1.setViewportView(table);
         
 
@@ -241,6 +270,7 @@ public class TelaCaixa extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButtonCancelarVenda;
     private javax.swing.JButton jButtonContinuarVenda;
     private javax.swing.JButton jButtonFiltro;
     private com.toedter.calendar.JDateChooser jDateChooserDataFinal;
@@ -260,11 +290,20 @@ public class TelaCaixa extends javax.swing.JFrame {
         String ESTADO= (String) table.getValueAt(table.getSelectedRow(), 5);
         
         jTextPane1.setText("Venda realizada em: "+DATA_VENDA.substring(0, 10)+" às "+DATA_VENDA.substring(11)+"\nProdutos: "+PRODUTOS+"\n"
-                + "Cliente: "+CLIENTE+"\t\t\tValor: "+VALOR_DA_VENDA+"\nEstado: "+ESTADO);
+                + "Cliente: "+CLIENTE+"\t\t\tValor: R$ "+VALOR_DA_VENDA+"\nEstado: "+ESTADO);
         if(ESTADO.equals("PENDENTE")){
             jButtonContinuarVenda.setEnabled(true);
+            jButtonCancelarVenda.setEnabled(true);
         } else{
             jButtonContinuarVenda.setEnabled(false);
+            jButtonCancelarVenda.setEnabled(false);
         }
+    }
+    
+    /**
+     * Atualiza a tabela visualizada.
+     */
+    public void atualizar(){
+        criarTabela(ControllerVenda.todasVendas());
     }
 }

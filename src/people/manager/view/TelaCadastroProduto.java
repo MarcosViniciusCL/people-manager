@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import people.manager.controller.Controller;
 import people.manager.controller.ControllerProduto;
 import people.manager.exception.ArquivoModificadoException;
 import people.manager.persistencia.ArquivoDAO;
@@ -230,6 +231,7 @@ public class TelaCadastroProduto extends javax.swing.JFrame {
         if (!testeCampo()) {
             ControllerProduto.cadastrarProduto(jTextFieldNome.getText().trim(), (String) jComboBox1.getSelectedItem(), jTextFieldCodBarra.getText().trim(), Double.parseDouble(jTextFieldCompra.getText().trim().replace(",", ".")), Double.parseDouble(jTextFieldVenda.getText().trim().replace(",", ".")), Integer.parseInt(jTextFieldQuantidade.getText().trim()));
             JOptionPane.showMessageDialog(null, "Produto cadastrado");
+            Controller.novoLog(" cadastrou um novo produto Nome: "+jTextFieldNome.getText().trim());
             clear();
         }
     }//GEN-LAST:event_jButton2ActionPerformed

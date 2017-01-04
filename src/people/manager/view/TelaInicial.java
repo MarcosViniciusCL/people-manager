@@ -5,6 +5,7 @@
  */
 package people.manager.view;
 
+import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
@@ -21,6 +22,7 @@ import people.manager.controller.ControllerCliente;
 import people.manager.exception.SemInternetException;
 import people.manager.model.Cliente;
 import people.manager.model.Usuario;
+import people.manager.persistencia.ArquivoDAO;
 import people.manager.persistencia.ConnectionFactory;
 import people.manager.tools.PDF;
 
@@ -46,6 +48,7 @@ public class TelaInicial extends javax.swing.JFrame {
         Controller.lerProperties(); //<- Carrega o arquivo de configurações do disco; 
         verificacaoSistema();
         temAniversariante();
+        setIcons();
     }
 
     /**
@@ -68,7 +71,6 @@ public class TelaInicial extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem4 = new javax.swing.JMenuItem();
-        jMenuItem3 = new javax.swing.JMenuItem();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenuItem7 = new javax.swing.JMenuItem();
@@ -95,6 +97,7 @@ public class TelaInicial extends javax.swing.JFrame {
         jMenuItem18 = new javax.swing.JMenuItem();
         jMenu5 = new javax.swing.JMenu();
         jMenuItem22 = new javax.swing.JMenuItem();
+        jMenuItem3 = new javax.swing.JMenuItem();
         jMenu7 = new javax.swing.JMenu();
         jMenuItem19 = new javax.swing.JMenuItem();
 
@@ -161,14 +164,6 @@ public class TelaInicial extends javax.swing.JFrame {
             }
         });
         jMenu1.add(jMenuItem4);
-
-        jMenuItem3.setText("Exportar BD");
-        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem3ActionPerformed(evt);
-            }
-        });
-        jMenu1.add(jMenuItem3);
 
         jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
         jMenuItem1.setText("Sair");
@@ -348,6 +343,14 @@ public class TelaInicial extends javax.swing.JFrame {
         });
         jMenu5.add(jMenuItem22);
 
+        jMenuItem3.setText("Opções");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
+        jMenu5.add(jMenuItem3);
+
         jMenuBar1.add(jMenu5);
 
         jMenu7.setText("Sobre");
@@ -400,14 +403,12 @@ public class TelaInicial extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        Controller.novoLog("fechou a aplicação");
-        System.exit(0);
+        if (JOptionPane.showConfirmDialog(null, "Fechar aplicação?") == 0) {
+            Controller.novoLog("fechou a aplicação");
+            Controller.removerLock();
+            System.exit(0);
+        }
     }//GEN-LAST:event_jMenuItem1ActionPerformed
-
-    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
-        JFileChooser jfc = new JFileChooser();
-        jfc.showDialog(null, "Salvar");
-    }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
         JFileChooser jfc = new JFileChooser();
@@ -415,7 +416,10 @@ public class TelaInicial extends javax.swing.JFrame {
         jfc.setAcceptAllFileFilterUsed(false);
         jfc.showDialog(null, "Abrir");
         File arq = jfc.getSelectedFile();
-        System.out.println(arq.getPath());
+        if (arq != null) {
+            ArquivoDAO.copiar(arq.getPath(), "./database.db");
+            System.out.println(arq.getPath());
+        }
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
     private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
@@ -574,6 +578,13 @@ public class TelaInicial extends javax.swing.JFrame {
         }.start();
     }//GEN-LAST:event_jMenuItem22ActionPerformed
 
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        TelaOpcoesSoftware tos = new TelaOpcoesSoftware("Opções");
+        Main.guardarJanela(tos);
+        tos.setLocationRelativeTo(null);
+        tos.setVisible(true);
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
+
     /**
      * É executado quando o botão X da janela é pressionado.
      */
@@ -584,6 +595,7 @@ public class TelaInicial extends javax.swing.JFrame {
                 int resposta = JOptionPane.showConfirmDialog(null, "Deseja fechar o programa?", "Finalizar", JOptionPane.YES_NO_OPTION);
                 if (resposta == 0) {
                     Controller.novoLog("fechou a aplicação");
+                    Controller.removerLock();
                     System.exit(0);
                 }
 
@@ -715,5 +727,9 @@ public class TelaInicial extends javax.swing.JFrame {
             }
         }.start();
 
+    }
+
+    private void setIcons() {
+        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("1_Primary_logo_on_transparent_157x73.png")));
     }
 }

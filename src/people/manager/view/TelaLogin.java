@@ -5,6 +5,8 @@
  */
 package people.manager.view;
 
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import javax.swing.JOptionPane;
 import people.manager.controller.Controller;
 import people.manager.controller.ControllerUsuario;
@@ -25,6 +27,7 @@ public class TelaLogin extends javax.swing.JFrame {
     public TelaLogin(String title) {
         super(title);
         initComponents();
+        botaoX();
     }
 
     /**
@@ -144,6 +147,7 @@ public class TelaLogin extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        Controller.removerLock();
         System.exit(0);
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -193,6 +197,20 @@ public class TelaLogin extends javax.swing.JFrame {
             }
         }.start();
     }
+    
+     /**
+     * É executado quando o botão X da janela é pressionado.
+     */
+    private void botaoX() {
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                    Controller.removerLock();
+                    System.exit(0);
+            }
+        });
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;

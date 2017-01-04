@@ -9,8 +9,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import people.manager.controller.Controller;
 import people.manager.exception.ArquivoModificadoException;
 import people.manager.model.Usuario;
+import people.manager.persistencia.ArquivoDAO;
 import people.manager.persistencia.ConnectionFactory;
 
 /**
@@ -23,9 +26,15 @@ public class Main {
     private static ArrayList<JFrame> janelas;
 
     public static void main(String[] args) throws ArquivoModificadoException, IOException {
-        janelas = new ArrayList<>();
-
+        //Teste de instancia aberta;
+        if (new File("lock").exists()) {
+            JOptionPane.showMessageDialog(null, "O programa já está sendo executado em outra instancia.");
+            System.exit(1);
+        }
         
+        Controller.criarLock();
+        
+        janelas = new ArrayList<>();
         TelaLogin t = new TelaLogin("Login");
         t.setLocationRelativeTo(null);
         t.setVisible(true);

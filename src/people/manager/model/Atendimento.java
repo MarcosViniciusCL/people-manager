@@ -11,7 +11,7 @@ import java.util.Calendar;
  *
  * @author marcos
  */
-public class Atendimento {
+public class Atendimento extends Produto{
     private int id;
     private Calendar dataAgendamento;
     private Calendar dataAtendimento;
@@ -22,12 +22,16 @@ public class Atendimento {
     private boolean atendido;
 
     public Atendimento(String comentario, Integer idAtendente, Integer idCliente, Calendar dataAtendimento, Double preco) {
+        super("", "", "", 0.0, 0.0, 0);
         this.dataAgendamento = Calendar.getInstance();
         this.comentario = comentario;
         this.idAtendente = idAtendente;
         this.idCliente = idCliente;
         this.dataAtendimento = dataAtendimento;
         this.preco = preco;
+        super.setNome(comentario);
+        super.setValorVenda(preco);
+        super.setQuantidade(1);
         this.atendido = false;
     }
 
@@ -52,7 +56,8 @@ public class Atendimento {
         this.atendido = atendido;
     }
     
-    public int getId() {
+    @Override
+    public Integer getId() {
         return id;
     }
 

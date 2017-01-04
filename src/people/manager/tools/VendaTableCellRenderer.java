@@ -27,6 +27,10 @@ public class VendaTableCellRenderer extends DefaultTableCellRenderer {
                 result.setFont(new Font("arial", Font.PLAIN, 12));
                 result.setForeground(Color.black);
                 result.setBackground(Color.orange);
+            } else if(estado.equals("CANCELADA")){
+                result.setFont(new Font("arial", Font.PLAIN, 12));
+                result.setForeground(Color.white);
+                result.setBackground(Color.red);
             } else {
                 result.setFont(new Font("arial", Font.PLAIN, 12));
                 result.setForeground(Color.black);

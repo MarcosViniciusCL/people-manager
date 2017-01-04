@@ -314,7 +314,8 @@ public class TelaEditarAgendamento extends javax.swing.JFrame {
                 SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
                 data.setTime(sdf.parse(dataS));
                 ControllerAtendimento.editar(jTextFieldIDAtendimento.getText().trim(),jTextAreaComentario.getText().trim(), Integer.parseInt(jTextFieldIDFunc.getText().trim()), Integer.parseInt(jTextFieldIDCliente.getText().trim()), data, Double.parseDouble(jTextFieldValor.getText().trim().replace(",", ".")));
-                JOptionPane.showMessageDialog(null, "Agendamento cadastrado.");
+                JOptionPane.showMessageDialog(null, "Agendamento editado.");
+                Controller.novoLog(" editou um agendamento do cliente "+jTextFieldNomeCliente.getText().trim()+": DATA ANTIGA: "+Controller.calendarParaString(agend.getDataAgendamento())+" ID ATENDENTE ANTIGA: "+agend.getIdAtendente()+"|| DATA ATUAL: "+Controller.calendarParaString(data)+" ID ATENDENTE ATUAL: "+jTextFieldIDAtendimento.getText().trim());
                 dispose();
             } catch (ParseException | AtendimentoNaoEncontradoException ex) {
                 Logger.getLogger(TelaEditarAgendamento.class.getName()).log(Level.SEVERE, null, ex);
