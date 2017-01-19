@@ -206,21 +206,32 @@ public class Controller {
         return Update.verificarAtualização();
     }
 
-    public static boolean baixarAtualixacao() {
+    public static boolean baixarAtualizacao() {
         return Update.baixarAtualizacao();
     }
-
-    public static boolean instalarAtualizacao() {
+    
+    public static boolean prepararAtualizacao(){
         try {
-            ArquivoZIP.unzip(new File("PeopleManager.zip"), new File("PeopleManagerAt"));
-            File jarOriginal = new File("PeopleManager.jar");
-            jarOriginal.delete();
-            ArquivoDAO.copiar("PeopleManagerAt/PeopleManager.jar", "PeopleManager.jar");
+            ArquivoZIP.unzip(new File("PeopleManager.zip"), new File("PeopleManagerAt")); //<-- Descopactando aquivo no diretorio temporario
             return true;
         } catch (IOException ex) {
             Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
         }
         return false;
+    }
+
+    public static void instalarAtualizacao() {
+        new Thread() {
+            @Override
+            public void run(){
+                TelaInicial.fechar(); //<- Fechar programa principal;
+                try {
+                    Runtime.getRuntime().exec("java -jar ./update.jar -r");
+                } catch (IOException ex) {
+                    Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }.start();
     }
 
     /**

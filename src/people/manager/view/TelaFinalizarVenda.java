@@ -13,7 +13,6 @@ import javax.swing.JOptionPane;
 import people.manager.controller.ControllerVenda;
 import people.manager.exception.ClienteNaoEncontradoException;
 import people.manager.exception.SemProdutoEstoqueException;
-import people.manager.model.Atendimento;
 import people.manager.model.Venda;
 
 /**

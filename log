@@ -1,4 +1,4 @@
-1483547378190:51130:::::::::::::::::::::::::::::::::::::
+1483624714000:51429:::::::::::::::::::::::::::::::::::::
 03/12/2016 17:51:04-> Usuario 'root' fez login no sistema;
 03/12/2016 17:51:50-> OS ARQUIVOS DO SISTEMA FORAM ALTERADOS, A APLICAÇÃO VAI TENTAR RECUMPERA-LOS;
 03/12/2016 17:53:55-> OS ARQUIVOS DO SISTEMA FORAM ALTERADOS, A APLICAÇÃO VAI TENTAR RECUMPERA-LOS;
@@ -833,3 +833,7 @@
 04/01/2017 14:28:45-> OS ARQUIVOS DO SISTEMA FORAM ALTERADOS, A APLICAÇÃO VAI TENTAR RECUMPERA-LOS;
 04/01/2017 14:28:50-> Usuario 'user' fez login no sistema;
 04/01/2017 14:29:38-> Usuario 'user' fechou a aplicação;
+05/01/2017 11:58:14-> OS ARQUIVOS DO SISTEMA FORAM ALTERADOS, A APLICAÇÃO VAI TENTAR RECUMPERA-LOS;
+****************************** ARQUIVO RECUPERADO ****************************
+05/01/2017 11:58:19-> Usuario 'user' fez login no sistema;
+05/01/2017 11:58:34-> Usuario 'user' fechou a aplicação;

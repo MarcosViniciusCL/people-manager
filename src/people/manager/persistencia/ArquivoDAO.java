@@ -138,16 +138,15 @@ public class ArquivoDAO {
         }
     }
     
-    public static FileOutputStream novoArquivo(String caminho){
-        FileOutputStream fos = null;
+    public static File novoArquivo(String caminho){
+        File arquivo = new File(caminho);
         try {
-            fos = new FileOutputStream(new File(caminho));
-            fos.close();
+            arquivo.createNewFile();
         } catch (FileNotFoundException ex) {
             Logger.getLogger(ArquivoDAO.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(ArquivoDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return fos;
+        return arquivo;
     }
 }

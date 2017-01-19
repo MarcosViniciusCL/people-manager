@@ -603,6 +603,13 @@ public class TelaInicial extends javax.swing.JFrame {
         });
     }
 
+    /**
+     *
+     */
+    public static void fechar() {
+        System.exit(0);
+    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton2;
@@ -678,24 +685,45 @@ public class TelaInicial extends javax.swing.JFrame {
                 Controller.aguardar(5);
                 try {
                     jLabelMensagem.setText("O sistema está verificando atualizações...");
-                    Controller.aguardar(5);
-                    Controller.temNet();
-                    if (Controller.verificarAtualizacao()) {
-                        jLabelMensagem.setText("Há uma nova atualização disponivel.");
-                        Thread.sleep(3000);
-                        jLabelMensagem.setText("Baixando nova atualização...");
-                        Thread.sleep(3000);
-                        if (Controller.instalarAtualizacao()) {
-                            jLabelMensagem.setText("A atualização foi instalada, o programa deve ser reiniciado.");
+                    Thread.sleep(3000);
+                    if (!new File("PeopleManager.zip").exists()) { // <-- Verifica se há arquivo de atualização baixado.
+                        Controller.aguardar(5);
+                        Controller.temNet();
+                        if (Controller.verificarAtualizacao()) {
+                            jLabelMensagem.setText("Há uma nova atualização disponivel.");
                             Thread.sleep(3000);
+                            jLabelMensagem.setText("Baixando nova atualização...");
+                            Controller.baixarAtualizacao();
+                            if (Controller.prepararAtualizacao()) {
+                                jLabelMensagem.setText("A atualização está pronto para ser instalada, o programa deve ser reiniciado.");
+                                Thread.sleep(3000);
+                                if (JOptionPane.showConfirmDialog(null, "Reiniciar e instalar atualização?") == 0) {
+                                    jLabelMensagem.setText("Reiniciando...");
+                                    Controller.aguardar(3);
+                                    Controller.instalarAtualizacao();
+                                }
+                            } else {
+                                jLabelMensagem.setText("Erro ao preparar a atualização. Contate o suporte.");
+                            }
                         } else {
-                            jLabelMensagem.setText("Houve um erro na instalação da atualização. Tente mais tarde.");
+                            jLabelMensagem.setText("O sistema já está atualizado.");
                             Thread.sleep(3000);
+
                         }
                     } else {
-                        jLabelMensagem.setText("O sistema já está atualizado.");
+                        jLabelMensagem.setText("Já existe uma atualização baixada.");
                         Thread.sleep(3000);
-
+                        if (Controller.prepararAtualizacao()) {
+                            jLabelMensagem.setText("A atualização está pronta para ser instalada, o programa deve ser reiniciado.");
+                            Thread.sleep(3000);
+                            if (JOptionPane.showConfirmDialog(null, "Reiniciar e instalar atualização?") == 0) {
+                                jLabelMensagem.setText("Reiniciando...");
+                                Controller.aguardar(3);
+                                Controller.instalarAtualizacao();
+                            }
+                        } else {
+                            jLabelMensagem.setText("Erro ao preparar a atualização. Contate o suporte.");
+                        }
                     }
                 } catch (InterruptedException ex) {
                     Logger.getLogger(TelaInicial.class.getName()).log(Level.SEVERE, null, ex);
