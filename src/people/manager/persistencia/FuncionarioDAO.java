@@ -277,7 +277,7 @@ public class FuncionarioDAO {
                     + "NASCIMENTO = '"+nascimento+"', "
                     + "DATA_CONTRATACAO = '"+contratacao+"', "
                     + "CPF = '"+v.getCpf()+"', "
-                    + "ENDERECO = '"+endereco+"', "
+                    + "ENDERECO = '"+endereco+"' "
                     + "where ID="+v.getId()+";";
             stmt.executeUpdate(sql);
         } catch (SQLException ex) {
