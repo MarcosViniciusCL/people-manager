@@ -189,4 +189,13 @@ public class ControllerFuncionario {
     }
     private static JTable table;
     private static Funcionario funcionarioMain;
+
+    public static void ativarFuncionario(String cpf) throws VendedorNaoEncontradoException {
+        Funcionario vendedor = FuncionarioDAO.buscaCPF(cpf);
+        if (vendedor == null) {
+            throw new VendedorNaoEncontradoException();
+        }
+        vendedor.habilitar();
+        FuncionarioDAO.edita(vendedor);
+    }
 }

@@ -22,7 +22,7 @@ import people.manager.model.Funcionario;
  *
  * @author marcos
  */
-public class TelaBuscaVendedores extends javax.swing.JFrame {
+public class TelaBuscaFuncionarios extends javax.swing.JFrame {
 
     JTable table;
 
@@ -31,7 +31,7 @@ public class TelaBuscaVendedores extends javax.swing.JFrame {
      *
      * @param title
      */
-    public TelaBuscaVendedores(String title) {
+    public TelaBuscaFuncionarios(String title) {
         super(title);
         initComponents();
     }
@@ -55,6 +55,7 @@ public class TelaBuscaVendedores extends javax.swing.JFrame {
         jScrollPane3 = new javax.swing.JScrollPane();
         jButton2 = new javax.swing.JButton();
         jButtonDesativar = new javax.swing.JButton();
+        jButtonAtivar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -91,6 +92,13 @@ public class TelaBuscaVendedores extends javax.swing.JFrame {
             }
         });
 
+        jButtonAtivar.setText("Ativar");
+        jButtonAtivar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAtivarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -100,6 +108,8 @@ public class TelaBuscaVendedores extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jButtonAtivar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButtonDesativar, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -140,7 +150,8 @@ public class TelaBuscaVendedores extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton2)
-                    .addComponent(jButtonDesativar))
+                    .addComponent(jButtonDesativar)
+                    .addComponent(jButtonAtivar))
                 .addGap(33, 33, 33))
         );
 
@@ -205,7 +216,7 @@ public class TelaBuscaVendedores extends javax.swing.JFrame {
                     te.setLocationRelativeTo(null);
                     te.setVisible(true);
                 } catch (VendedorNaoEncontradoException ex) {
-                    Logger.getLogger(TelaBuscaVendedores.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(TelaBuscaFuncionarios.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
             }
@@ -230,12 +241,35 @@ public class TelaBuscaVendedores extends javax.swing.JFrame {
                         }
                     }
                 } catch (VendedorNaoEncontradoException ex) {
-                    Logger.getLogger(TelaBuscaVendedores.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(TelaBuscaFuncionarios.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
             }
         }
     }//GEN-LAST:event_jButtonDesativarActionPerformed
+
+    private void jButtonAtivarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAtivarActionPerformed
+         ArrayList<Funcionario> f;
+            if (table.getSelectedRow() == -1) {
+                JOptionPane.showMessageDialog(null, "Selecione um funcionario antes");
+            } else {
+                try {
+                    f = ControllerFuncionario.buscarFuncionario(2, (String) table.getValueAt(table.getSelectedRow(), 0));
+                    if (JOptionPane.showConfirmDialog(null, "Tem certeza que pretende ativar o funcionario?") == 0) {
+
+                        if (f.get(0).isAtivo()) {
+                            JOptionPane.showMessageDialog(null, "Funcionário já esta ativo");
+                        } else {
+                            ControllerFuncionario.ativarFuncionario(f.get(0).getCpf());
+                            JOptionPane.showMessageDialog(null, "Funcionário foi ativado");
+                        }
+                    }
+                } catch (VendedorNaoEncontradoException ex) {
+                    Logger.getLogger(TelaBuscaFuncionarios.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+            }
+    }//GEN-LAST:event_jButtonAtivarActionPerformed
 
     private void criarTabela(ArrayList<Funcionario> vededores) {
         String[] colunas = {"ID", "NOME", "CELULAR", "EMAIL", "IDADE", "NASCIMENTO", "CPF", "ESTADO"};
@@ -265,6 +299,7 @@ public class TelaBuscaVendedores extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButtonAtivar;
     private javax.swing.JButton jButtonDesativar;
     private javax.swing.JComboBox<String> jComboBoxTipoBusca;
     private javax.swing.JLabel jLabel1;

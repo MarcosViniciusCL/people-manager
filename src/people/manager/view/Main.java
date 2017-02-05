@@ -13,7 +13,6 @@ import javax.swing.JOptionPane;
 import people.manager.controller.Controller;
 import people.manager.exception.ArquivoModificadoException;
 import people.manager.model.Usuario;
-import people.manager.persistencia.ArquivoDAO;
 import people.manager.persistencia.ConnectionFactory;
 
 /**

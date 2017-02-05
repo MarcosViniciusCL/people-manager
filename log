@@ -1,4 +1,4 @@
-1486325844000:52104:::::::::::::::::::::::::::::::::::::
+1486331404000:53468:::::::::::::::::::::::::::::::::::::
 03/12/2016 17:51:04-> Usuario 'root' fez login no sistema;
 03/12/2016 17:51:50-> OS ARQUIVOS DO SISTEMA FORAM ALTERADOS, A APLICAÇÃO VAI TENTAR RECUMPERA-LOS;
 03/12/2016 17:53:55-> OS ARQUIVOS DO SISTEMA FORAM ALTERADOS, A APLICAÇÃO VAI TENTAR RECUMPERA-LOS;
@@ -848,3 +848,25 @@
 05/02/2017 18:05:55-> Usuario 'user' fez login no sistema;
 05/02/2017 18:16:34-> Usuario 'user' fez login no sistema;
 05/02/2017 18:17:24-> Usuario 'user' editou um funcionario onde o CPF é 6565656565;
+05/02/2017 18:19:00-> Usuario 'user' fechou a aplicação;
+05/02/2017 18:23:09-> Usuario 'user' fez login no sistema;
+05/02/2017 18:24:13-> Usuario 'user' fechou a aplicação;
+05/02/2017 18:24:40-> Usuario 'user' fez login no sistema;
+05/02/2017 18:27:10-> Usuario 'user' fechou a aplicação;
+05/02/2017 19:11:11-> Usuario 'user' fez login no sistema;
+05/02/2017 19:11:23-> Usuario 'user' fechou a aplicação;
+05/02/2017 19:12:06-> Usuario 'user' fez login no sistema;
+05/02/2017 19:12:29-> Usuario 'user' fechou a aplicação;
+05/02/2017 19:13:43-> Usuario 'user' fez login no sistema;
+05/02/2017 19:14:23-> Usuario 'user' fechou a aplicação;
+05/02/2017 19:24:30-> Usuario 'user' fez login no sistema;
+05/02/2017 19:25:38-> Usuario 'user' agendou um novo atendimento para o cliente CPF: 06453705508 DATA: 05/02/2017 19:25:12;
+05/02/2017 19:25:45-> Usuario 'user' fez logout no sistema;
+05/02/2017 19:25:50-> Usuario 'user' fez login no sistema;
+05/02/2017 19:26:39-> Usuario 'user' fechou a aplicação;
+05/02/2017 19:29:12-> Usuario 'user' fez login no sistema;
+05/02/2017 19:30:48-> Usuario 'user' fechou a aplicação;
+05/02/2017 19:48:51-> Usuario 'user' fez login no sistema;
+05/02/2017 19:49:03-> Usuario 'user' fechou a aplicação;
+05/02/2017 19:49:11-> Usuario 'user' fez login no sistema;
+05/02/2017 19:50:04-> Usuario 'user' fechou a aplicação;
