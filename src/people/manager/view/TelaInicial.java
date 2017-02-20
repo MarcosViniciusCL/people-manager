@@ -614,12 +614,9 @@ public class TelaInicial extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem21ActionPerformed
 
     private void jMenuItem22ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem22ActionPerformed
-        new Thread() {
-            @Override
-            public void run() {
-                PDF.criarPDFVendas();
-            }
-        }.start();
+        TelaRelatorioVenda trv = new TelaRelatorioVenda("Gerar PDF");
+        trv.setLocationRelativeTo(null);
+        trv.setVisible(true);
     }//GEN-LAST:event_jMenuItem22ActionPerformed
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed

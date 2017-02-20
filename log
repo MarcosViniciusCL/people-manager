@@ -1,4 +1,4 @@
-1486331404000:53468:::::::::::::::::::::::::::::::::::::
+1487602566000:54596:::::::::::::::::::::::::::::::::::::
 03/12/2016 17:51:04-> Usuario 'root' fez login no sistema;
 03/12/2016 17:51:50-> OS ARQUIVOS DO SISTEMA FORAM ALTERADOS, A APLICAÇÃO VAI TENTAR RECUMPERA-LOS;
 03/12/2016 17:53:55-> OS ARQUIVOS DO SISTEMA FORAM ALTERADOS, A APLICAÇÃO VAI TENTAR RECUMPERA-LOS;
@@ -870,3 +870,21 @@
 05/02/2017 19:49:03-> Usuario 'user' fechou a aplicação;
 05/02/2017 19:49:11-> Usuario 'user' fez login no sistema;
 05/02/2017 19:50:04-> Usuario 'user' fechou a aplicação;
+20/02/2017 10:58:37-> Usuario 'user' fez login no sistema;
+20/02/2017 11:00:15-> Usuario 'user' agendou um novo atendimento para o cliente CPF: 06453705508 DATA: 20/02/2017 10:59:54;
+20/02/2017 11:00:36-> Usuario 'user' fez logout no sistema;
+20/02/2017 11:00:40-> Usuario 'user' fez login no sistema;
+20/02/2017 11:11:55-> Usuario 'user' fechou a aplicação;
+20/02/2017 11:32:47-> Usuario 'user' fez login no sistema;
+20/02/2017 11:33:00-> Usuario 'user' fechou a aplicação;
+20/02/2017 11:38:32-> Usuario 'user' fez login no sistema;
+20/02/2017 11:41:16-> Usuario 'user' fez login no sistema;
+20/02/2017 11:41:46-> Usuario 'user' fechou a aplicação;
+20/02/2017 11:41:57-> Usuario 'user' fez login no sistema;
+20/02/2017 11:45:38-> Usuario 'user' fechou a aplicação;
+20/02/2017 11:45:45-> Usuario 'user' fez login no sistema;
+20/02/2017 11:49:13-> Usuario 'user' fechou a aplicação;
+20/02/2017 11:49:19-> Usuario 'user' fez login no sistema;
+20/02/2017 11:54:12-> Usuario 'user' fechou a aplicação;
+20/02/2017 11:54:22-> Usuario 'user' fez login no sistema;
+20/02/2017 11:56:06-> Usuario 'user' fechou a aplicação;

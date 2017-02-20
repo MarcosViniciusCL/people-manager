@@ -14,6 +14,7 @@ import javax.swing.JTable;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
+import people.manager.controller.Controller;
 import people.manager.controller.ControllerCliente;
 import people.manager.controller.ControllerVenda;
 import people.manager.exception.ClienteNaoEncontradoException;
@@ -211,11 +212,13 @@ public class TelaCaixa extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonContinuarVendaActionPerformed
 
     private void jButtonCancelarVendaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelarVendaActionPerformed
-        if(JOptionPane.showConfirmDialog(null,"Cancelar Venda?") == 0){
+        if (Controller.getUser().getLevel() == 0) {
+            JOptionPane.showMessageDialog(null, "Voce não tem permissão para cancelar compras. Apenas administrador.");
+        } else if (JOptionPane.showConfirmDialog(null, "Cancelar Venda?") == 0) {
             ControllerVenda.cancelarVenda(Integer.parseInt((String) table.getValueAt(table.getSelectedRow(), 0)));
             JOptionPane.showMessageDialog(null, "Compra cancelada.");
             atualizar();
-        }
+        } else{}
     }//GEN-LAST:event_jButtonCancelarVendaActionPerformed
 
     private void criarTabela(ArrayList<Venda> venda) {
@@ -231,7 +234,7 @@ public class TelaCaixa extends javax.swing.JFrame {
 
         }
         table = new JTable();
-        
+
         table.setModel(new DefaultTableModel(lista.toArray(new String[lista.size()][]), colunas) {
             boolean[] canEdit = new boolean[]{
                 false, false, false, false, false, false
@@ -252,18 +255,15 @@ public class TelaCaixa extends javax.swing.JFrame {
         for (int c = 0; c < table.getColumnCount(); c++) {
             table.setDefaultRenderer(table.getColumnClass(c), renderer);
         }
-        
+
         table.getSelectionModel().addListSelectionListener((ListSelectionEvent evt) -> { //Evento na tabela
             if (evt.getValueIsAdjusting()) {
                 return;
             }
             tableFocusEvent();
-        }); 
-        
-        
-        
+        });
+
         jScrollPane1.setViewportView(table);
-        
 
     }
 
@@ -282,28 +282,28 @@ public class TelaCaixa extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private void tableFocusEvent() {
-        String ID= (String) table.getValueAt(table.getSelectedRow(), 0);
-        String DATA_VENDA= (String) table.getValueAt(table.getSelectedRow(), 1);
-        String PRODUTOS= (String) table.getValueAt(table.getSelectedRow(), 2);
-        String  CLIENTE= (String) table.getValueAt(table.getSelectedRow(), 3);
-        String VALOR_DA_VENDA= (String) table.getValueAt(table.getSelectedRow(), 4);
-        String ESTADO= (String) table.getValueAt(table.getSelectedRow(), 5);
-        
-        jTextPane1.setText("Venda realizada em: "+DATA_VENDA.substring(0, 10)+" às "+DATA_VENDA.substring(11)+"\nProdutos: "+PRODUTOS+"\n"
-                + "Cliente: "+CLIENTE+"\t\t\tValor: R$ "+VALOR_DA_VENDA+"\nEstado: "+ESTADO);
-        if(ESTADO.equals("PENDENTE")){
+        String ID = (String) table.getValueAt(table.getSelectedRow(), 0);
+        String DATA_VENDA = (String) table.getValueAt(table.getSelectedRow(), 1);
+        String PRODUTOS = (String) table.getValueAt(table.getSelectedRow(), 2);
+        String CLIENTE = (String) table.getValueAt(table.getSelectedRow(), 3);
+        String VALOR_DA_VENDA = (String) table.getValueAt(table.getSelectedRow(), 4);
+        String ESTADO = (String) table.getValueAt(table.getSelectedRow(), 5);
+
+        jTextPane1.setText("Venda realizada em: " + DATA_VENDA.substring(0, 10) + " às " + DATA_VENDA.substring(11) + "\nProdutos: " + PRODUTOS + "\n"
+                + "Cliente: " + CLIENTE + "\t\t\tValor: R$ " + VALOR_DA_VENDA + "\nEstado: " + ESTADO);
+        if (ESTADO.equals("PENDENTE")) {
             jButtonContinuarVenda.setEnabled(true);
             jButtonCancelarVenda.setEnabled(true);
-        } else{
+        } else {
             jButtonContinuarVenda.setEnabled(false);
             jButtonCancelarVenda.setEnabled(false);
         }
     }
-    
+
     /**
      * Atualiza a tabela visualizada.
      */
-    public void atualizar(){
+    public void atualizar() {
         criarTabela(ControllerVenda.todasVendas());
     }
 }

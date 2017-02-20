@@ -47,6 +47,18 @@ public class ControllerVenda {
     public static ArrayList todasVendas() {
         return VendaDAO.listarTodos();
     }
+    
+    public static ArrayList getVendas(Calendar inicio, Calendar fim){
+        int total = VendaDAO.quantidadeBanco();
+        Venda venda;
+        ArrayList<Venda> lista = new ArrayList();
+        for(int i=0; i <= total+1; i++){
+            venda = buscaId(i);
+            if(venda != null && venda.getEstado().equals("CONCLUIDO") && venda.getData().compareTo(inicio) >= 0 && venda.getData().compareTo(fim) <= 0)
+                lista.add(venda);
+        }
+        return lista;
+    }
 
     public static ArrayList todasVendas(Calendar dataInicial, Calendar dataFinal) {
         int max = VendaDAO.quantidadeBanco();
@@ -75,7 +87,7 @@ public class ControllerVenda {
     }
 
     /**
-     * Retorna o valor total, em real, de vendas
+     * Retorna o valor total, em real, de vendas.
      *
      * @return Double
      * @throws ParseException
@@ -90,6 +102,8 @@ public class ControllerVenda {
         }
         return total;
     }
+    
+    
 
     public static Venda buscaId(int id) {
         return VendaDAO.buscaID(id);

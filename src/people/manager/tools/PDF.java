@@ -48,7 +48,7 @@ public class PDF {
             table.addCell("DATA");
             table.addCell("ID CLIENTE");
             table.addCell("ID VENDEDO");
-            table.addCell("PRODUTOS");
+            table.addCell("PROD/SERV");
             table.addCell("VALOR");
             for (Venda venda : vendas) {
                 table.addCell(Controller.calendarParaString(venda.getData()));
@@ -72,5 +72,49 @@ public class PDF {
             Logger.getLogger(PDF.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+    }
+
+    public static void criarPDFVendas(ArrayList<Venda> array) {
+        // criação do documento
+        Document document = new Document();
+        try {
+            PdfWriter.getInstance(document, new FileOutputStream("./PDF_Vendas.pdf"));
+            document.open();
+            // adicionando um parágrafo no documento
+            document.add(new Paragraph("Relatório de Vendas"));
+            document.add(new Paragraph(" "));
+            document.add(new LineSeparator());
+            PdfPTable table = new PdfPTable(5);
+            Paragraph p1 = new Paragraph("Vendas Realizadas");
+            PdfPCell header = new PdfPCell(p1);
+            header.setColspan(5);
+            table.addCell(header);
+            Double valorTotal = 0.0;
+            table.addCell("DATA");
+            table.addCell("ID CLIENTE");
+            table.addCell("ID VENDEDO");
+            table.addCell("PROD/SERV");
+            table.addCell("VALOR");
+            for (Venda venda : array) {
+                table.addCell(Controller.calendarParaString(venda.getData()));
+                table.addCell(venda.getIdCliente()+"");
+                table.addCell(venda.getIdVendedor()+"");
+                table.addCell(venda.getNomesProdutos());
+                table.addCell(String.format("R$ %.2f", venda.getValorVenda()));
+                valorTotal += venda.getValorVenda();
+            }
+
+            table.addCell("TOTAL");
+            table.addCell("");
+            table.addCell("");
+            table.addCell("");
+            table.addCell(String.format("R$ %.2f", valorTotal));
+            
+            document.add(table);
+            
+            document.close();
+        } catch (FileNotFoundException | DocumentException ex) {
+            Logger.getLogger(PDF.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }
